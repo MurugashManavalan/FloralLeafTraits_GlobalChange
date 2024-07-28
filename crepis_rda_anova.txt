@@ -1,0 +1,15 @@
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 9999
+
+Model: rda(formula = AusRDC[, c(9, 11:16)] ~ CO2 * Temperature * Drought, data = AusRDC, scale = TRUE)
+                Df Variance      F Pr(>F)    
+CO2              1   0.0819 0.5668 0.7581    
+Temperature      1   0.1541 1.0655 0.3700    
+Drought          1   0.6373 4.4079 0.0006 ***
+CO2:Temperature  1   0.3618 2.5024 0.0306 *  
+CO2:Drought      1   0.1261 0.8725 0.4986    
+Residual        39   5.6387                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
