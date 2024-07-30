@@ -5,7 +5,7 @@ install.packages("Hmisc")
 install.packages("VennDiagram")
 install.packages("devtools")
 install.github("vqv/ggbiplot") # Need to load devtools package before installing
-
+install.packages("ggeffects")
 library(readr)
 library(lme4)
 library(lmerTest)
@@ -21,6 +21,7 @@ library(ggbiplot)
 library(devtools)
 library(ggbiplot)
 library(plyr)
+library(ggeffects)
 
 # Loading Files into R ----
 setwd("/Users/murugash/Desktop/PhD/Austria Experiment/R Analysis/Crepis and Lotus Samples - R Analysis")
@@ -359,7 +360,15 @@ ggplot(AusC, aes(x = Drought, y = `Average No. of Seeds per Flower Head (AFH)`, 
   ) +
   theme_minimal()
 
-
+## Plotting Using GGpredict ----
+ggpredict(c_sq_DAmodel)
+pr=ggpredict(c_sq_DAmodel, terms = c("Drought", "Temperature"), type = "fixed")
+pr
+plot(pr, dodge = 1, , colors = c("red", "blue" ), ci_style = "errorbar")+
+  labs(title = NULL,
+       x = "Drought",
+       y = "DA")
+?plot.ggeffects
 # Principal Component Analysis ----
 ## Creation of PCA models ----
 View(AusPC)
@@ -384,7 +393,7 @@ names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
 biplot(lav, scale = 0)
 biplot(lmv, scale = 0)
 biplot(cav, scale = 0)
-biplot(cmv, scale = 1)
+biplot(cmv, scale = 1, alpha = 0)
 biplot(lcav, scale = 0)
 scores(lmv, display = "species")
 ?biplot
@@ -393,8 +402,10 @@ lmv_scores[,3]
 
 ### PCA plots using ggbiplot ----
 
-ggbiplot(lmv)
-ggbiplot(cmv)
+ggbiplot(lmv, alpha = 0, varname.size = 5)
+ggbiplot(cmv, alpha = 0, varname.size = 6) + 
+  xlim(-2, 2) + 
+  ylim(-2, 2) 
 
 ## Extracting PC Scores ----
 summary(cmv)
@@ -467,17 +478,16 @@ names(AusRD)
 summary_text <- capture.output(summary(rda.l))
 writeLines(summary_text, "lotus_rda_summary.txt")
 ### Plot for Lotus RDA ----
-plot(rda.l, type = "n",xlim = c(-1,1), ylim = c(-1,1))
+plot(rda.l, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (68.77%)", ylab = "RDA2 (20.36%)")
 site_scores <- scores(rda.l, display = "sites")
 plot(rda.l, display = "both", cex = 0.7)
 points(site_scores, pch = 16, col = "red", cex = 0.5) # Ignore this to not get points
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.l, display = "species")[,1], scores(rda.l, display = "species")[,2], col = 'blue', length = 0.1)
-text(scores(rda.l, display = "species")[,1], scores(rda.l, display = "species")[,2], labels = rownames(scores(rda.l, display = "species")), col = 'blue', pos = 3, cex = 0.6)
+text(scores(rda.l, display = "species")[,1], scores(rda.l, display = "species")[,2], labels = rownames(scores(rda.l, display = "species")), col = 'blue', pos = 3, cex = 1)
 ### Adding Arrows and Text for Predictor Variables
 arrows(0, 0, scores(rda.l, display = "bp")[,1], scores(rda.l, display = "bp")[,2], col = 'red', length = 0.1)
-
-text(scores(rda.l, display = "bp")[,1], scores(rda.l, display = "bp")[,2], labels = rownames(scores(rda.l, display = "bp")), col = 'red', pos = 3, cex = 0.6)
+text(scores(rda.l, display = "bp")[,1], scores(rda.l, display = "bp")[,2], labels = rownames(scores(rda.l, display = "bp")), col = 'red', pos = 3, cex = 1)
 
 ## Redundancy Analysis for Lotus (Contd.)----
 anova.cca(rda.l, permutations = 9999)
@@ -521,16 +531,16 @@ summary_text <- capture.output(summary(rda.c))
 writeLines(summary_text, "crepis_rda_summary.txt")
 
 ### Plot for Crepis RDA ----
-plot(rda.c, type = "n", xlim = c(-1,1), ylim = c(-1,1))
+plot(rda.c, type = "n", xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (76.05%)", ylab = "RDA2 (11.04%)")
 site_scores <- scores(rda.l, display = "sites")
 plot(rda.c, display = "both", cex = 0.7)
 points(site_scores, pch = 16, col = "red", cex = 0.5) # Ignore this to not get row names 
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.c, display = "species")[,1], scores(rda.c, display = "species")[,2], col = 'blue', length = 0.1)
-text(scores(rda.c, display = "species")[,1], scores(rda.c, display = "species")[,2], labels = rownames(scores(rda.c, display = "species")), col = 'blue', pos = 3, cex = 0.6)
+text(scores(rda.c, display = "species")[,1], scores(rda.c, display = "species")[,2], labels = rownames(scores(rda.c, display = "species")), col = 'blue', pos = 3, cex = 1)
 ### Adding Arrows and Text for Predictor Variables
 arrows(0, 0, scores(rda.c, display = "bp")[,1], scores(rda.c, display = "bp")[,2], col = 'red', length = 0.1)
-text(scores(rda.c, display = "bp")[,1], scores(rda.c, display = "bp")[,2], labels = rownames(scores(rda.c, display = "bp")), col = 'red', pos = 3, cex = 0.6)
+text(scores(rda.c, display = "bp")[,1], scores(rda.c, display = "bp")[,2], labels = rownames(scores(rda.c, display = "bp")), col = 'red', pos = 3, cex = 1)
 
 rda.cn <- rda(AusRDC[,c(18:23)] ~ Drought + Condition(AusRDC$`Temperature Level`*AusRDC$`CO2 Level`), data = AusRDC, scale = TRUE)
 View(AusRD)
@@ -628,29 +638,49 @@ anova_to_csv(log_ASMmodel, anova_output_csv)
 
 # Pearson Correlation ----
 ## Lotus ----
-cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Petal Dry Matter Content (PDMC) (g/g)`, method = "pearson") # Significant
+cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
 cor.test(AusL$`Petal Mass per Area (PMA)(g/cm2)`, AusL$`Petal Dry Matter Content (PDMC) (g/g)`, method = "pearson") # Significant
-cor.test(AusL$`Specific Leaf Area (SLA) (cm2/g)`, AusL$`Leaf Dry Matter Content (LDMC) (g/g)`, method = "pearson") # Significant
+cor.test(AusL$`Specific Leaf Area (SLA)(cm2/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson") # Significant
 cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
 cor.test(AusL$`Petal Mass per Area (PMA)(g/cm2)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
 cor.test(AusL$`Petal Dry Matter Content (PDMC) (g/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
-cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Petal Dry Matter Content (PDMC) (g/g)`, method = "pearson") #Significant
+cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") #Significant
 cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Specific Petal Area (SPA)(cm2/g)`, method = "pearson") # Significant
+cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
+cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
+cor.test(AusL$`Specific Leaf Area (SLA)(cm2/g)`, AusL$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson")
+cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
+cor.test(AusL$`Petal Dry Matter Content (PDMC)(g/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
+
+
 
 ## Crepis ----
 cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
 cor.test(AusC$`Petal Mass Per Area (PMA)(g/cm2)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
-cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Leaf Dry Matter Content (g/g)`, method = "pearson") 
+cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson") 
 cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
 cor.test(AusC$`Petal Mass Per Area (PMA)(g/cm2)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusC$`Leaf Dry Matter Content (g/g)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson")
+cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson")
 cor.test(AusC$`Average No. of Seeds per Flower Head (AFH)`, AusC$`Average Individual Seed Mass (ASM)(g)`, method = "pearson")
 cor.test(AusC$`Average No. of Seeds per Flower Head (AFH)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") # Significant
 cor.test(AusC$`Average No. of Seeds per Flower Head (AFH)`, AusC$`Leaf Dry Matter Content (g/g)`, method = "pearson") # Significant
 cor.test(AusC$`Average No. of Seeds per Flower Head (AFH)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
 cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson")
 cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Specific Petal Area (SPA)(cm2/g)`, method = "pearson") # Significant
-
+cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
+cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
+cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Average No. of Seeds per Flower Head (AFH)`, method = "pearson")
+cor.test(AusC$`Display Area (DA)(cm2)`, AusC$`Average Individual Seed Mass (ASM)(g)`, method = "pearson")
+cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
+cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`, AusC$`Average No. of Seeds per Flower Head (AFH)`, method = "pearson")
+cor.test(AusC$`Specific Petal Area (SPA)(cm2/g)`,  AusC$`Average Individual Seed Mass (ASM)(g)`, method = "pearson")
+cor.test(AusC$`Petal Dry Matter Content (PDMC)(g/g)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
+cor.test(AusC$`Petal Dry Matter Content (PDMC)(g/g)`, AusC$`Average No. of Seeds per Flower Head (AFH)`, method = "pearson")
+cor.test(AusC$`Petal Dry Matter Content (PDMC)(g/g)`, AusC$`Average Individual Seed Mass (ASM)(g)`, method = "pearson")
+cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Average No. of Seeds per Flower Head (AFH)`, method = "pearson") 
+cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Average Individual Seed Mass (ASM)(g)`, method = "pearson") 
+cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Average No. of Seeds per Flower Head (AFH)`, method = "pearson")
+cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Average Individual Seed Mass (ASM)(g)`, method = "pearson")
 
 # Correlation Plots ----
 ## Lotus ----
