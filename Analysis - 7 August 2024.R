@@ -6,17 +6,22 @@ install.packages("VennDiagram")
 install.packages("devtools")
 install.github("vqv/ggbiplot") # Need to load devtools package before installing
 install.packages("ggeffects")
-library(readr)
-library(lme4)
-library(lmerTest)
-library(ggplot2)
+install.packages("igraph")
+install.packages("qgraph")
+library(readr) # For easier importing of datasets 
+library(lme4) # For linear models 
+library(lmerTest) # For linear models
+library(ggplot2) # For better plots
 library(vegan)
 library(dplyr)
-library(corrplot)
+library(corrplot) # For Correlation Matrix and Corellogram
+library(igraph) # For Correlation Matrix
+library(qgraph) # For Correlation Matrix
+library(qgraph)
+library(igraph)
 library(Hmisc)
 library(ggrepel)
 library(tidyr)
-library(VennDiagram)
 library(ggbiplot)
 library(devtools)
 library(ggbiplot)
@@ -303,6 +308,7 @@ plot(AusC$`Number of Seeds (SN)`~AusC$Drought, main = "Drought on No. of Seeds",
 
 ## Plots in Crepis (Using ggplot) ----
 View(AusC)
+
 ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
   geom_boxplot()+
   labs(
@@ -379,7 +385,6 @@ lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:22)], scale = TRUE)
 cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:24)], scale = TRUE)
 cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:24)], scale = TRUE)
 lcav <- prcomp(AusPC[,c(16, 18,19,20)], center = TRUE, scale = TRUE)
-?prcomp
 names(AusPC)
 
 colnames(AusPC)
@@ -458,10 +463,11 @@ proportion_variance_explained
 # Redundancy Analysis ----
 ### Sub-setting Data frames for Lotus and Crepis ----
 lotus_rows <- AusRD[AusRD$Species == "Lotus", ]
+View(lotus_rows)
 lotus_rows <- lotus_rows[-c(40:72), ]
-AusRDL <- lotus_rows[, -c(23:25)]
+AusRDL <- lotus_rows[, -c(23,24)]
 View(AusRDL)
-
+View(AusRD)
 crepis_rows <- AusRD[AusRD$Species == "Crepis",]
 crepis_rows <- crepis_rows[-c(46:78),]
 AusRDC <- crepis_rows[,-c(10:17)]
@@ -471,7 +477,6 @@ names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
 names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
-
 rda.l <- rda(AusRDL[,c(9,18,20:22)] ~ CO2*Temperature*Drought, data = AusRDL, scale = TRUE)
 Lotus_RDA <- anova.cca(rda.l, permutations = 9999, by = "terms")
 Lotus_RDA # Temperature, Drought and CO2:Drought are significant
@@ -625,7 +630,7 @@ cor.test(AusL$`Petal Mass per Area (PMA)(g/cm2)`, AusL$`Petal Dry Matter Content
 cor.test(AusL$`Specific Leaf Area (SLA)(cm2/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson") # Significant
 cor.test(AusL$`Specific Petal Area (SPA)(cm2/g)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
 cor.test(AusL$`Petal Mass per Area (PMA)(g/cm2)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
-cor.test(AusL$`Petal Dry Matter Content (PDMC) (g/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
+cor.test(AusL$`Petal Dry Matter Content (PDMC)(g/g)`, AusL$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
 cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Petal Dry Matter Content (PDMC)(g/g)`, method = "pearson") #Significant
 cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Specific Petal Area (SPA)(cm2/g)`, method = "pearson") # Significant
 cor.test(AusL$`Display Area (DA)(cm2)`, AusL$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson")
@@ -749,7 +754,6 @@ print(combined_plot)
 
 
 # Correlogram ----
-
 ## For Lotus ----
 View(AusL)
 Lotcor_Data <- AusL[,c(9,18,20:22)]
@@ -840,7 +844,7 @@ ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
                        name = "Pearson\nCorrelation") +
   geom_text(aes(label = label, fontface = fontface), color = "black", size = 5) +
   theme_minimal() +
-  theme(axis.text.x = element_text(size = 12),  # Adjust size as needed
+  theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
@@ -849,21 +853,154 @@ ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
 
 # Variation Partitioning ----
 ## For Lotus ----
-### Performing RDA for each predictor ----
-lotus_rda_temp <- rda(AusRDL[,c(9,18,20:22)] ~ Temperature, data = AusRDL)
-lotus_rda_co2 <- rda(AusRDL[,c(9,18,20:22)] ~ CO2, data = AusRDL)
-lotus_rda_drought <- rda(AusRDL[,c(9,18,20:22)] ~ Drought, data = AusRDL)
-lotus_rda_full <- rda(AusRDL[,c(9,18,20:22)] ~ Temperature + CO2 + Drought, data = AusRDL)
 
-### Calculate adjusted R2 values ----
-lotus_r2_temp <- RsquareAdj(lotus_rda_temp)$adj.r.squared
-lotus_r2_co2 <- RsquareAdj(lotus_rda_co2)$adj.r.squared
-lotus_r2_drought <- RsquareAdj(lotus_rda_drought)$adj.r.squared
-lotus_r2_full <- RsquareAdj(lotus_rda_full)$adj.r.squared
+l_DA_var <- varpart(AusRDL$DA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
+l_DA_var$part$indfract$Adj.R.square <- l_DA_var$part$indfract$Adj.R.square *100
+plot(l_DA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in DA of L. corniculatus")
 
-### Calculate unique and shared variances ----
-lotus_unique_temp <- lotus_r2_full - (lotus_r2_co2 + lotus_r2_drought - lotus_r2_full)
-lotus_unique_co2 <- lotus_r2_full - (lotus_r2_temp + lotus_r2_drought - lotus_r2_full)
-lotus_unique_drought <- lotus_r2_full - (lotus_r2_co2 + lotus_r2_temp - lotus_r2_full)
-shared_temp_co2 <- lotu_r2_full - (lotus_unique_temp)
+l_SPA_var <- varpart(AusRDL$SPA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
+l_SPA_var$part$indfract$Adj.R.square <- l_SPA_var$part$indfract$Adj.R.square *100
+plot(l_SPA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in SPA of L. corniculatus")
 
+l_PDMC_var <- varpart(AusRDL$PDMC, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
+l_PDMC_var$part$indfract$Adj.R.square <- l_PDMC_var$part$indfract$Adj.R.square *100
+plot(l_PDMC_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in PDMC of L. corniculatus")
+
+l_SLA_var <- varpart(AusRDL$SLA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
+l_SLA_var$part$indfract$Adj.R.square <- l_SLA_var$part$indfract$Adj.R.square *100
+plot(l_SLA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in SLA of L. corniculatus")
+
+l_LDMC_var <- varpart(AusRDL$LDMC, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
+l_LDMC_var$part$indfract$Adj.R.square <- l_LDMC_var$part$indfract$Adj.R.square *100
+plot(l_LDMC_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in LDMC of L. corniculatus")
+
+## For Crepis ----
+
+c_DA_var <- varpart(AusRDC$DA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_DA_var$part$indfract$Adj.R.square <- c_DA_var$part$indfract$Adj.R.square *100
+plot(c_DA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in DA of C. capillaris")
+
+c_SPA_var <- varpart(AusRDC$SPA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_SPA_var$part$indfract$Adj.R.square <- c_SPA_var$part$indfract$Adj.R.square *100
+plot(c_SPA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in SPA of C. capillaris")
+
+c_PDMC_var <- varpart(AusRDC$PDMC, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_PDMC_var$part$indfract$Adj.R.square <- c_PDMC_var$part$indfract$Adj.R.square *100
+plot(c_PDMC_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in PDMC of C. capillaris")
+
+c_SLA_var <- varpart(AusRDC$SLA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_SLA_var$part$indfract$Adj.R.square <- c_SLA_var$part$indfract$Adj.R.square *100
+plot(c_SLA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in SLA of C. capillaris")
+
+c_LDMC_var <- varpart(AusRDC$LDMC, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_LDMC_var$part$indfract$Adj.R.square <- c_LDMC_var$part$indfract$Adj.R.square *100
+plot(c_LDMC_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in LDMC of C. capillaris")
+
+c_SN_var <- varpart(AusRDC$SN, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_SN_var$part$indfract$Adj.R.square <- c_SN_var$part$indfract$Adj.R.square *100
+plot(c_SN_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in SN of C. capillaris")
+
+c_SM_var <- varpart(AusRDC$SM, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_SM_var$part$indfract$Adj.R.square <- c_SM_var$part$indfract$Adj.R.square *100
+plot(c_SM_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in SM of C. capillaris")
+
+# Correlation Networks ----
+## For Lotus ----
+View(Aus)
+l_cor <- cor(AusRDL[,c(9,18,20:22)])
+l_network <- graph_from_adjacency_matrix(l_cor, weighted = TRUE, mode = "undirected", diag = FALSE)
+plot(l_network)
+l_network_graph <- qgraph(
+  l_cor, 
+  graph = "cor",  # Use partial correlations
+  layout = "spring", 
+  sampleSize = nrow(AusRDC[,c(9,10,12:16)]),
+  vsize = 6, 
+  cut = 0.2,  
+  maximum = 0.45, 
+  border.width = 1.5,
+  alpha = 0.05,
+  labels = c("DA", "SPA", "PDMC", "SLA", "LDMC"),
+  posCol = "royalblue4",
+  negCol = "brown1"
+)
+
+## For Crepis ----
+c_cor <- cor(AusRDC[,c(9,10,12:16)])
+cor(AusRDC[,c(9,10,12:16)])
+c_network <- graph_from_adjacency_matrix(c_cor, weighted=T, mode="undirected", diag=F)
+c_network_graph <- qgraph(c_cor, 
+                          graph = "cor",  # Use partial correlations
+                          layout = "spring", 
+                          sampleSize = nrow(AusRDC[,c(9,10,12:16)]),
+                          vsize = 6, 
+                          cut = 0.2,  
+                          maximum = 0.45, 
+                          border.width = 1.5,
+                          labels = c("DA", "SPA", "PDMC", "SLA", "LDMC", "SN", "SM"),
+                          posCol = "royalblue4",
+                          negCol = "brown1"
+)
+
+summary(c_sq_DAmodel)
+anova(c_sq_DAmode
