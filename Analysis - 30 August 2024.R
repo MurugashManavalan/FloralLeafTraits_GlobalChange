@@ -27,20 +27,23 @@ library(devtools)
 library(ggbiplot)
 library(plyr)
 library(ggeffects)
+library(car)
 library(reshape2) # For correlogram
+View(AusC)
 
 # Loading Files into R ----
 setwd("/Users/murugash/Desktop/PhD/Austria Experiment/R Analysis/Crepis and Lotus Samples - R Analysis")
-AusL <- read_csv("Austria Experiment - Lotus Data - Core Response Variables - 10 July 2024.csv")
-AusC <- read_csv("Austria Experiment - Crepis Data - Core Response Variables - 7 August 2024.csv")
+AusL <- read_csv("Austria Experiment - Lotus Data - Core Response Variables - 15 August 2024.csv")
+AusC <- read_csv("Austria Experiment - Crepis Data - Core Response Variables - 15 August 2024.csv")
 AusC <- AusC[-c(63:163),]
-AusPC <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 7 August 2024.csv")
+AusPC <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 15 August 2024.csv")
 AusPC <- AusPC[-c(85:117),]
-AusRD <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 7 August 2024.csv")
+AusRD <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 15 August 2024.csv")
 AusRD <- AusRD[-c(85:117),]
 AusL1 <- AusL[AusL$`Plot No.`!= "P16",]
-View(AusC)
+View(AusRD)
 dir()
+AusC
 
 # Function to Log and Square Root transform Response Variables ----
 log_sqrt_transform <- function(df, cols) {
@@ -59,8 +62,8 @@ log_sqrt_transform <- function(df, cols) {
   return(df)
 }
 
-AusL <- log_sqrt_transform(AusL, c(9:22))
-AusC <- log_sqrt_transform(AusC, c(9:16))
+AusL <- log_sqrt_transform(AusL, c(9:23))
+AusC <- log_sqrt_transform(AusC, c(9:17))
 View(AusC)
 # Function to create Histogram of Response Variables ----
 
@@ -76,14 +79,14 @@ hist_df <- function(df, cols) {
 
 # Histogram of Response Variables ----
 
-hist_df(AusL, c(9,50))
-hist_df(AusC, c(9,35))
-hist_df(AusPC, c(9,25))
+hist_df(AusL, c(9:53))
+hist_df(AusC, c(9:35))
+hist_df(AusPC, c(9:25))
 
 # Shapiro-Wilk test for Response Variables ----
-Lotus_shapiro_results <- apply(AusL[,c(9:50)], 2, shapiro.test)
+Lotus_shapiro_results <- apply(AusL[,c(9:53)], 2, shapiro.test)
 Lotus_shapiro_results
-Crepis_shapiro_results <- apply(AusC[,c(9:32)], 2, shapiro.test)
+Crepis_shapiro_results <- apply(AusC[,c(9:35)], 2, shapiro.test)
 Crepis_shapiro_results
 colnames(AusC)
 
@@ -114,6 +117,7 @@ AusRD$Temperature <- as.factor(AusRD$Temperature)
 AusRD$Drought <- as.factor(AusRD$Drought)
 AusRD$Species <- as.factor(AusRD$Species)
 
+names(AusC)
 # Preparation of Mixed Effect Model ----
 ## Mixed-effect Models for Response Variables of Lotus ----
 l_DAmodel <- lmer(`Display Area (DA)(cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
@@ -128,15 +132,16 @@ log_KPMAmodel <- lmer(`log_Keel Petal Mass per Area (KPMA)(g/cm2)` ~ CO2 * Tempe
 l_sq_SPAmodel <- lmer(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
 l_log_PMAmodel <- lmer(`log_Petal Mass per Area (PMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
 l_PDMCmodel <- lmer(`Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
+l_LAmodel <- lmer(`Leaf Area (LA)(cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
 l_SLAmodel <- lmer(`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
 l_log_LDMCmodel <- lmer(`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
 
 ## Mixed Effect Models for Response Variables of Crepis ----
-names(AusC)
 c_sq_DAmodel <- lmer(`Display Area (DA)(cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
 c_sq_SPAmodel <- lmer(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
 c_log_PMAmodel <- lmer(`log_Petal Mass Per Area (PMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
 c_sq_PDMCmodel <- lmer(`sqrt_Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
+c_log_LAmodel <- lmer(`log_Leaf Area (LA)(cm2)`~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
 c_log_SLAmodel <- lmer(`log_Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
 c_sq_LDMCmodel <- lmer(`sqrt_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
 sq_SNmodel <- lmer(`sqrt_Number of Seeds (SN)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
@@ -156,6 +161,7 @@ log_KPMAmodel <- lm(`log_Keel Petal Mass per Area (KPMA)(g/cm2)` ~ CO2 * Tempera
 l_sq_SPAmodel <- lm(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusL)
 l_log_PMAmodel <- lm(`log_Petal Mass per Area (PMA)(g/cm2)` ~ CO2 * Temperature * Drought, data = AusL)
 l_PDMCmodel <- lm(`Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 * Temperature * Drought, data = AusL)
+l_LAmodel <- lm(`Leaf Area (LA)(cm2)` ~ CO2 * Temperature * Drought, data = AusL)
 l_SLAmodel <- lm(`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusL)
 l_log_LDMCmodel <- lm(`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought, data = AusL)
 
@@ -164,6 +170,7 @@ c_sq_DAmodel <- lm(`Display Area (DA)(cm2)`~ CO2 * Temperature * Drought, data =
 c_sq_SPAmodel <- lm(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusC)
 c_log_PMAmodel <- lm(`log_Petal Mass Per Area (PMA)(g/cm2)` ~ CO2 * Temperature * Drought, data = AusC)
 c_sq_PDMCmodel <- lm(`sqrt_Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 * Temperature * Drought, data = AusC)
+c_log_LAmodel <- lm(`log_Leaf Area (LA)(cm2)`~ CO2 * Temperature * Drought, data = AusC)
 c_log_SLAmodel <- lm(`log_Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusC)
 c_sq_LDMCmodel <- lm(`sqrt_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought, data = AusC)
 sq_SNmodel <- lm(`sqrt_Number of Seeds (SN)` ~ CO2 * Temperature * Drought, data = AusC)
@@ -172,36 +179,38 @@ log_SMmodel <- lm(`log_Seed Mass (SM)(g)` ~ CO2 * Temperature * Drought, data = 
 
 # ANOVA Analysis ----
 ## Anova test for Reponse Variables in Lotus ----
-anova(l_DAmodel)
-anova(log_SSPAmodel)
+anova(l_DAmodel) # Significance: Temperature and CO2:Drought in ME; Temperature, CO2:Temperature and CO2:Drought in LM
+anova(log_SSPAmodel) # Significance: CO2: Drought marginally significant in LM
 anova(log_SW1PAmodel)
-anova(SW2PAmodel)
+anova(SW2PAmodel) # Significance: Drought in LM
 anova(sq_SKPAmodel)
-anova(log_SPMAmodel)
+anova(log_SPMAmodel) # Significance: CO2: Drought marginally significant in LM
 anova(log_W1PMAmodel)
-anova(log_W2PMAmodel)
+anova(log_W2PMAmodel) # Significance: Drought and CO2: Temperature in LM (Latter marginally significant)
 anova(log_KPMAmodel)
-anova(l_sq_SPAmodel)
-anova(l_log_PMAmodel)
+anova(l_sq_SPAmodel) # Significance: Drought marginally significant in LM
+anova(l_log_PMAmodel) # Significance: Drought marginally significant in LM
 anova(l_PDMCmodel)
-anova(l_SLAmodel)
-anova(l_log_LDMCmodel)
+anova(l_LAmodel) # Significance: CO2 and CO2:Drought in ME; Same in LM
+anova(l_SLAmodel) # Significance: Drought and CO2: Temperature in ME (Latter marginally significant); CO2, Drought and CO2: Temperature in LM
+anova(l_log_LDMCmodel) # Significance: CO2, Drought and CO2:Drought in ME (Latter marginally significant); CO2, Drought and CO2: Drought in LM
 
 ## Anova test for Response Variables in Crepis ----
-anova(c_sq_DAmodel)
-anova(c_sq_SPAmodel)
-anova(c_log_PMAmodel)
-anova(c_sq_PDMCmodel)
+anova(c_sq_DAmodel) # Significance: Drought in ME; Drought in LM
+anova(c_sq_SPAmodel) # Significance: Temperature and CO2: Temperature both marginally significant in ME; Drought and CO2: Temperature in LM (latter marginally significant) 
+anova(c_log_PMAmodel) # Significance: Temperature marginally significant in ME; Drought in LM
+anova(c_sq_PDMCmodel) # Significance: Temperature marginally significant in ME; Drought and CO2: Temperature in LM(Latter marginally significant)
+anova(c_log_LAmodel) # Significance: Temperature marginally significant in LM
 anova(c_log_SLAmodel)
-anova(c_sq_LDMCmodel)
-anova(sq_SNmodel)
+anova(c_sq_LDMCmodel) # Significance: Drought and CO2: Drought in LM (Latter marginally significant)
+anova(sq_SNmodel) # Significance: Temperature, Drought and CO2: Temperature in ME (Latter marginally significant); Same in LM
 anova(log_SMmodel)
 
 # Plotting Significant Response Variables against Predictor Variables ----
 ## Plots in Lotus ----
 plot(AusL$`Display Area (DA)(cm2)`~AusL$Temperature, main = "Temperature on DA", xlab = "Temperature Level", ylab = "Display Area (DA)(cm2)")
-plot(AusL$`Display Area (DA)(cm2)`~AusL$Drought)
 plot(AusL$`Specific Petal Area (SPA)(cm2/g)`~AusL$Drought, main= "Drought on SPA", xlab = "Drought Level", ylab = "Specific Petal Area (SPA) (cm2/g)")
+plot(AusL$`Leaf Area (LA)(cm2)`~AusL$CO2, main = "CO2 on LA", xlab = "CO2 Level", ylab = "Leaf Area (LA)(cm2)")
 plot(AusL$`Specific Leaf Area (SLA)(cm2/g)`~AusL$CO2, main = "CO2 on SLA", xlab = "CO2 Level", ylab = "Specific Leaf Area (SLA)(cm2/g)")
 plot(AusL$`Specific Leaf Area (SLA)(cm2/g)`~AusL$Drought, main = "Drought on SLA", xlab = "Drought Level", ylab = "Specific Leaf Area (SLA)(cm2/g)")
 plot(AusL$`Leaf Dry Matter Content (LDMC)(g/g)`~AusL$CO2, main = "CO2 on LDMC", xlab = "CO2 Level", ylab = "Leaf Dry Matter Content (LDMC)(g/g)")
@@ -217,6 +226,7 @@ ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
     y = "Display Area (DA)(cm2)"
   )
 
+
 ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
   geom_boxplot() +
   facet_wrap(~ Temperature) +
@@ -227,6 +237,7 @@ ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
     fill = "Temperature"
   ) +
   theme_minimal()
+
 
 ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Drought)) +
   geom_boxplot() +
@@ -239,6 +250,36 @@ ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Drought)) +
   ) +
   theme_minimal()
 
+### Specific Petal Area ----
+ggplot(AusL, aes(x = AusL$Drought, y = AusL$`Specific Petal Area (SPA)(cm2/g)`))+
+  geom_boxplot() +
+  labs(
+    title = "Lotus - Effect of Drought on Specific Petal Area",
+    x = "Drought Level",
+    y = "Specific Petal Area (SPA)(cm2/g)"
+  )
+
+### Leaf Area ----
+ggplot(AusL, aes(x = AusL$CO2, y = AusL$`Leaf Area (LA)(cm2)`))+
+  geom_boxplot() +
+  labs(
+    title = "Lotus - Effect of CO2 on Leaf Area",
+    x = "CO2 Level",
+    y = "Leaf Area (LA)(cm2)"
+  )
+
+ggplot(AusL, aes(x = CO2, y = `Leaf Area (LA)(cm2)`, fill = Drought)) +
+  geom_boxplot() +
+  facet_wrap(~ Drought) +
+  labs(
+    title = "Lotus - Effect of CO2 Level on LA by Drought Level",
+    x = "CO2 Level",
+    y = "Leaf Area (LA)(cm2)",
+    fill = "Drought"
+  ) +
+  theme_minimal()
+
+
 ### Specific Leaf Area ----
 ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
   geom_boxplot() +
@@ -248,6 +289,7 @@ ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
     y = "Specific Leaf Area (SLA) (cm2/g)"
   )
 
+
 ggplot(AusL, aes(x = AusL$Drought, y= AusL$`Specific Leaf Area (SLA)(cm2/g)`)) +
   geom_boxplot()+
   labs(
@@ -255,6 +297,7 @@ ggplot(AusL, aes(x = AusL$Drought, y= AusL$`Specific Leaf Area (SLA)(cm2/g)`)) +
     x = "Drought Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
   )
+
 
 ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperature)) +
   geom_boxplot() +
@@ -302,6 +345,7 @@ ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drou
 plot(AusC$`Display Area (DA)(cm2)`~AusC$Drought, main = "Drought on DA", xlab = "Drought Level", ylab = "Display Area (DA)(cm2)")
 plot(AusC$`Specific Petal Area (SPA)(cm2/g)`~AusC$Drought, main = "Drought on SPA", xlab = "Drought Level", ylab = "Specific Petal Area (SPA) (cm2/g)")
 plot(AusC$`Petal Dry Matter Content (PDMC)(g/g)`~AusC$Drought, main = "Drought on PDMC", xlab = "Drought Level", ylab = "Petal Dry Matter Content (PDMC) (g/g)")
+plot(AusC$`Leaf Area (LA)(cm2)`~AusC$Temperature, main = "Temperature on Leaf Area", xlab = "Temperature Level", ylab = "Leaf Area (LA)(cm2)")
 plot(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`~AusC$Drought, main = "Drought on LDMC", xlab = "Drought Level", ylab = "Leaf Dry Matter Content (PDMC) (g/g)")
 plot(AusC$`Number of Seeds (SN)`~AusC$Temperature, main = "Temperature on No. of Seeds", xlab = "Temperature Level", ylab = "No. of Seeds")
 plot(AusC$`Number of Seeds (SN)`~AusC$Drought, main = "Drought on No. of Seeds", xlab = "Drought", ylab = "No. of Seeds")
@@ -309,6 +353,7 @@ plot(AusC$`Number of Seeds (SN)`~AusC$Drought, main = "Drought on No. of Seeds",
 ## Plots in Crepis (Using ggplot) ----
 View(AusC)
 
+### Display Area ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
   geom_boxplot()+
   labs(
@@ -317,6 +362,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
     y = "Display Area (DA)(cm2)"
   )
 
+### Specific Petal Area ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Specific Petal Area (SPA)(cm2/g)`)) +
   geom_boxplot()+
   labs(
@@ -325,6 +371,18 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Specific Petal Area (SPA)(cm2/g)`)) +
     y = "Specific Petal Area (SPA)(cm2/g)"
   )
 
+ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
+  geom_boxplot() +
+  facet_wrap(~ Temperature) +
+  labs(
+    title = "Crepis - Effect of CO2 Level on SPA by Temperature",
+    x = "CO2 Level",
+    y = "Specific Petal Area (SPA)(cm2/g)",
+    fill = "Temperature"
+  ) +
+  theme_minimal()
+
+### Petal Dry Matter Content ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Petal Dry Matter Content (PDMC)(g/g)`)) +
   geom_boxplot()+
   labs(
@@ -333,6 +391,28 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Petal Dry Matter Content (PDMC)(g/g)`)) +
     y = "Petal Dry Matter Content (PDMC)(g/g)"
   )
 
+ggplot(AusC, aes(x = CO2, y = `Petal Dry Matter Content (PDMC)(g/g)`, fill = Temperature)) +
+  geom_boxplot() +
+  facet_wrap(~ Temperature) +
+  labs(
+    title = "Crepis - Effect of CO2 Level on PDMC by Temperature",
+    x = "CO2 Level",
+    y = "Petal Dry Matter Content (PDMC)(g/g)",
+    fill = "Temperature"
+  ) +
+  theme_minimal()
+
+View(AusL)
+### Leaf Area ----
+ggplot(AusC, aes(x = AusC$Temperature, y= `Leaf Area (LA)(cm2)`)) +
+  geom_boxplot()+
+  labs(
+    title = "Crepis - Effect of Temperature on LA",
+    x = "Temperature Level",
+    y = "Leaf Area (LA)(cm2)"
+  )
+
+### Leaf Dry Matter Content ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
   geom_boxplot()+
   labs(
@@ -341,6 +421,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     y = "Leaf Dry Matter Content (g/g)"
   )
 
+### Seed Number ----
 ggplot(AusC, aes(x = AusC$Temperature, y= `Number of Seeds (SN)`)) +
   geom_boxplot()+
   labs(
@@ -357,14 +438,15 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
     y = "Number of Seeds (SN)"
   )
 
-ggplot(AusC, aes(x = Drought, y = `Number of Seeds (SN)`, fill = Temperature)) +
+
+ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
   geom_boxplot() +
   facet_wrap(~ Temperature) +
   labs(
-    title = "Crepis - Effect of Drought on SN by Temperature Level",
-    x = "Drought Level",
+    title = "Crepis - Effect of CO2 on SN by Temperature",
+    x = "CO2 Level",
     y = "Number of Seeds (SN)",
-    fill = "Temperature Level"
+    fill = "Temperature"
   ) +
   theme_minimal()
 
@@ -380,15 +462,13 @@ plot(pr, dodge = 1, , colors = c("red", "blue" ), ci_style = "errorbar")+
 # Principal Component Analysis ----
 ## Creation of PCA models ----
 View(AusPC)
-lav <- prcomp(AusPC[AusPC$Species == "Lotus",c(9:13,18,20:22)], scale = TRUE)
-lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:22)], scale = TRUE)
-cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:24)], scale = TRUE)
-cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:24)], scale = TRUE)
+lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
+cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
 lcav <- prcomp(AusPC[,c(16, 18,19,20)], center = TRUE, scale = TRUE)
 names(AusPC)
 
 colnames(AusPC)
-## Plotting of PCA models ----
+## Plotting of PCA models ---- 
 names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusPC)[names(AusPC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
@@ -396,33 +476,35 @@ names(AusPC)[names(AusPC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(AusPC)[names(AusPC) == "Number of Seeds (SN)"] <- "SN"
 names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "SM"
 names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
+names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
-biplot(lav, scale = 0)
 biplot(lmv, scale = 0)
-biplot(cav, scale = 0)
 biplot(cmv, scale = 1, alpha = 0)
 biplot(lcav, scale = 0)
 scores(lmv, display = "species")
 ?biplot
 lmv_scores <- lmv$x
 lmv_scores[,3]
-
+summary(lmv)
+lmv
 ### PCA plots using ggbiplot ----
 
 ggbiplot(lmv, alpha = 0, varname.size = 5) +
-  labs(x = "PC1 (38.7%)", y = "PC2 (33.9%)")
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(x = "PC1 (35.4%)", y = "PC2 (29.1%)")
 
 ggbiplot(cmv, alpha = 0, varname.size = 5) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (32.1%)", y = "PC2 (21.6%)")
+  labs(x = "PC1 (33.6%)", y = "PC2 (21.6%)")
 
 ## Extracting PC Scores ----
 summary(cmv)
 lcav$x
 AusPC1 <- cbind(AusPC, lcav$x[,1:4])
 View(AusPC1)
-
+View(AusC)
 ## Plotting with GG plot ----
 ggplot(AusPC, aes(PC1,PC2, colour = Species, fill = Species)) +
   stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) +
@@ -436,7 +518,8 @@ lotus_pca_eigenvalues <- lmv$sdev^2
 lotus_pca_variance <- lotus_pca_eigenvalues/sum(lotus_pca_eigenvalues)
 lotus_pca_cum_variance <- cumsum(lotus_pca_variance)
 lotus_pca_trait_loadings
-
+lotus_pca_cum_variance
+summary(cmv)
 
 write.csv(lotus_pca_trait_loadings, "lotus_pca_trait_loadings.csv", row.names = FALSE)
 write.csv(lotus_pca_eigenvalues, "lotus_pca_eigenvalues.csv", row.names = FALSE)
@@ -444,11 +527,13 @@ write.csv(lotus_pca_variance, "lotus_pca_variance.csv")
 write.csv(lotus_pca_cum_variance, "lotus_pca_cum_variance.csv")
 
 ### For Crepis ----
-cav
-crepis_pca_trait_loadings <- cav$rotation*cav$sdev
-crepis_pca_eigenvalues <- cav$sdev^2
+cmv
+crepis_pca_trait_loadings <- cmv$rotation*cmv$sdev
+crepis_pca_eigenvalues <- cmv$sdev^2
 crepis_pca_variance <- crepis_pca_eigenvalues/sum(crepis_pca_eigenvalues)
 crepis_pca_cum_variance <- cumsum(crepis_pca_variance)
+crepis_pca_trait_loadings
+crepis_pca_cum_variance
 
 write.csv(crepis_pca_trait_loadings, "crepis_pca_trait_loadings.csv", row.names = FALSE)
 write.csv(crepis_pca_eigenvalues, "crepis_pca_eigenvalues.csv", row.names = FALSE)
@@ -463,11 +548,11 @@ proportion_variance_explained
 # Redundancy Analysis ----
 ### Sub-setting Data frames for Lotus and Crepis ----
 lotus_rows <- AusRD[AusRD$Species == "Lotus", ]
-View(lotus_rows)
+names(lotus_rows)
 lotus_rows <- lotus_rows[-c(40:72), ]
-AusRDL <- lotus_rows[, -c(23,24)]
-View(AusRDL)
-View(AusRD)
+AusRDL <- lotus_rows[, -c(24,25)]
+View(crepis_rows)
+names(AusRDC)
 crepis_rows <- AusRD[AusRD$Species == "Crepis",]
 crepis_rows <- crepis_rows[-c(46:78),]
 AusRDC <- crepis_rows[,-c(10:17)]
@@ -477,18 +562,25 @@ names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
 names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
-rda.l <- rda(AusRDL[,c(9,18,20:22)] ~ CO2*Temperature*Drought, data = AusRDL, scale = TRUE)
+names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
+rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2*Temperature*Drought, data = AusRDL, scale = TRUE)
 Lotus_RDA <- anova.cca(rda.l, permutations = 9999, by = "terms")
-Lotus_RDA # Temperature, Drought and CO2:Drought are significant
-
+Lotus_RDA # CO2, Temperature, Drought and CO2:Drought are significant
+anova(rda.l)
+summary(rda.l)
+names(AusRDL)
 ### Extracting Values for Lotus RDA ----
 summary_text <- capture.output(summary(rda.l))
 writeLines(summary_text, "lotus_rda_summary.txt")
+l_rda_eigenvalues <- eigenvals(rda.l, constrained = TRUE)
+l_rda_proportion_explained <- l_rda_eigenvalues/sum(l_rda_eigenvalues) 
+l_rda_proportion_explained
 
+summary(rda.l)
 ### Plot for Lotus RDA ----
-rda.ln <- rda(AusRDL[,c(9,18,20:22)] ~ Temperature + Drought + CO2:Drought + Condition(CO2), data = AusRDL, scale = TRUE)
+rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Drought, data = AusRDL, scale = TRUE)
 
-plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (68.77%)", ylab = "RDA2 (20.36%)")
+plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (60.15%)", ylab = "RDA2 (20.84%)")
 site_scores <- scores(rda.ln, display = "sites")
 plot(rda.ln, display = "both", cex = 0.7)
 points(site_scores, pch = 16, col = "red", cex = 0.5) # Ignore this to not get points
@@ -505,20 +597,27 @@ names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
 names(AusRDC)[names(AusRDC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "DA"
+names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "LA"
 names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "SN"
 names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "SM"
-rda.c <- rda(AusRDC[,c(9:10,12:16)] ~ CO2*Temperature*Drought, data = AusRDC, scale = TRUE)
-Crepis_RDA <- anova.cca(rda.c, permutations = 9999, by = "terms")
-Crepis_RDA # Drought and CO2: Temperature are signifcant
 
+rda.c <- rda(AusRDC[,c(9:10,12:17)] ~ CO2*Temperature*Drought, data = AusRDC, scale = TRUE)
+Crepis_RDA <- anova.cca(rda.c, permutations = 9999, by = "terms")
+Crepis_RDA # Drought and CO2: Temperature are significant
+names(AusRDC)
+
+plot(AusC$`Leaf Area (LA)(cm2)`~AusC$Temperature)
 ### Extracting Values for Crepis RDA ----
 summary_text <- capture.output(summary(rda.c))
 writeLines(summary_text, "crepis_rda_summary.txt")
+c_rda_eigenvalues <- eigenvals(rda.c, constrained = TRUE)
+c_rda_proportion_explained <- c_rda_eigenvalues/sum(c_rda_eigenvalues) 
+c_rda_proportion_explained
 
 ### Plot for Crepis RDA ----
-rda.cn <- rda(AusRDC[,c(9:10,12:16)] ~ Drought + CO2:Temperature + Condition(CO2+Temperature), data = AusRDC, scale = TRUE)
+rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2+Temperature), data = AusRDC, scale = TRUE)
 
-plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (76.05%)", ylab = "RDA2 (11.04%)")
+plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (65.15%)", ylab = "RDA2 (20.54%)")
 site_scores <- scores(rda.cn, display = "sites")
 plot(rda.cn, display = "both", cex = 0.7)
 points(site_scores, pch = 16, col = "red", cex = 0.5) # Ignore this to not get row names 
@@ -579,44 +678,48 @@ anova_to_csv <- function(model, csv_file_path) {
 }
 
 ## Output ANOVA results to CSV file for Mixed Effect Linear models in Lotus ----
-anova_output_csv <- 'anova_LMLo.csv'
-anova_to_csv(DAmodel, anova_output_csv)
+anova_output_csv <- 'anova_LMLo - 18 August 2024.csv'
+anova_to_csv(l_DAmodel, anova_output_csv)
 anova_to_csv(log_SSPAmodel, anova_output_csv)
 anova_to_csv(log_SW1PAmodel, anova_output_csv)
 anova_to_csv(SW2PAmodel, anova_output_csv)
 anova_to_csv(sq_SKPAmodel, anova_output_csv)
+anova_to_csv(l_LAmodel, anova_output_csv)
 anova_to_csv(l_sq_SPAmodel, anova_output_csv)
 anova_to_csv(l_PDMCmodel, anova_output_csv)
 anova_to_csv(l_SLAmodel, anova_output_csv)
 anova_to_csv(l_log_LDMCmodel, anova_output_csv)
 
 ## Output ANOVA results to CSV file for Mixed Effect Linear models in Crepis ----
-anova_output_csv <- 'anova_LMCr.csv'
-anova_to_csv(c_sq_DAAmodel, anova_output_csv)
+anova_output_csv <- 'anova_LMCr - 18 August 2024.csv'
+anova_to_csv(c_sq_DAmodel, anova_output_csv)
 anova_to_csv(c_sq_SPAmodel, anova_output_csv)
 anova_to_csv(c_sq_PDMCmodel, anova_output_csv)
+anova_to_csv(c_log_LAmodel, anova_output_csv)
 anova_to_csv(c_log_SLAmodel, anova_output_csv)
 anova_to_csv(c_sq_LDMCmodel, anova_output_csv)
 anova_to_csv(sq_SNmodel, anova_output_csv)
 anova_to_csv(log_SMmodel, anova_output_csv)
 
 ## Output ANOVA results to CSV file for Linear models in Lotus ----
-anova_output_csv <- 'anova_LLo.csv'
-anova_to_csv(DAmodel, anova_output_csv)
+anova_output_csv <- 'anova_LLo - 18 August 2024.csv'
+anova_to_csv(l_DAmodel, anova_output_csv)
 anova_to_csv(log_SSPAmodel, anova_output_csv)
 anova_to_csv(log_SW1PAmodel, anova_output_csv)
 anova_to_csv(SW2PAmodel, anova_output_csv)
 anova_to_csv(sq_SKPAmodel, anova_output_csv)
 anova_to_csv(l_sq_SPAmodel, anova_output_csv)
+anova_to_csv(l_LAmodel, anova_output_csv)
 anova_to_csv(l_PDMCmodel, anova_output_csv)
 anova_to_csv(l_SLAmodel, anova_output_csv)
 anova_to_csv(l_log_LDMCmodel, anova_output_csv)
 
 ## Output ANOVA results to CSV file for Linear models in Crepis ----
-anova_output_csv <- 'anova_LCr.csv'
+anova_output_csv <- 'anova_LCr - 18 August 2024.csv'
 anova_to_csv(c_sq_DAmodel, anova_output_csv)
 anova_to_csv(c_sq_SPAmodel, anova_output_csv)
 anova_to_csv(c_sq_PDMCmodel, anova_output_csv)
+anova_to_csv(c_log_LAmodel, anova_output_csv)
 anova_to_csv(c_log_SLAmodel, anova_output_csv)
 anova_to_csv(c_sq_LDMCmodel, anova_output_csv)
 anova_to_csv(sq_SNmodel, anova_output_csv)
@@ -668,11 +771,13 @@ cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Number of Seeds (SN)`, me
 cor.test(AusC$`Specific Leaf Area (SLA)(cm2/g)`, AusC$`Seed Mass (SM)(g)`, method = "pearson") 
 cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Number of Seeds (SN)`, method = "pearson")
 cor.test(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, AusC$`Seed Mass (SM)(g)`, method = "pearson")
+cor.test(AusC$`Leaf Area (LA)(cm2)`, AusC$`Specific Leaf Area (SLA)(cm2/g)`, method = "pearson") # Significant
+cor.test(AusC$`Leaf Area (LA)(cm2)`, AusC$`Leaf Dry Matter Content (LDMC)(g/g)`, method = "pearson")
 
 # Correlation Plots ----
 ## Lotus ----
 ?ggplot
-SPA_PDMC_Plot <- ggplot(AusL, aes(x = AusL$`Specific Petal Area (SPA) (cm2/g)`, y = AusL$`Petal Dry Matter Content (PDMC) (g/g)`)) +
+SPA_PDMC_Plot <- ggplot(AusL, aes(x = AusL$`Specific Petal Area (SPA)(cm2/g)`, y = AusL$`Petal Dry Matter Content (PDMC)(g/g)`)) +
   geom_point() +  # Scatter plot points
   geom_smooth(method = "lm", col = "blue") +  # Regression line
   labs(title = "Specific Petal Area (SPA) and Petal Dry Matter Content (PDMC)",
@@ -681,14 +786,23 @@ SPA_PDMC_Plot <- ggplot(AusL, aes(x = AusL$`Specific Petal Area (SPA) (cm2/g)`, 
   theme_minimal()
 print(SPA_PDMC_Plot)
 
-PMA_PDMC_Plot <- ggplot(AusL, aes(x = AusL$`Petal Mass per Area (PMA)(g/cm2)`, y = AusL$`Petal Dry Matter Content (PDMC) (g/g)`)) +
+SPA_DA_Plot <- ggplot(AusL, aes(x = AusL$`Specific Petal Area (SPA)(cm2/g)`, y = AusL$`Display Area (DA)(cm2)`)) +
   geom_point() +  # Scatter plot points
   geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Lotus - PMA and PDMC",
-       x = "Petal Mass per Area (PMA) (g/cm2)",
-       y = "Petal Dry Matter Content (PDMC) (g/g)") +
+  labs(title = "Specific Petal Area (SPA) and Display Area (DA)",
+       x = "Specfic Petal Area (SPA) (cm2/g)",
+       y = "Display Area (DA)(cm2)") +
   theme_minimal()
-print(PMA_PDMC_Plot)
+print(SPA_DA_Plot)
+
+DA_PDMC_Plot <- ggplot(AusL, aes(x = AusL$`Display Area (DA)(cm2)`, y = AusL$`Petal Dry Matter Content (PDMC)(g/g)`)) +
+  geom_point() +  # Scatter plot points
+  geom_smooth(method = "lm", col = "blue") +  # Regression line
+  labs(title = "Display Area (DA) and Petal Dry Matter Content (PDMC)",
+       x = "Display Area (DA)(cm2)",
+       y = "Petal Dry Matter Content (PDMC)(g/g)") +
+  theme_minimal()
+print(DA_PDMC_Plot)
 
 SLA_LDMC_Plot <- ggplot(AusL, aes(x = AusL$`Specific Leaf Area (SLA) (cm2/g)`, y = AusL$`Leaf Dry Matter Content (LDMC) (g/g)`)) +
   geom_point() +  # Scatter plot points
@@ -700,6 +814,16 @@ SLA_LDMC_Plot <- ggplot(AusL, aes(x = AusL$`Specific Leaf Area (SLA) (cm2/g)`, y
 print(SLA_LDMC_Plot)
 
 ## Crepis ----
+
+SPA_DA_Plot <- ggplot(AusC, aes(x = AusC$`Specific Petal Area (SPA)(cm2/g)`, y = AusC$`Display Area (DA)(cm2)`)) +
+  geom_point() +  # Scatter plot points
+  geom_smooth(method = "lm", col = "blue") +  # Regression line
+  labs(title = "Specific Petal Area (SPA) and Display Area (DA)",
+       x = "Specfic Petal Area (SPA)(cm2/g)",
+       y = "Display Area (DA)(cm2)") +
+  theme_minimal()
+print(SPA_DA_Plot)
+
 SPA_PDMC_Plot <- ggplot(AusC, aes(x = AusC$`Specific Petal Area (SPA)(cm2/g)`, y = AusC$`Petal Dry Matter Content (PDMC)(g/g)`)) +
   geom_point() +  # Scatter plot points
   geom_smooth(method = "lm", col = "blue") +  # Regression line
@@ -709,14 +833,14 @@ SPA_PDMC_Plot <- ggplot(AusC, aes(x = AusC$`Specific Petal Area (SPA)(cm2/g)`, y
   theme_minimal()
 print(SPA_PDMC_Plot)
 
-PMA_PDMC_Plot <- ggplot(AusC, aes(x = AusC$`Petal Mass Per Area (PMA)(g/cm2)`, y = AusC$`Petal Dry Matter Content (PDMC)(g/g)`)) +
+SLA_LA_Plot <- ggplot(AusC, aes(x = AusC$`Specific Leaf Area (SLA)(cm2/g)`, y = AusC$`Leaf Area (LA)(cm2)`)) +
   geom_point() +  # Scatter plot points
   geom_smooth(method = "lm", col = "blue") +  # Regression line
-  labs(title = "Crepis - PMA and PDMC",
-       x = "Petal Mass per Area (PMA) (g/cm2)",
-       y = "Petal Dry Matter Content (PDMC) (g/g)") +
+  labs(title = "Specific Leaf Area (SLA) and Leaf Area (LA)",
+       x = "Specific Leaf Area (SLA)",
+       y = "Leaf Area (LA)") +
   theme_minimal()
-print(PMA_PDMC_Plot)
+print(SLA_LA_Plot)
 
 SN_PDMC_Plot <- ggplot(AusC, aes(x = AusC$`Number of Seeds (SN)`, y = AusC$`Petal Dry Matter Content (PDMC)(g/g)`)) +
   geom_point() +  # Scatter plot points
@@ -756,13 +880,14 @@ print(combined_plot)
 # Correlogram ----
 ## For Lotus ----
 View(AusL)
-Lotcor_Data <- AusL[,c(9,18,20:22)]
+Lotcor_Data <- AusL[,c(9,18,20:23)]
 names(Lotcor_Data)
 names(Lotcor_Data)[names(Lotcor_Data) == "Display Area (DA)(cm2)"] <- "DA"
 names(Lotcor_Data)[names(Lotcor_Data) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(Lotcor_Data)[names(Lotcor_Data) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(Lotcor_Data)[names(Lotcor_Data) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
-names(Lotcor_Data)[names(Lotcor_Data) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC" 
+names(Lotcor_Data)[names(Lotcor_Data) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
+names(Lotcor_Data)[names(Lotcor_Data) == "Leaf Area (LA)(cm2)"] <- "LA"
 Lotcor_Matrix <- cor(Lotcor_Data, use = "complete.obs", method = "pearson")
 corrplot(Lotcor_Matrix, method = "color", type = "full", 
          addCoef.col = "black", # Add black text with correlation values
@@ -802,8 +927,8 @@ ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
   coord_fixed()
 
 ## For Crepis ----
-View(AusC)
-Crecor_Data <- AusC[,c(9,10,12:16)]
+names(AusC)
+Crecor_Data <- AusC[,c(9,10,12:17)]
 names(Crecor_Data)
 names(Crecor_Data)[names(Crecor_Data) == "Display Area (DA)(cm2)"] <- "DA"
 names(Crecor_Data)[names(Crecor_Data) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -812,6 +937,7 @@ names(Crecor_Data)[names(Crecor_Data) == "Specific Leaf Area (SLA)(cm2/g)"] <-"S
 names(Crecor_Data)[names(Crecor_Data) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(Crecor_Data)[names(Crecor_Data) == "Number of Seeds (SN)"] <- "SN"
 names(Crecor_Data)[names(Crecor_Data) == "Seed Mass (SM)(g)"] <- "SM"
+names(Crecor_Data)[names(Crecor_Data) == "Leaf Area (LA)(cm2)"] <- "LA"
 Crecor_Matrix <- cor(Crecor_Data, use = "complete.obs", method = "pearson")
 corrplot(Crecor_Matrix, method = "color", type = "full", 
          addCoef.col = "black", # Add black text with correlation values
@@ -861,6 +987,7 @@ plot(l_DA_var,
      bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
      digits = 1, # only show 2 digits
      cex = 1.5)
+
 title(main = "Variance in DA of L. corniculatus")
 
 l_SPA_var <- varpart(AusRDL$SPA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
@@ -877,9 +1004,18 @@ l_PDMC_var$part$indfract$Adj.R.square <- l_PDMC_var$part$indfract$Adj.R.square *
 plot(l_PDMC_var,
      Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
      bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
+     digits = 2, # only show 2 digits
      cex = 1.5)
 title(main = "Variance in PDMC of L. corniculatus")
+
+l_LA_var <- varpart(AusRDL$LA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
+l_LA_var$part$indfract$Adj.R.square <- l_LA_var$part$indfract$Adj.R.square *100
+plot(l_LA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 2, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in LA of L. corniculatus")
 
 l_SLA_var <- varpart(AusRDL$SLA, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
 l_SLA_var$part$indfract$Adj.R.square <- l_SLA_var$part$indfract$Adj.R.square *100
@@ -890,6 +1026,7 @@ plot(l_SLA_var,
      cex = 1.5)
 title(main = "Variance in SLA of L. corniculatus")
 
+
 l_LDMC_var <- varpart(AusRDL$LDMC, AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
 l_LDMC_var$part$indfract$Adj.R.square <- l_LDMC_var$part$indfract$Adj.R.square *100
 plot(l_LDMC_var,
@@ -898,6 +1035,14 @@ plot(l_LDMC_var,
      digits = 1, # only show 2 digits
      cex = 1.5)
 title(main = "Variance in LDMC of L. corniculatus")
+
+l_at_var <- varpart(AusRDL[,c(9,18,20:23)], AusRDL$CO2, AusRDL$Temperature, AusRDL$Drought)
+l_at_var$part$indfract$Adj.R.square <- l_at_var$part$indfract$Adj.R.square *100
+plot(l_at_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
 
 ## For Crepis ----
 
@@ -915,7 +1060,7 @@ c_SPA_var$part$indfract$Adj.R.square <- c_SPA_var$part$indfract$Adj.R.square *10
 plot(c_SPA_var,
      Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
      bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
+     digits = 2, # only show 2 digits
      cex = 1.5)
 title(main = "Variance in SPA of C. capillaris")
 
@@ -927,6 +1072,15 @@ plot(c_PDMC_var,
      digits = 1, # only show 2 digits
      cex = 1.5)
 title(main = "Variance in PDMC of C. capillaris")
+
+c_LA_var <- varpart(AusRDC$LA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_LA_var$part$indfract$Adj.R.square <- c_LA_var$part$indfract$Adj.R.square *100
+plot(c_LA_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 1, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in LA of C. capillaris")
 
 c_SLA_var <- varpart(AusRDC$SLA, AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
 c_SLA_var$part$indfract$Adj.R.square <- c_SLA_var$part$indfract$Adj.R.square *100
@@ -960,46 +1114,64 @@ c_SM_var$part$indfract$Adj.R.square <- c_SM_var$part$indfract$Adj.R.square *100
 plot(c_SM_var,
      Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
      bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
-     digits = 1, # only show 2 digits
+     digits = 2, # only show 2 digits
+     cex = 1.5)
+title(main = "Variance in SM of C. capillaris")
+
+c_at_var <- varpart(AusRDC[,c(9,10,12:17)],AusRDC$CO2, AusRDC$Temperature, AusRDC$Drought)
+c_at_var$part$indfract$Adj.R.square <- c_at_var$part$indfract$Adj.R.square *100
+plot(c_at_var,
+     Xnames = c("CO2", "Temperature", "Drought"), # name the partitions
+     bg = c("seagreen3", "mediumpurple", "royalblue3"), alpha = 80, # colour the circles
+     digits = 2, # only show 2 digits
      cex = 1.5)
 title(main = "Variance in SM of C. capillaris")
 
 # Correlation Networks ----
 ## For Lotus ----
 View(Aus)
-l_cor <- cor(AusRDL[,c(9,18,20:22)])
-l_network <- graph_from_adjacency_matrix(l_cor, weighted = TRUE, mode = "undirected", diag = FALSE)
+l_cor
+l_corl_cor <- cor(AusRDL[,c(9,18,20:23)])
+l_network <- graph_from_adjacency_matrix(l_corl_cor, weighted = TRUE, mode = "undirected", diag = FALSE)
 plot(l_network)
 l_network_graph <- qgraph(
-  l_cor, 
+  l_corl_cor, 
   graph = "cor",  # Use partial correlations
   layout = "spring", 
-  sampleSize = nrow(AusRDC[,c(9,10,12:16)]),
+  sampleSize = nrow(AusRDL[,c(9,18,20:23)]),
   vsize = 6, 
   cut = 0.2,  
   maximum = 0.45, 
   border.width = 1.5,
   alpha = 0.05,
-  labels = c("DA", "SPA", "PDMC", "SLA", "LDMC"),
+  labels = c("DA", "SPA", "PDMC","LA", "SLA", "LDMC"),
   posCol = "royalblue4",
   negCol = "brown1"
 )
 
 ## For Crepis ----
-c_cor <- cor(AusRDC[,c(9,10,12:16)])
-cor(AusRDC[,c(9,10,12:16)])
-c_network <- graph_from_adjacency_matrix(c_cor, weighted=T, mode="undirected", diag=F)
-c_network_graph <- qgraph(c_cor, 
+c_corl_cor <- cor(AusRDC[,c(9,10,12:17)])
+c_corl_cor
+cor(AusRDC[,c(9,10,12:17)])
+c_network <- graph_from_adjacency_matrix(c_corl_cor, weighted=T, mode="undirected", diag=F)
+c_network_graph <- qgraph(c_corl_cor, 
                           graph = "cor",  # Use partial correlations
                           layout = "spring", 
-                          sampleSize = nrow(AusRDC[,c(9,10,12:16)]),
+                          sampleSize = nrow(AusRDC[,c(9,10,12:17)]),
                           vsize = 6, 
                           cut = 0.2,  
                           maximum = 0.45, 
                           border.width = 1.5,
-                          labels = c("DA", "SPA", "PDMC", "SLA", "LDMC", "SN", "SM"),
+                          labels = c("DA", "SPA", "PDMC", "LA","SLA", "LDMC", "SN", "SM"),
                           posCol = "royalblue4",
                           negCol = "brown1"
 )
 
-history()
+summary(c_sq_DAmodel)
+
+# New Model ----
+# This model is crated to account for the fact that with Drought, CO2 and Temperature acted as one variable
+
+l_DA_Nmodel <- lm(`Display Area (DA)(cm2)` ~ CO2 * Temperature + Drought * (CO2 + Temperature), data = AusL)
+
+anova(l_DA_Nmodel)
