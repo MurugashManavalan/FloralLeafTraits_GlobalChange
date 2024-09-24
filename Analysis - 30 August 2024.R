@@ -8,12 +8,13 @@ install.github("vqv/ggbiplot") # Need to load devtools package before installing
 install.packages("ggeffects")
 install.packages("igraph")
 install.packages("qgraph")
+install.packages("vegan")
 library(readr) # For easier importing of datasets 
 library(lme4) # For linear models 
 library(lmerTest) # For linear models
 library(ggplot2) # For better plots
 library(vegan)
-library(dplyr)
+library(dplyr) # For Variance Partitioning Barplot, for %>%
 library(corrplot) # For Correlation Matrix and Corellogram
 library(igraph) # For Correlation Matrix
 library(qgraph) # For Correlation Matrix
@@ -27,8 +28,9 @@ library(devtools)
 library(ggbiplot)
 library(plyr)
 library(ggeffects)
-library(car)
+library(car) # For Variance Partitioning Barplot, for Anova
 library(reshape2) # For correlogram
+library(vegan)
 View(AusC)
 
 # Loading Files into R ----
@@ -224,6 +226,13 @@ ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
     title = "Lotus - Effect of Temperature on Display Area",
     x = "Temperature Level",
     y = "Display Area (DA)(cm2)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 
@@ -236,7 +245,14 @@ ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
     y = "Display Area (DA)(cm2)",
     fill = "Temperature"
   ) +
-  theme_minimal()
+  theme_minimal()+
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 
 ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Drought)) +
@@ -248,7 +264,14 @@ ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Drought)) +
     y = "Display Area (DA)(cm2)",
     fill = "Drought Level"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 ### Specific Petal Area ----
 ggplot(AusL, aes(x = AusL$Drought, y = AusL$`Specific Petal Area (SPA)(cm2/g)`))+
@@ -257,6 +280,13 @@ ggplot(AusL, aes(x = AusL$Drought, y = AusL$`Specific Petal Area (SPA)(cm2/g)`))
     title = "Lotus - Effect of Drought on Specific Petal Area",
     x = "Drought Level",
     y = "Specific Petal Area (SPA)(cm2/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ### Leaf Area ----
@@ -266,6 +296,13 @@ ggplot(AusL, aes(x = AusL$CO2, y = AusL$`Leaf Area (LA)(cm2)`))+
     title = "Lotus - Effect of CO2 on Leaf Area",
     x = "CO2 Level",
     y = "Leaf Area (LA)(cm2)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ggplot(AusL, aes(x = CO2, y = `Leaf Area (LA)(cm2)`, fill = Drought)) +
@@ -277,7 +314,14 @@ ggplot(AusL, aes(x = CO2, y = `Leaf Area (LA)(cm2)`, fill = Drought)) +
     y = "Leaf Area (LA)(cm2)",
     fill = "Drought"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 
 ### Specific Leaf Area ----
@@ -287,6 +331,13 @@ ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
     title = "Lotus - Effect of CO2 Level on SLA",
     x = "CO2 Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 
@@ -296,6 +347,13 @@ ggplot(AusL, aes(x = AusL$Drought, y= AusL$`Specific Leaf Area (SLA)(cm2/g)`)) +
     title = "Lotus - Effect of Drought on SLA",
     x = "Drought Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 
@@ -308,7 +366,14 @@ ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperat
     y = "Specific Leaf Area (SLA) (cm2/g)",
     fill = "Temperature"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 
 ### Leaf Dry Matter Content ----
@@ -319,6 +384,13 @@ ggplot(AusL, aes(x = CO2,y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     title = "Lotus - Effect of CO2 Level on LDMC",
     x = "CO2 Level",
     y = "Leaf Dry Matter Content (LDMC) (g/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
@@ -327,6 +399,13 @@ ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
     title = "Lotus - Effect of Drought on LDMC",
     x = "Drought Level",
     y = "Leaf Dry Matter Content (LDMC) (g/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
@@ -338,7 +417,14 @@ ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drou
     y = "Leaf Dry Matter Content (LDMC)(g/g)",
     fill = "Drought"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 
 ## Plots in Crepis ----
@@ -360,6 +446,13 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
     title = "Crepis - Effect of Drought on DA",
     x = "Drought Level",
     y = "Display Area (DA)(cm2)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ### Specific Petal Area ----
@@ -369,6 +462,13 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Specific Petal Area (SPA)(cm2/g)`)) +
     title = "Crepis - Effect of Drought on SPA",
     x = "Drought Level",
     y = "Specific Petal Area (SPA)(cm2/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
@@ -380,7 +480,14 @@ ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Tempera
     y = "Specific Petal Area (SPA)(cm2/g)",
     fill = "Temperature"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 ### Petal Dry Matter Content ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Petal Dry Matter Content (PDMC)(g/g)`)) +
@@ -389,6 +496,13 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Petal Dry Matter Content (PDMC)(g/g)`)) +
     title = "Crepis - Effect of Drought on PDMC",
     x = "Drought Level",
     y = "Petal Dry Matter Content (PDMC)(g/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ggplot(AusC, aes(x = CO2, y = `Petal Dry Matter Content (PDMC)(g/g)`, fill = Temperature)) +
@@ -400,7 +514,14 @@ ggplot(AusC, aes(x = CO2, y = `Petal Dry Matter Content (PDMC)(g/g)`, fill = Tem
     y = "Petal Dry Matter Content (PDMC)(g/g)",
     fill = "Temperature"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 View(AusL)
 ### Leaf Area ----
@@ -410,6 +531,13 @@ ggplot(AusC, aes(x = AusC$Temperature, y= `Leaf Area (LA)(cm2)`)) +
     title = "Crepis - Effect of Temperature on LA",
     x = "Temperature Level",
     y = "Leaf Area (LA)(cm2)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ### Leaf Dry Matter Content ----
@@ -419,7 +547,14 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     title = "Crepis - Effect of Drought on LDMC",
     x = "Drought Level",
     y = "Leaf Dry Matter Content (g/g)"
-  )
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  ) 
 
 ### Seed Number ----
 ggplot(AusC, aes(x = AusC$Temperature, y= `Number of Seeds (SN)`)) +
@@ -428,6 +563,13 @@ ggplot(AusC, aes(x = AusC$Temperature, y= `Number of Seeds (SN)`)) +
     title = "Crepis - Effect of Temperature on SN",
     x = "Temperature Level",
     y = "Number of Seeds (SN)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
@@ -436,6 +578,13 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
     title = "Crepis - Effect of Drought on SN",
     x = "Drought Level",
     y = "Number of Seeds (SN)"
+  ) +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
   )
 
 
@@ -448,7 +597,14 @@ ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
     y = "Number of Seeds (SN)",
     fill = "Temperature"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+  )
 
 ## Plotting Using GGpredict ----
 ggpredict(c_sq_DAmodel)
@@ -552,7 +708,7 @@ names(lotus_rows)
 lotus_rows <- lotus_rows[-c(40:72), ]
 AusRDL <- lotus_rows[, -c(24,25)]
 View(crepis_rows)
-names(AusRDC)
+names(AusRDL)
 crepis_rows <- AusRD[AusRD$Species == "Crepis",]
 crepis_rows <- crepis_rows[-c(46:78),]
 AusRDC <- crepis_rows[,-c(10:17)]
@@ -563,9 +719,15 @@ names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
 names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
+names(AusRDL)[names(AusRDL) == "CO2"] <- "C"
+names(AusRDL)[names(AusRDL) == "Temperature"] <- "T"
+names(AusRDL)[names(AusRDL) == "Drought"] <- "D"
+
+
 rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2*Temperature*Drought, data = AusRDL, scale = TRUE)
 Lotus_RDA <- anova.cca(rda.l, permutations = 9999, by = "terms")
-Lotus_RDA # CO2, Temperature, Drought and CO2:Drought are significant
+Lotus_RDA <- as.data.frame(Lotus_RDA)
+View(Lotus_RDA) # CO2, Temperature, Drought and CO2:Drought are significant
 anova(rda.l)
 summary(rda.l)
 names(AusRDL)
@@ -576,10 +738,22 @@ l_rda_eigenvalues <- eigenvals(rda.l, constrained = TRUE)
 l_rda_proportion_explained <- l_rda_eigenvalues/sum(l_rda_eigenvalues) 
 l_rda_proportion_explained
 
-summary(rda.l)
-### Plot for Lotus RDA ----
-rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Drought, data = AusRDL, scale = TRUE)
+summary(rda.ln)
 
+# Changing Name of Interaction ----
+bp_scores <- scores(rda.ln, display = "bp")
+
+# Rename the fourth row
+rownames(bp_scores)[4] <- "(CT):D"
+
+# View the updated biplot scores
+rownames(bp_scores)
+
+rownames(scores(rda.ln, display = "bp"))[4] <- "(CT):D"
+
+### Plot for Lotus RDA ----
+
+rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ C + T + D + C:D, data = AusRDL, scale = TRUE)
 plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (60.15%)", ylab = "RDA2 (20.84%)")
 site_scores <- scores(rda.ln, display = "sites")
 plot(rda.ln, display = "both", cex = 0.7)
@@ -589,7 +763,7 @@ arrows(0, 0, scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "
 text(scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], labels = rownames(scores(rda.ln, display = "species")), col = 'blue', pos = 3, cex = 1)
 ### Adding Arrows and Text for Predictor Variables
 arrows(0, 0, scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], col = 'red', length = 0.1)
-text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(scores(rda.ln, display = "bp")), col = 'red', pos = 3, cex = 1)
+text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(bp_scores), col = 'red', pos = 3, cex = 1)
 
 ## Redundancy Analysis for Crepis ----
 names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -600,12 +774,16 @@ names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "LA"
 names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "SN"
 names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "SM"
+names(AusRDC)[names(AusRDC) == "CO2"] <- "C"
+names(AusRDC)[names(AusRDC) == "Temperature"] <- "T"
+names(AusRDC)[names(AusRDC) == "Drought"] <- "D"
 
-rda.c <- rda(AusRDC[,c(9:10,12:17)] ~ CO2*Temperature*Drought, data = AusRDC, scale = TRUE)
+rda.c <- rda(AusRDC[,c(9:10,12:17)] ~ C*T*D, data = AusRDC, scale = TRUE)
 Crepis_RDA <- anova.cca(rda.c, permutations = 9999, by = "terms")
 Crepis_RDA # Drought and CO2: Temperature are significant
-names(AusRDC)
-
+Crepis_RDA <- as.data.frame(Crepis_RDA)
+View(Crepis_RDA)
+summary(rda.c)
 plot(AusC$`Leaf Area (LA)(cm2)`~AusC$Temperature)
 ### Extracting Values for Crepis RDA ----
 summary_text <- capture.output(summary(rda.c))
@@ -615,9 +793,9 @@ c_rda_proportion_explained <- c_rda_eigenvalues/sum(c_rda_eigenvalues)
 c_rda_proportion_explained
 
 ### Plot for Crepis RDA ----
-rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2+Temperature), data = AusRDC, scale = TRUE)
+rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ D + C:T + Condition(C+T), data = AusRDC, scale = TRUE)
 
-plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (65.15%)", ylab = "RDA2 (20.54%)")
+plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-0.5,0.5), xlab = "RDA1 (65.15%)", ylab = "RDA2 (20.54%)")
 site_scores <- scores(rda.cn, display = "sites")
 plot(rda.cn, display = "both", cex = 0.7)
 points(site_scores, pch = 16, col = "red", cex = 0.5) # Ignore this to not get row names 
@@ -628,7 +806,7 @@ text(scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species"
 arrows(0, 0, scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], col = 'red', length = 0.1)
 text(scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], labels = rownames(scores(rda.cn, display = "bp")), col = 'red', pos = 3, cex = 1)
 
-rda.cn <- rda(AusRDC[,c(18:23)] ~ Drought + Condition(AusRDC$`Temperature Level`*AusRDC$`CO2 Level`), data = AusRDC, scale = TRUE)
+ rda.cn <- rda(AusRDC[,c(18:23)] ~ Drought + Condition(AusRDC$`Temperature Level`*AusRDC$`CO2 Level`), data = AusRDC, scale = TRUE)
 View(AusRD)
 ## Redundancy Analysis for both Crepis and Lotus ----
 
@@ -926,6 +1104,51 @@ ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
         axis.ticks = element_blank()) +
   coord_fixed()
 
+### Correlogram which includes p-values and the central diagonal is white ----
+
+# Calculate correlation matrix
+l_corr_matrix <- rcorr(as.matrix(Lotcor_Data))
+l_r_values <- l_corr_matrix$r
+l_p_values <- l_corr_matrix$P
+
+# Set upper triangle and diagonal elements to NA for r values
+l_r_values[upper.tri(l_r_values)] <- NA
+diag(l_r_values) <- NA
+
+# Set lower triangle elements to NA for p values
+l_p_values[lower.tri(l_p_values)] <- NA
+
+# Melt data into long format
+l_r_melt <- melt(l_r_values, na.rm = TRUE)
+l_p_melt <- melt(l_p_values, na.rm = TRUE)
+
+# Merge correlation and p-value data
+l_merged_data <- merge(l_r_melt, l_p_melt, by = c("Var1", "Var2"), all = TRUE)
+colnames(l_merged_data) <- c("Var1", "Var2", "correlation", "p_value")
+
+# Create labels and fontface based on correlation and p-values
+l_merged_data$label <- with(l_merged_data, 
+                            ifelse(is.na(correlation), 
+                                   ifelse(p_value < 0.001, "<0.001", sprintf("%.3f", p_value)), 
+                                   round(correlation, 2)))
+l_merged_data$fontface <- with(l_merged_data, 
+                               ifelse(is.na(correlation) & p_value <= 0.05, "bold", "plain"))
+
+# Plot correlogram
+ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "red", high = "blue4", mid = "#ffffff", 
+                       midpoint = 0, limit = c(-1, 1), space = "Lab", 
+                       name = "Pearson\nCorrelation") +
+  geom_text(aes(label = label, fontface = fontface), color = "black", size = 5) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks = element_blank()) +
+  coord_fixed()
+
 ## For Crepis ----
 names(AusC)
 Crecor_Data <- AusC[,c(9,10,12:17)]
@@ -963,6 +1186,51 @@ c_merged_data$label <- with(c_merged_data,
 c_merged_data$fontface <- with(c_merged_data, 
                                ifelse(is.na(correlation) & p_value <= 0.05, "bold", "plain"))
 
+
+ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "red", high = "blue4", mid = "#ffffff", 
+                       midpoint = 0, limit = c(-1, 1), space = "Lab", 
+                       name = "Pearson\nCorrelation",) +
+  geom_text(aes(label = label, fontface = fontface), color = "black", size = 5) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks = element_blank()) +
+  coord_fixed()
+
+### Correlogram which includes p-values and the central diagonal is white ----
+
+c_corr_matrix <- rcorr(as.matrix(Crecor_Data))
+c_r_values <- c_corr_matrix$r
+c_p_values <- c_corr_matrix$P
+
+# Set upper triangle and diagonal elements to NA for r values
+c_r_values[upper.tri(c_r_values)] <- NA
+diag(c_r_values) <- NA
+
+# Set lower triangle elements to NA for p values
+c_p_values[lower.tri(c_p_values)] <- NA
+
+# Melt data into long format
+c_r_melt <- melt(c_r_values, na.rm = TRUE)
+c_p_melt <- melt(c_p_values, na.rm = TRUE)
+
+# Merge correlation and p-value data
+c_merged_data <- merge(c_r_melt, c_p_melt, by = c("Var1", "Var2"), all = TRUE)
+colnames(c_merged_data) <- c("Var1", "Var2", "correlation", "p_value")
+
+# Create labels and fontface based on correlation and p-values
+c_merged_data$label <- with(c_merged_data, 
+                            ifelse(is.na(correlation), 
+                                   ifelse(p_value < 0.001, "<0.001", sprintf("%.3f", p_value)), 
+                                   round(correlation, 2)))
+c_merged_data$fontface <- with(c_merged_data, 
+                               ifelse(is.na(correlation) & p_value <= 0.05, "bold", "plain"))
+
+# Plot correlogram
 ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
   geom_tile(color = "white") +
   scale_fill_gradient2(low = "red", high = "blue4", mid = "#ffffff", 
@@ -1169,9 +1437,248 @@ c_network_graph <- qgraph(c_corl_cor,
 
 summary(c_sq_DAmodel)
 
-# New Model ----
-# This model is crated to account for the fact that with Drought, CO2 and Temperature acted as one variable
+# Variance Partitioning using Barplot ----
 
-l_DA_Nmodel <- lm(`Display Area (DA)(cm2)` ~ CO2 * Temperature + Drought * (CO2 + Temperature), data = AusL)
+## Creation of Separate Models ----
+### For Lotus ----
+lv_DAmodel <- lm(AusL$`Display Area (DA)(cm2)`~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
+lv_sq_SPAmodel <- lm(AusL$`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
+lv_PDMCmodel <- lm(AusL$`Petal Dry Matter Content (PDMC)(g/g)` ~CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
+lv_LAmodel <- lm(AusL$`Leaf Area (LA)(cm2)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
+lv_SLAmodel <- lm(AusL$`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
+lv_log_LDMCmodel <- lm(AusL$`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
 
-anova(l_DA_Nmodel)
+### For Crepis ----
+cv_sq_DAmodel <- lm(AusC$`Display Area (DA)(cm2)`~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+cv_sq_SPAmodel <- lm(AusC$`Specific Petal Area (SPA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+cv_sq_PDMCmodel <- lm(AusC$`Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+cv_log_LAmodel <- lm(AusC$`log_Leaf Area (LA)(cm2)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+cv_log_SLAmodel <- lm(AusC$`log_Specific Leaf Area (SLA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+cv_sq_LDMCmodel <- lm(AusC$`sqrt_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+cv_sq_SNmodel <- lm(AusC$`sqrt_Number of Seeds (SN)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+cv_log_SMmodel <- lm(AusC$`log_Seed Mass (SM)(g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+anova(cv_sq_DAmodel)
+### Creation of Plot for Lotus ----
+l_model <- list(
+  DA = lv_DAmodel,
+  SPA = lv_sq_SPAmodel,
+  PDMC = lv_PDMCmodel,
+  LA = lv_LAmodel,
+  SLA = lv_SLAmodel,
+  LDMC = lv_log_LDMCmodel
+)
+
+# Initialize an empty data frame to store results
+all_results_df <- data.frame()
+
+# Loop through each model in the l_model list
+for (model_name in names(l_model)) {
+  model <- l_model[[model_name]]
+  
+  # Perform ANOVA using the Anova function from the car package
+  anova_results <- Anova(model, type = "III")
+  
+  # Convert ANOVA results to a data frame
+  anova_results_df <- as.data.frame(anova_results)
+  
+  # Calculate the proportion of variance explained for each factor
+  anova_results_df <- anova_results_df %>%
+    mutate(PropVar = (`Sum Sq` / sum(`Sum Sq`)),
+           Factor = rownames(anova_results_df),
+           Trait = model_name) %>% # Add trait name
+    filter(Factor != "(Intercept)" & Factor != "Residuals") # Exclude intercept and residuals
+  
+  # Combine results into the all_results_df
+  all_results_df <- rbind(all_results_df, anova_results_df)
+}
+all_results_df
+desired_order <- c("LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
+
+# Convert 'Trait' to a factor with the desired order
+all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
+
+# Create a stacked bar plot for all models
+ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
+  geom_bar(stat = "identity", position = "stack") +
+  theme_minimal() +
+  labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
+  scale_fill_manual(values = c("seagreen3", "mediumpurple", "royalblue3", "goldenrod2", "darkorange2"), 
+                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "(CO2 + Temperature) :Drought")) +
+  coord_flip() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
+        axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
+        axis.title = element_text(size = 16),   # Increase axis title font size
+        plot.title = element_text(size = 18),   # Increase plot title font size
+        legend.position = "bottom", 
+        legend.title = element_blank())
+
+#### Including RDA ----
+
+rda.lv <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDL, scale = TRUE)
+
+lv_RDA <- anova.cca(rda.lv, permutations = 9999, by = "terms")
+
+lv_rda_results_df <- lv_RDA %>% 
+  as.data.frame() %>%  # Ensure it is a data frame
+  mutate(
+    PropVar = Variance / sum(Variance),  # Calculate proportion of variance explained
+    Factor = rownames(lv_RDA),           # Add Factor names as a new column
+    Trait = "RDA"                        # Label this as RDA to differentiate in the plot
+  ) %>%
+  filter(Factor != "Residual")  # Correct filter condition to exclude residuals
+
+all_results_selected <- all_results_df[, c("PropVar", "Factor", "Trait")]
+
+# Select necessary columns from lv_rda_results_df
+lv_rda_results_selected <- lv_rda_results_df[, c("PropVar", "Factor", "Trait")]
+
+# Combine the selected columns
+combined_results_df <- rbind(all_results_selected, lv_rda_results_selected)
+
+combined_results_df
+desired_order <- c("RDA", "LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
+
+# Convert 'Trait' to a factor with the desired order
+combined_results_df$Trait <- factor(combined_results_df$Trait, levels = desired_order)
+combined_results_df
+# Create a stacked bar plot for all models
+ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
+  geom_bar(stat = "identity", position = "stack") +
+  theme_minimal() +
+  labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
+  scale_fill_manual(values = c("seagreen3", "mediumpurple", "royalblue3", "goldenrod2", "darkorange2"), 
+                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "(CO2 + Temperature) :Drought")) +
+  coord_flip() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
+        axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
+        axis.title = element_text(size = 16),   # Increase axis title font size
+        plot.title = element_text(size = 18),   # Increase plot title font size
+        legend.position = "bottom", 
+        legend.title = element_blank())
+
+### Creation of plot for Crepis ----
+
+c_model <- list(
+  DA = cv_sq_DAmodel,
+  SPA = cv_sq_SPAmodel,
+  PDMC = cv_sq_PDMCmodel,
+  LA = cv_log_LAmodel,
+  SLA = cv_log_SLAmodel,
+  LDMC = cv_sq_LDMCmodel,
+  SN = cv_sq_SNmodel,
+  SM = cv_log_SMmodel
+)
+
+all_results_df <- data.frame()
+
+# Loop through each model in the l_model list
+for (model_name in names(c_model)) {
+  model <- c_model[[model_name]]
+  
+  # Perform ANOVA using the Anova function from the car package
+  anova_results <- Anova(model, type = "III")
+  
+  # Convert ANOVA results to a data frame
+  anova_results_df <- as.data.frame(anova_results)
+  
+  # Calculate the proportion of variance explained for each factor
+  anova_results_df <- anova_results_df %>%
+    mutate(PropVar = `Sum Sq` / sum(`Sum Sq`),
+           Factor = rownames(anova_results_df),
+           Trait = model_name) %>% # Add trait name
+    filter(Factor != "(Intercept)" & Factor != "Residuals") # Exclude intercept and residuals
+  
+  # Combine results into the all_results_df
+  all_results_df <- rbind(all_results_df, anova_results_df)
+}
+
+desired_order <- c("SM", "SN", "LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
+
+# Convert 'Trait' to a factor with the desired order
+all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
+
+# Create a stacked bar plot for all models
+ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
+  geom_bar(stat = "identity", position = "stack") +
+  theme_minimal() +
+  labs(x = " Traits", y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
+  scale_fill_manual(values = c("seagreen3", "mediumpurple", "royalblue3", "goldenrod2", "darkorange2"), 
+                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "(CO2 + Temperature) :Drought")) +
+  coord_flip() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
+        axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
+        axis.title = element_text(size = 16),   # Increase axis title font size
+        plot.title = element_text(size = 18),   # Increase plot title font size
+        legend.position = "bottom", 
+        legend.title = element_blank())
+
+#### Including RDA ----
+rda.cv <- rda(AusRDC[,c(9:10,12:17)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDC, scale = TRUE)
+
+cv_RDA <- anova.cca(rda.cv, permutations = 9999, by = "terms")
+
+cv_rda_results_df <- lv_RDA %>% 
+  as.data.frame() %>%  # Ensure it is a data frame
+  mutate(
+    PropVar = Variance / sum(Variance),  # Calculate proportion of variance explained
+    Factor = rownames(lv_RDA),           # Add Factor names as a new column
+    Trait = "RDA"                        # Label this as RDA to differentiate in the plot
+  ) %>%
+  filter(Factor != "Residual")  # Correct filter condition to exclude residuals
+
+all_results_selected <- all_results_df[, c("PropVar", "Factor", "Trait")]
+
+# Select necessary columns from lv_rda_results_df
+cv_rda_results_selected <- cv_rda_results_df[, c("PropVar", "Factor", "Trait")]
+
+# Combine the selected columns
+combined_results_df <- rbind(all_results_selected, cv_rda_results_selected)
+
+combined_results_df
+desired_order <- c("RDA", "SM", "SN", "LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
+
+# Convert 'Trait' to a factor with the desired order
+combined_results_df$Trait <- factor(combined_results_df$Trait, levels = desired_order)
+combined_results_df
+# Create a stacked bar plot for all models
+ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
+  geom_bar(stat = "identity", position = "stack") +
+  theme_minimal() +
+  labs(x = " Traits", y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
+  scale_fill_manual(values = c("seagreen3", "mediumpurple", "royalblue3", "goldenrod2", "darkorange2"), 
+                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "(CO2 + Temperature) :Drought")) +
+  coord_flip() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
+        axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
+        axis.title = element_text(size = 16),   # Increase axis title font size
+        plot.title = element_text(size = 18),   # Increase plot title font size
+        legend.position = "bottom", 
+        legend.title = element_blank())
+
+
+
+### Plotting for a single Trait ----
+
+anova_results <- Anova(lv_DAmodel, type = "III")
+
+# Convert ANOVA results to a data frame
+anova_results_df <- as.data.frame(anova_results)
+
+# Calculate the proportion of variance explained for each factor
+anova_results_df <- anova_results_df %>%
+  mutate(PropVar = `Sum Sq` / sum(`Sum Sq`),
+         Factor = rownames(anova_results_df)) %>%
+  filter(Factor != "(Intercept)" & Factor != "Residuals") # Exclude intercept and residuals
+
+# Create a stacked bar plot
+ggplot(anova_results_df, aes(x = 1, y = PropVar, fill = Factor)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(x = NULL, y = "Proportion of Variance Explained", title = "Proportion of Variance Explained by Predictors") +
+  scale_fill_manual(values = c("grey80", "grey50", "black", "red", "blue"), # Adjust colors to match the example
+                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "CO2:Drought")) +
+  coord_flip() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.position = "bottom", 
+        legend.title = element_blank())
