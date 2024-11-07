@@ -719,12 +719,12 @@ crepis_rows <- AusRD[AusRD$Species == "Crepis",]
 crepis_rows <- crepis_rows[-c(46:78),]
 AusRDC <- crepis_rows[,-c(10:17)]
 ## Redundancy Analysis for Lotus ----
-names(AusRDL)[names(AusRDL) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
-names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
-names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
-names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
-names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
-names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
+names(AusRDL)[names(AusRDL) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
+names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
+names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
+names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
+names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "F-DA"
+names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "L-LA"
 names(AusRDL)[names(AusRDL) == "CO2"] <- "C"
 names(AusRDL)[names(AusRDL) == "Temperature"] <- "T"
 names(AusRDL)[names(AusRDL) == "Drought"] <- "D"
@@ -772,14 +772,14 @@ arrows(0, 0, scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[
 text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(bp_scores), col = 'red', pos = 3, cex = 1)
 
 ## Redundancy Analysis for Crepis ----
-names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
-names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
-names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
-names(AusRDC)[names(AusRDC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
-names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "DA"
-names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "LA"
-names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "SN"
-names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "SM"
+names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
+names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
+names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
+names(AusRDC)[names(AusRDC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
+names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "F-DA"
+names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "L-LA"
+names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "S-SN"
+names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "S-SM"
 names(AusRDC)[names(AusRDC) == "CO2"] <- "C"
 names(AusRDC)[names(AusRDC) == "Temperature"] <- "T"
 names(AusRDC)[names(AusRDC) == "Drought"] <- "D"
@@ -1517,7 +1517,7 @@ all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
 ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
+  labs(x = NULL, y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
   scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
                     labels = c("CO2", "(CO2 + Temperature) : Drought", "CO2 : Temperature", "Drought", "Temperature")) +
   coord_flip() +
@@ -1564,7 +1564,7 @@ all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
 ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
+  labs(x = NULL, y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
   scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
                     labels = c("CO2", "(CO2 + Temperature) : Drought", "CO2 : Temperature", "Drought", "Temperature")) +
   coord_flip() +
@@ -1715,7 +1715,7 @@ all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
 ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
+  labs(x = NULL, y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
   scale_fill_manual(values = c("#f7756d", "#00bfc4")) +
   coord_flip() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
@@ -1796,8 +1796,3 @@ ggplot(anova_results_df, aes(x = 1, y = PropVar, fill = Factor)) +
         axis.ticks.x = element_blank(),
         legend.position = "bottom", 
         legend.title = element_blank())
-
-anova(lv_LAmodel)
-anova(lv_SLAmodel)
-anova(lv_log_LDMCmodel)
-
