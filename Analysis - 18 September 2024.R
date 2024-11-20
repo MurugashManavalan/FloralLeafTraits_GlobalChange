@@ -623,8 +623,11 @@ plot(pr, dodge = 1, , colors = c("red", "blue" ), ci_style = "errorbar")+
 # Principal Component Analysis ----
 ## Creation of PCA models ----
 View(AusPC)
+colnames(AusPC)
 lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
 cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
+cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale =  TRUE)
+
 lcav <- prcomp(AusPC[,c(16, 18,19,20)], center = TRUE, scale = TRUE)
 names(AusPC)
 
@@ -647,18 +650,25 @@ scores(lmv, display = "species")
 lmv_scores <- lmv$x
 lmv_scores[,3]
 summary(lmv)
+summary(cmv)
+summary(cav)
 lmv
 ### PCA plots using ggbiplot ----
 
 ggbiplot(lmv, alpha = 0, varname.size = 5) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (35.4%)", y = "PC2 (29.1%)")
+  labs(x = "PC1 (32.7%)", y = "PC2 (28.3%)")
 
 ggbiplot(cmv, alpha = 0, varname.size = 5) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(x = "PC1 (33.6%)", y = "PC2 (21.6%)")
+
+ggbiplot(cav, alpha = 0, varname.size = 5) + 
+  xlim(-2, 2) + 
+  ylim(-2, 2) +
+  labs(x = "PC1 (28%)", y = "PC2 (18.6%)")
 
 ## Extracting PC Scores ----
 summary(cmv)
