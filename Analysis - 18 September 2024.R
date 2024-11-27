@@ -1,20 +1,22 @@
 # Installing Packages ----
-install.packages("corrplot")
-install.packages("ggrepel")
-install.packages("Hmisc")
-install.packages("VennDiagram")
-install.packages("devtools")
-install.github("vqv/ggbiplot") # Need to load devtools package before installing
-install.packages("ggeffects")
-install.packages("igraph")
-install.packages("qgraph")
-install.packages("vegan")
-library(readr) # For easier importing of datasets 
-library(lme4) # For linear models 
-library(lmerTest) # For linear models
-library(ggplot2) # For better plots
+install.packages("corrplot") # Used to visualize correlation matrices and create correlograms to identify data patterns.
+install.packages("ggrepel") #  Enhances ggplot2 by adding labels that repel each other, avoiding overlap in plots.
+install.packages("Hmisc") # Provides tools for data manipulation, descriptive statistics, and creating correlation matrices with significance tests.
+install.packages("VennDiagram") # Creates Venn diagrams to visualize intersections, unions, and unique elements among sets.
+install.packages("devtools") # Facilitates package development and installation, including GitHub-based packages.
+install.github("vqv/ggbiplot")# Extends ggplot2 to visualize PCA results through biplots for exploring variable and observation relationships.
+install_github("kassambara/factoextra") # For Grouping in PCA
+install.packages("ggeffects") # Simplifies the creation of effect plots for regression models to interpret model predictions.
+install.packages("igraph") # Focused on network analysis and visualization, allowing the creation and analysis of graph structures.
+install.packages("qgraph") # Builds visualizations for networks and integrates with igraph, often used for correlation networks and psychological studies.
+install.packages("vegan")# Provides tools for ecological data analysis, including ordination, diversity analysis, and multivariate statistics.
+install.packages("factoextra") # For Grouping in PCA
+library(readr) # Offers fast and user-friendly functions for importing datasets (e.g., CSV, TSV) into R.
+library(lme4) # Fits linear and generalized linear mixed-effects models, useful for hierarchical data or random effects.
+library(lmerTest) # Extends lme4 by adding p-values and other summaries for mixed models.
+library(ggplot2) # A fundamental package for creating customizable and advanced visualizations based on the grammar of graphics.
 library(vegan)
-library(dplyr) # For Variance Partitioning Barplot, for %>%
+library(dplyr) # A data manipulation package with easy-to-use functions and piping (%>%) for filtering and summarizing data.
 library(corrplot) # For Correlation Matrix and Corellogram
 library(igraph) # For Correlation Matrix
 library(qgraph) # For Correlation Matrix
@@ -22,15 +24,16 @@ library(qgraph)
 library(igraph)
 library(Hmisc)
 library(ggrepel)
-library(tidyr)
+library(tidyr) # Simplifies reshaping data (wide to long format) and managing missing values, often used with dplyr.
 library(ggbiplot)
 library(devtools)
 library(ggbiplot)
-library(plyr)
+library(plyr) # Provides functions to split, apply, and combine operations on datasets, though less commonly used due to dplyr.
 library(ggeffects)
-library(car) # For Variance Partitioning Barplot, for Anova
-library(reshape2) # For correlogram
+library(car) # Provides tools for regression analysis, ANOVA, and diagnostic plots, including variance partitioning.
+library(reshape2) # Offers functions for reshaping data frames, such as melting and casting, to prepare tidy datasets.
 library(vegan)
+library(factoextra)
 View(AusC)
 
 # Loading Files into R ----
@@ -611,14 +614,19 @@ ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
   )
 
 ## Plotting Using GGpredict ----
-ggpredict(c_sq_DAmodel)
-pr=ggpredict(c_sq_DAmodel, terms = c("Drought", "Temperature"), type = "fixed")
-pr
-plot(pr, dodge = 1, , colors = c("red", "blue" ), ci_style = "errorbar")+
-  labs(title = NULL,
-       x = "Drought",
-       y = "DA")
-?plot.ggeffects
+cv_sq_DAmodel <- lm(AusC$`Display Area (DA)(cm2)`~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
+c_sq_DAmodel <- lm(`Display Area (DA)(cm2)`~ CO2 * Temperature * Drought, data = AusC)
+DA_pre_model <- ggpredict(c_sq_DAmodel, terms = c("Temperature", "Drought"), type = "fixed")
+plot(DA_pre_model) +
+  labs(x = "CO2 + Temperature", y = "Drought") +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 16),  # Increase x-axis title size
+    axis.title.y = element_text(size = 16),  # Increase y-axis title size
+    axis.text.x = element_text(size = 12),   # Increase x-axis text size
+    axis.text.y = element_text(size = 12)
+  )
+
 
 # Principal Component Analysis ----
 ## Creation of PCA models ----
@@ -632,6 +640,7 @@ lcav <- prcomp(AusPC[,c(16, 18,19,20)], center = TRUE, scale = TRUE)
 names(AusPC)
 
 colnames(AusPC)
+
 ## Plotting of PCA models ---- 
 names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
@@ -642,7 +651,7 @@ names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "SM"
 names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
-biplot(lmv, scale = 0)
+biplot(lmv)
 biplot(cmv, scale = 1, alpha = 0)
 biplot(lcav, scale = 0)
 scores(lmv, display = "species")
@@ -653,23 +662,39 @@ summary(lmv)
 summary(cmv)
 summary(cav)
 lmv
+
 ### PCA plots using ggbiplot ----
 
-ggbiplot(lmv, alpha = 0, varname.size = 5) +
+ggbiplot(lmv, varname.size = 6, groups = AusPC$Treatment[AusPC$Species== "Lotus"], addEllipses = TRUE, ellipse.level=0.95) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (32.7%)", y = "PC2 (28.3%)")
+  labs(x = "PC1 (32.7%)", y = "PC2 (28.3%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+  )
 
-ggbiplot(cmv, alpha = 0, varname.size = 5) + 
+ggbiplot(cmv, varname.size = 6 , groups = AusPC$Treatment[AusPC$Species== "Crepis"], addEllipses = TRUE, ellipse.level=0.95) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (33.6%)", y = "PC2 (21.6%)")
+  labs(x = "PC1 (33.6%)", y = "PC2 (21.6%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+  )
 
-ggbiplot(cav, alpha = 0, varname.size = 5) + 
+ggbiplot(cav, varname.size = 6 , groups = AusPC$Treatment[AusPC$Species== "Crepis"], addEllipses = TRUE, ellipse.level=0.95) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (28%)", y = "PC2 (18.6%)")
+  labs(x = "PC1 (28%)", y = "PC2 (18.6%)") +
+  theme(
+    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+  )
+View(AusPC)
 
+
+## Grouping Based on Predictors ----
 ## Extracting PC Scores ----
 summary(cmv)
 lcav$x
