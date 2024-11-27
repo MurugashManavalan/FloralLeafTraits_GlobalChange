@@ -693,6 +693,30 @@ ggbiplot(cav, varname.size = 6 , groups = AusPC$Treatment[AusPC$Species== "Crepi
   )
 View(AusPC)
 
+## Grouping based on Climatic Variables ----
+### For Lotus
+
+fviz_pca_biplot(lmv, geom = "point", habillage = AusPC$Treatment[AusPC$Species == "Lotus"], addEllipses = TRUE, ellipse.level = 0.95)+
+  labs(title = "Lotus - PCA",x = "PC1 (32.7%)", y = "PC2 (28.3%)") +
+  theme(
+    axis.title.x = element_text(size = 14),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 14)   # Increase size of y-axis title
+  )
+
+fviz_pca_biplot(cmv, geom = "point", habillage = AusPC$Treatment[AusPC$Species == "Crepis"], addEllipses = TRUE, ellipse.level = 0.95)+
+  labs(title = "Crepis - PCA",x = "PC1 (33.6%)", y = "PC2 (21.6%)") +
+  theme(
+    axis.title.x = element_text(size = 14),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 14)   # Increase size of y-axis title
+  )
+
+
+fviz_pca_biplot(cav, geom = "point", habillage = AusPC$Treatment[AusPC$Species == "Crepis"], addEllipses = TRUE, ellipse.level = 0.95)+
+  labs(title = "Crepis - PCA",x = "PC1 (28%)", y = "PC2 (18.6%)") +
+  theme(
+    axis.title.x = element_text(size = 14),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 14)   # Increase size of y-axis title
+  )
 
 ## Grouping Based on Predictors ----
 ## Extracting PC Scores ----
