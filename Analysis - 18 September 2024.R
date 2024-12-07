@@ -718,17 +718,86 @@ fviz_pca_biplot(cav, geom = "point", habillage = AusPC$Treatment[AusPC$Species =
     axis.title.y = element_text(size = 14)   # Increase size of y-axis title
   )
 
-## Grouping Based on Predictors ----
-## Extracting PC Scores ----
-summary(cmv)
-lcav$x
-AusPC1 <- cbind(AusPC, lcav$x[,1:4])
-View(AusPC1)
-View(AusC)
-## Plotting with GG plot ----
-ggplot(AusPC, aes(PC1,PC2, colour = Species, fill = Species)) +
-  stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) +
-  geom_point(shape = 21, col = "black")
+## Using Ordispider Package ----
+
+library(vegan)
+### For Lotus ----
+l_pca_scores <- as.data.frame(lmv$x)   # Extract PCA individual scores
+l_groups <- AusPC$Treatment[AusPC$Species == "Lotus"]  # Grouping variable
+
+# Base plot
+plot(l_pca_scores$PC1, l_pca_scores$PC2, 
+     xlab = "PC1 (32.7%)", ylab = "PC2 (28.3%)", main = "Lotus - PCA",
+     col = as.factor(l_groups), pch = 19, cex = 1.5)
+
+# Add spider diagram
+ordispider(l_pca_scores, l_groups, col = rainbow(length(unique(l_groups))), label = TRUE)
+ordihull(l_pca_scores, l_groups, col = rainbow(length(unique(l_groups))), draw = "polygon")
+
+# Optional: Add legend
+legend("topright", legend = unique(l_groups), 
+       col = rainbow(length(unique(l_groups))), 
+       pch = 19, bty = "n")
+
+# Adding arrows
+l_pca_loadings <- as.data.frame(lmv$rotation[, 1:2])  
+arrows(0, 0, 
+       l_pca_loadings$PC1 * 2,  
+       l_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(l_pca_loadings$PC1 * 2.2, l_pca_loadings$PC2 * 2.2, labels = rownames(l_pca_loadings), col = "blue", cex = 0.8)
+
+### For Crepis (Main Variables) ----
+cm_pca_scores <- as.data.frame(cmv$x)
+c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
+
+#Base plot
+plot(cm_pca_scores$PC1, cm_pca_scores$PC2,
+     xlab = "PC1 (33.6%)", ylab = "PC2 (21.6%)", main = "Crepis - Main Variables - PCA",
+     col=as.factor(c_groups), pch = 19, cex = 1.5)
+
+# Add spider diagram
+ordispider(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
+ordihull(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
+
+# Optional: Add legend
+legend("topright", legend = unique(c_groups), 
+       col = rainbow(length(unique(c_groups))), 
+       pch = 19, bty = "n")
+
+# Adding arrows
+cm_pca_loadings <- as.data.frame(cmv$rotation[, 1:2])  
+arrows(0, 0, 
+       cm_pca_loadings$PC1 * 2,  
+       cm_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(cm_pca_loadings$PC1 * 2.2, cm_pca_loadings$PC2 * 2.2, labels = rownames(cm_pca_loadings), col = "blue", cex = 0.8)
+
+### For Crepis (All Variables) ----
+ca_pca_scores <- as.data.frame(cav$x)
+c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
+
+#Base plot
+plot(ca_pca_scores$PC1, ca_pca_scores$PC2,
+     xlab = "PC1 (28%)", ylab = "PC2 (18.6%)", main = "Crepis - All Variables - PCA",
+     col=as.factor(c_groups), pch = 19, cex = 1.5)
+
+# Add spider diagram
+ordispider(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
+ordihull(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
+
+# Optional: Add legend
+legend("topright", legend = unique(c_groups), 
+       col = rainbow(length(unique(c_groups))), 
+       pch = 19, bty = "n")
+
+# Adding arrows
+ca_pca_loadings <- as.data.frame(cav$rotation[, 1:2])  
+arrows(0, 0, 
+       ca_pca_loadings$PC1 * 2,  
+       ca_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(ca_pca_loadings$PC1 * 2.2, ca_pca_loadings$PC2 * 2.2, labels = rownames(ca_pca_loadings), col = "blue", cex = 0.8)
 
 ## Extracting PCA Results----
 ### For Lotus ----
