@@ -359,6 +359,43 @@ ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperat
     legend.title = element_text(size = 24),  # Increase legend title size
     legend.text = element_text(size = 22)    # Increase legend text size
   )
+ggplot(AusL, aes(x = CO2, y = AusL$`Display Area (DA)(cm2)`, fill = Drought)) +
+  geom_boxplot() +
+  facet_wrap(~ Drought) +
+  labs(
+    title = "Lotus - Effect of Combined Interaction on DA",
+    x = "CO2 + Temperature Level",
+    y = "Display Area (DA)(cm2)",
+    fill = "Drought"
+  ) +
+  theme(
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
+  )
+
+ggplot(AusL, aes(x = CO2, y = AusL$`Leaf Area (LA)(cm2)`, fill = Drought)) +
+  geom_boxplot() +
+  facet_wrap(~ Drought) +
+  labs(
+    title = "Lotus - Effect of Combined Interaction on LA",
+    x = "CO2 + Temperature Level",
+    y = "Leaf Area (LA)(cm2)",
+    fill = "Drought"
+  ) +
+  theme(
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
+  )
 
 ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
   geom_boxplot() +
