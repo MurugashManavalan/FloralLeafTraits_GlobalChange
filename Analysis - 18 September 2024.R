@@ -226,141 +226,118 @@ plot(AusL$`Leaf Dry Matter Content (LDMC)(g/g)`~AusL$CO2, main = "CO2 on LDMC", 
 plot(AusL$`Leaf Dry Matter Content (LDMC)(g/g)`~AusL$Drought, main = "Drought on LDMC", xlab = "Drought Level", ylab = "Leaf Dry Matter Content (LDMC)(g/g)")
 
 ## Plots in Lotus (Using ggplot) ----
-### Display Area ----
-ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
-  geom_boxplot() +
-  labs(
-    title = "Lotus - Effect of Temperature on Display Area",
-    x = "Temperature Level",
-    y = "Display Area (DA)(cm2)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-
-ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
-  geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    title = "Lotus - Effect of CO2 Level on DA by Temperature",
-    x = "CO2 Level",
-    y = "Display Area (DA)(cm2)",
-    fill = "Temperature"
-  ) +
-  theme_minimal()+
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-
-ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Drought)) +
-  geom_boxplot() +
-  facet_wrap(~ Drought) +
-  labs(
-    title = "Lotus - Effect of CO2 and Temperature on DA by Drought Level",
-    x = "CO2 + Temperature Level",
-    y = "Display Area (DA)(cm2)",
-    fill = "Drought"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Specific Petal Area ----
-ggplot(AusL, aes(x = AusL$Drought, y = AusL$`Specific Petal Area (SPA)(cm2/g)`))+
-  geom_boxplot() +
-  labs(
-    title = "Lotus - Effect of Drought on Specific Petal Area",
-    x = "Drought Level",
-    y = "Specific Petal Area (SPA)(cm2/g)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Leaf Area ----
+### CO2 ----
 ggplot(AusL, aes(x = AusL$CO2, y = AusL$`Leaf Area (LA)(cm2)`))+
-  geom_boxplot() +
+  geom_boxplot(fill = "#f7766d") +
   labs(
-    title = "Lotus - Effect of CO2 on Leaf Area",
+    title = "Lotus - Effect of CO2 on LA",
     x = "CO2 Level",
     y = "Leaf Area (LA)(cm2)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-ggplot(AusL, aes(x = CO2, y = `Leaf Area (LA)(cm2)`, fill = Drought)) +
-  geom_boxplot() +
-  facet_wrap(~ Drought) +
-  labs(
-    title = "Lotus - Effect of CO2 and Temperature on LA by Drought Level",
-    x = "CO2 + Temperature Level",
-    y = "Leaf Area (LA)(cm2)",
-    fill = "Drought"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-
-### Specific Leaf Area ----
 ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
-  geom_boxplot() +
+  geom_boxplot(fill = "#f7766d") +
   labs(
-    title = "Lotus - Effect of CO2 Level on SLA",
+    title = "Lotus - Effect of CO2 on SLA",
     x = "CO2 Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
+ggplot(AusL, aes(x = CO2,y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
+  geom_boxplot(fill = "#f7766d") +
+  labs(
+    title = "Lotus - Effect of CO2 on LDMC",
+    x = "CO2 Level",
+    y = "Leaf Dry Matter Content (LDMC) (g/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
 
+### Temperature ----
+ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
+  geom_boxplot(fill = "#f7766d") +
+  labs(
+    title = "Lotus - Effect of Temperature on DA",
+    x = "Temperature Level",
+    y = "Display Area (DA)(cm2)"
+  ) +
+  theme(
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
+
+### Drought ----
 ggplot(AusL, aes(x = AusL$Drought, y= AusL$`Specific Leaf Area (SLA)(cm2/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Lotus - Effect of Drought on SLA",
     x = "Drought Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
+
+ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
+  geom_boxplot(fill = "#f7766d")+
+  labs(
+    title = "Lotus - Effect of Drought on LDMC",
+    x = "Drought Level",
+    y = "Leaf Dry Matter Content (LDMC) (g/g)"
+  ) +
+  theme(
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+  )
+
+### Interactions ----
+
+ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
+  geom_boxplot() +
+  facet_wrap(~ Temperature) +
+  labs(
+    title = "Lotus - Effect of CO2 and Temperature on DA",
+    x = "CO2 Level",
+    y = "Display Area (DA)(cm2)",
+    fill = "Temperature"
+  ) +
+  theme(
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
 
 
@@ -368,69 +345,38 @@ ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperat
   geom_boxplot() +
   facet_wrap(~ Temperature) +
   labs(
-    title = "Lotus - Effect of CO2 Level on SLA by Temperature Level",
+    title = "Lotus - Effect of CO2 and Temperature on SLA",
     x = "CO2 Level",
     y = "Specific Leaf Area (SLA) (cm2/g)",
     fill = "Temperature"
   ) +
-  theme_minimal() +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-
-### Leaf Dry Matter Content ----
-
-ggplot(AusL, aes(x = CO2,y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
-  geom_boxplot() +
-  labs(
-    title = "Lotus - Effect of CO2 Level on LDMC",
-    x = "CO2 Level",
-    y = "Leaf Dry Matter Content (LDMC) (g/g)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
-  geom_boxplot()+
-  labs(
-    title = "Lotus - Effect of Drought on LDMC",
-    x = "Drought Level",
-    y = "Leaf Dry Matter Content (LDMC) (g/g)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
 
 ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
   geom_boxplot() +
   facet_wrap(~ Drought) +
   labs(
-    title = "Lotus - Effect of CO2 and Temperature on LDMC by Drought",
+    title = "Lotus - Effect of Combined Interaction on LDMC",
     x = "CO2 + Temperature Level",
     y = "Leaf Dry Matter Content (LDMC)(g/g)",
     fill = "Drought"
   ) +
-  theme_minimal() +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
 
 anova(lv_LAmodel)
@@ -446,187 +392,121 @@ plot(AusC$`Number of Seeds (SN)`~AusC$Drought, main = "Drought on No. of Seeds",
 ## Plots in Crepis (Using ggplot) ----
 View(AusC)
 
-### Display Area ----
+### Drought ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on DA",
     x = "Drought Level",
     y = "Display Area (DA)(cm2)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-### Specific Petal Area ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Specific Petal Area (SPA)(cm2/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on SPA",
     x = "Drought Level",
     y = "Specific Petal Area (SPA)(cm2/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
-  geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    title = "Crepis - Effect of CO2 Level on SPA by Temperature",
-    x = "CO2 Level",
-    y = "Specific Petal Area (SPA)(cm2/g)",
-    fill = "Temperature"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Petal Dry Matter Content ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Petal Dry Matter Content (PDMC)(g/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on PDMC",
     x = "Drought Level",
     y = "Petal Dry Matter Content (PDMC)(g/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-ggplot(AusC, aes(x = CO2, y = `Petal Dry Matter Content (PDMC)(g/g)`, fill = Temperature)) +
-  geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    title = "Crepis - Effect of CO2 Level on PDMC by Temperature",
-    x = "CO2 Level",
-    y = "Petal Dry Matter Content (PDMC)(g/g)",
-    fill = "Temperature"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-View(AusL)
-### Leaf Area ----
-ggplot(AusC, aes(x = AusC$Temperature, y= `Leaf Area (LA)(cm2)`)) +
-  geom_boxplot()+
-  labs(
-    title = "Crepis - Effect of Temperature on LA",
-    x = "Temperature Level",
-    y = "Leaf Area (LA)(cm2)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
-### Leaf Dry Matter Content ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on LDMC",
     x = "Drought Level",
     y = "Leaf Dry Matter Content (g/g)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   ) 
 
-### Seed Number ----
-ggplot(AusC, aes(x = AusC$Temperature, y= `Number of Seeds (SN)`)) +
-  geom_boxplot()+
-  labs(
-    title = "Crepis - Effect of Temperature on SN",
-    x = "Temperature Level",
-    y = "Number of Seeds (SN)"
-  ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
-  )
-
 ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
-  geom_boxplot()+
+  geom_boxplot(fill = "#f7766d")+
   labs(
     title = "Crepis - Effect of Drought on SN",
     x = "Drought Level",
     y = "Number of Seeds (SN)"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 32),  # Increase x-axis title size
+    axis.title.y = element_text(size = 32),  # Increase y-axis title size
+    axis.text.x = element_text(size = 28),   # Increase x-axis text size
+    axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
+### Interactions ----
+
+ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
+  geom_boxplot() +
+  facet_wrap(~ Temperature) +
+  labs(
+    title = "Crepis - Effect of CO2 and Temperature on SPA",
+    x = "CO2 Level",
+    y = "Specific Petal Area (SPA)(cm2/g)",
+    fill = "Temperature"
+  ) +
+  theme(
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
+  )
 
 ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
   geom_boxplot() +
   facet_wrap(~ Temperature) +
   labs(
-    title = "Crepis - Effect of CO2 on SN by Temperature",
+    title = "Crepis - Effect of CO2 and Temperature on SN",
     x = "CO2 Level",
     y = "Number of Seeds (SN)",
     fill = "Temperature"
   ) +
-  theme_minimal() +
   theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)    # Increase y-axis text size
+    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
+    axis.title.x = element_text(size = 28),  # Increase x-axis title size
+    axis.title.y = element_text(size = 28),  # Increase y-axis title size
+    axis.text.x = element_text(size = 26),   # Increase x-axis text size
+    axis.text.y = element_text(size = 26),   # Increase y-axis text size
+    legend.title = element_text(size = 24),  # Increase legend title size
+    legend.text = element_text(size = 22)    # Increase legend text size
   )
-
-## Plotting Using GGpredict ----
-cv_sq_DAmodel <- lm(AusC$`Display Area (DA)(cm2)`~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
-c_sq_DAmodel <- lm(`Display Area (DA)(cm2)`~ CO2 * Temperature * Drought, data = AusC)
-DA_pre_model <- ggpredict(c_sq_DAmodel, terms = c("Temperature", "Drought"), type = "fixed")
-plot(DA_pre_model) +
-  labs(x = "CO2 + Temperature", y = "Drought") +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 16),  # Increase x-axis title size
-    axis.title.y = element_text(size = 16),  # Increase y-axis title size
-    axis.text.x = element_text(size = 12),   # Increase x-axis text size
-    axis.text.y = element_text(size = 12)
-  )
-
 
 # Principal Component Analysis ----
 ## Creation of PCA models ----
@@ -642,14 +522,14 @@ names(AusPC)
 colnames(AusPC)
 
 ## Plotting of PCA models ---- 
-names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
-names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
-names(AusPC)[names(AusPC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
-names(AusPC)[names(AusPC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
-names(AusPC)[names(AusPC) == "Number of Seeds (SN)"] <- "SN"
-names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "SM"
-names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
-names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "LA"
+names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
+names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
+names(AusPC)[names(AusPC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
+names(AusPC)[names(AusPC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
+names(AusPC)[names(AusPC) == "Number of Seeds (SN)"] <- "S-SN"
+names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "S-SM"
+names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "F-DA"
+names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "L-LA"
 
 biplot(lmv)
 biplot(cmv, scale = 1, alpha = 0)
@@ -725,19 +605,25 @@ library(vegan)
 l_pca_scores <- as.data.frame(lmv$x)   # Extract PCA individual scores
 l_groups <- AusPC$Treatment[AusPC$Species == "Lotus"]  # Grouping variable
 
+# Define a consistent color palette for the polygons
+unique_groups <- unique(l_groups)
+group_colors <- setNames(rainbow(length(unique_groups)), unique_groups)
+
 # Base plot
 plot(l_pca_scores$PC1, l_pca_scores$PC2, 
      xlab = "PC1 (32.7%)", ylab = "PC2 (28.3%)", main = "Lotus - PCA",
-     col = as.factor(l_groups), pch = 19, cex = 1.5)
+     col = group_colors[l_groups], pch = 19, cex = 1.5)
 
-# Add spider diagram
+# Add spider diagram (ordihull polygons)
 ordispider(l_pca_scores, l_groups, col = rainbow(length(unique(l_groups))), label = TRUE)
-ordihull(l_pca_scores, l_groups, col = rainbow(length(unique(l_groups))), draw = "polygon")
+ordihull(l_pca_scores, l_groups, col = group_colors, draw = "polygon", alpha = 0.4)
 
-# Optional: Add legend
-legend("topright", legend = unique(l_groups), 
-       col = rainbow(length(unique(l_groups))), 
-       pch = 19, bty = "n")
+# Add legend matching polygon colors
+legend("topright",
+       legend = unique_groups,
+       fill = group_colors,
+       border = "black",
+       title = "Treatment Groups")
 
 # Adding arrows
 l_pca_loadings <- as.data.frame(lmv$rotation[, 1:2])  
@@ -763,7 +649,7 @@ ordihull(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw =
 # Optional: Add legend
 legend("topright", legend = unique(c_groups), 
        col = rainbow(length(unique(c_groups))), 
-       pch = 19, bty = "n")
+       pch = 19, bty = "o")
 
 # Adding arrows
 cm_pca_loadings <- as.data.frame(cmv$rotation[, 1:2])  
@@ -788,8 +674,11 @@ ordihull(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw =
 
 # Optional: Add legend
 legend("topright", legend = unique(c_groups), 
-       col = rainbow(length(unique(c_groups))), 
-       pch = 19, bty = "n")
+       col = rainbow(length(unique(c_groups))),
+       border = "black",
+       pch = 19, bty = "o", title = "Treatment Groups")
+
+
 
 # Adding arrows
 ca_pca_loadings <- as.data.frame(cav$rotation[, 1:2])  
@@ -858,7 +747,7 @@ names(AusRDL)[names(AusRDL) == "Temperature"] <- "T"
 names(AusRDL)[names(AusRDL) == "Drought"] <- "D"
 
 
-rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2*Temperature*Drought, data = AusRDL, scale = TRUE)
+rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ C*T*D, data = AusRDL, scale = TRUE)
 Lotus_RDA <- anova.cca(rda.l, permutations = 9999, by = "terms")
 Lotus_RDA <- as.data.frame(Lotus_RDA)
 View(Lotus_RDA) # CO2, Temperature, Drought and CO2:Drought are significant
@@ -875,10 +764,11 @@ l_rda_proportion_explained
 summary(rda.ln)
 
 # Changing Name of Interaction ----
-bp_scores <- scores(rda.ln, display = "bp")
 
+bp_scores <- scores(rda.ln, display = "bp")
+rownames(bp_scores)
 # Rename the fourth row
-rownames(bp_scores)[4] <- "(CT):D"
+rownames(bp_scores)[4] <- "(C+T)xD"
 
 # View the updated biplot scores
 rownames(bp_scores)
