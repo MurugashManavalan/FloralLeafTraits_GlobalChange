@@ -557,16 +557,16 @@ lcav <- prcomp(AusPC[,c(16, 18,19,20)], center = TRUE, scale = TRUE)
 names(AusPC)
 
 colnames(AusPC)
-
+View(AusPC)
 ## Plotting of PCA models ---- 
-names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
-names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
-names(AusPC)[names(AusPC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
-names(AusPC)[names(AusPC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
-names(AusPC)[names(AusPC) == "Number of Seeds (SN)"] <- "S-SN"
-names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "S-SM"
-names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "F-DA"
-names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "L-LA"
+names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
+names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
+names(AusPC)[names(AusPC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
+names(AusPC)[names(AusPC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
+names(AusPC)[names(AusPC) == "Number of Seeds (SN)"] <- "SN"
+names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "SM"
+names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
+names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
 biplot(lmv)
 biplot(cmv, scale = 1, alpha = 0)
@@ -611,33 +611,7 @@ ggbiplot(cav, varname.size = 6 , groups = AusPC$Treatment[AusPC$Species== "Crepi
 View(AusPC)
 
 ## Grouping based on Climatic Variables ----
-### For Lotus
-
-fviz_pca_biplot(lmv, geom = "point", habillage = AusPC$Treatment[AusPC$Species == "Lotus"], addEllipses = TRUE, ellipse.level = 0.95)+
-  labs(title = "Lotus - PCA",x = "PC1 (32.7%)", y = "PC2 (28.3%)") +
-  theme(
-    axis.title.x = element_text(size = 14),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 14)   # Increase size of y-axis title
-  )
-
-fviz_pca_biplot(cmv, geom = "point", habillage = AusPC$Treatment[AusPC$Species == "Crepis"], addEllipses = TRUE, ellipse.level = 0.95)+
-  labs(title = "Crepis - PCA",x = "PC1 (33.6%)", y = "PC2 (21.6%)") +
-  theme(
-    axis.title.x = element_text(size = 14),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 14)   # Increase size of y-axis title
-  )
-
-
-fviz_pca_biplot(cav, geom = "point", habillage = AusPC$Treatment[AusPC$Species == "Crepis"], addEllipses = TRUE, ellipse.level = 0.95)+
-  labs(title = "Crepis - PCA",x = "PC1 (28%)", y = "PC2 (18.6%)") +
-  theme(
-    axis.title.x = element_text(size = 14),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 14)   # Increase size of y-axis title
-  )
-
 ## Using Ordispider Package ----
-
-library(vegan)
 ### For Lotus ----
 l_pca_scores <- as.data.frame(lmv$x)   # Extract PCA individual scores
 l_groups <- AusPC$Treatment[AusPC$Species == "Lotus"]  # Grouping variable
@@ -715,8 +689,6 @@ legend("topright", legend = unique(c_groups),
        border = "black",
        pch = 19, bty = "o", title = "Treatment Groups")
 
-
-
 # Adding arrows
 ca_pca_loadings <- as.data.frame(cav$rotation[, 1:2])  
 arrows(0, 0, 
@@ -724,6 +696,146 @@ arrows(0, 0,
        ca_pca_loadings$PC2 * 2,  
        col = "blue", length = 0.1)
 text(ca_pca_loadings$PC1 * 2.2, ca_pca_loadings$PC2 * 2.2, labels = rownames(ca_pca_loadings), col = "blue", cex = 0.8)
+
+## Rank Abundance Curves ----
+### Creating PCA for each treatment ----
+### Lotus ----
+lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
+lmv_control <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
+lmv_drought <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
+lmv_temperature <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
+lmv_co2 <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
+lmv_ct <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
+lmv_ctd <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
+
+### Extracting Variance Explained for each treatment
+variance_lmv_control <- lmv_control$sdev^2 / sum(lmv_control$sdev^2)
+variance_lmv_drought <- lmv_drought$sdev^2 / sum(lmv_drought$sdev^2)
+variance_lmv_temperature <- lmv_temperature$sdev^2 / sum(lmv_temperature$sdev^2)
+variance_lmv_co2 <- lmv_co2$sdev^2 / sum(lmv_co2$sdev^2)
+variance_lmv_ct <- lmv_ct$sdev^2 / sum(lmv_ct$sdev^2)
+variance_lmv_ctd <- lmv_ctd$sdev^2 / sum(lmv_ctd$sdev^2)
+
+### Combining Variance Explained Results to a dataframe ----
+AusL_PC <- data.frame(
+  PCA_axis = rep(1:6,6),
+  Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
+  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
+)
+
+### Adding zero to treatments with insufficient PCA Axis 
+if (length(variance_lmv_drought) < 6) {
+  variance_lmv_drought <- c(variance_lmv_drought, rep(0, 6 - length(variance_lmv_drought)))
+}
+if (length(variance_lmv_ct) < 6) {
+  variance_lmv_ct <- c(variance_lmv_ct, rep(0, 6 - length(variance_lmv_ct)))
+}
+
+ggplot(AusL_PC, aes(x = AusL_PC$PCA_axis, y = AusL_PC$Variance_Explained, color = AusL_PC$Treatment)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Lotus - Effect of Climatic Factors on Trait Covariation",
+    x = "PCA Axis",
+    y = "Proportion of Variance Explained",
+    color = "Treatment"
+  ) +
+  theme_minimal()
+
+View(AusL_PC)
+
+### Crepis (Main Variables) ----
+cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
+cmv_control <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
+cmv_drought <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
+cmv_temperature <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
+cmv_co2 <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
+cmv_ct <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
+cmv_ctd <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
+
+### Extracting variance explained for each treatment 
+variance_cmv_control <- cmv_control$sdev^2 / sum(cmv_control$sdev^2)
+variance_cmv_drought <- cmv_drought$sdev^2 / sum(cmv_drought$sdev^2)
+variance_cmv_temperature <- cmv_temperature$sdev^2 / sum(cmv_temperature$sdev^2)
+variance_cmv_co2 <- cmv_co2$sdev^2 / sum(cmv_co2$sdev^2)
+variance_cmv_ct <- cmv_ct$sdev^2 / sum(cmv_ct$sdev^2)
+variance_cmv_ctd <- cmv_ctd$sdev^2 / sum(cmv_ctd$sdev^2)
+
+lengths <- sapply(list(variance_cmv_control, variance_cmv_co2, variance_cmv_temperature, variance_cmv_drought, variance_cmv_ct, variance_cmv_ctd), length)
+print(lengths)
+
+### Combining variance explained results to a dataframe
+
+AusCM_PC <- data.frame(
+  PCA_axis = rep(1:6, 6),
+  Variance_Explained = c(variance_cmv_control, variance_cmv_co2, variance_cmv_temperature, variance_cmv_drought, variance_cmv_ct, variance_cmv_ctd),
+  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
+)
+
+ggplot(AusCM_PC, aes(x = AusCM_PC$PCA_axis, y = AusCM_PC$Variance_Explained, color = AusCM_PC$Treatment)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Crepis (Main Variables) - Effect of Climatic Factors on Trait Covariation",
+    x = "PCA Axis",
+    y = "Proportion of Variance Explained",
+    color = "Treatment"
+  ) +
+  theme_minimal()
+
+### Crepis (All Variables) ----
+cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
+
+cav_control <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D0", c(9,18,20:25)], scale = TRUE)
+cav_drought <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D1", c(9,18,20:25)], scale = TRUE)
+cav_temperature <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T2D0", c(9,18,20:25)], scale = TRUE)
+cav_co2 <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T0D0", c(9,18,20:25)], scale = TRUE)
+cav_ct <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D0", c(9,18,20:25)], scale = TRUE)
+cav_ctd <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D1", c(9,18,20:25)], scale = TRUE)
+
+### Extracting variance explained for each treatment 
+variance_cav_control <- cav_control$sdev^2 / sum(cav_control$sdev^2)
+variance_cav_drought <- cav_drought$sdev^2 / sum(cav_drought$sdev^2)
+variance_cav_temperature <- cav_temperature$sdev^2 / sum(cav_temperature$sdev^2)
+variance_cav_co2 <- cav_co2$sdev^2 / sum(cav_co2$sdev^2)
+variance_cav_ct <- cav_ct$sdev^2 / sum(cav_ct$sdev^2)
+variance_cav_ctd <- cav_ctd$sdev^2 / sum(cav_ctd$sdev^2)
+
+### Checking the lengths of variance vectors
+lengths <- sapply(list(variance_cav_control, variance_cav_co2, variance_cav_temperature, variance_cav_drought, variance_cav_ct, variance_cav_ctd), length)
+print(lengths)
+
+### Adding zero to treatments with insufficient PCA Axis 
+if (length(variance_cav_co2) < 8) {
+  variance_cav_co2 <- c(variance_cav_co2, rep(0, 8 - length(variance_cav_co2)))
+}
+
+if (length(variance_cav_ct) < 8) {
+  variance_cav_ct <- c(variance_cav_ct, rep(0, 8 - length(variance_cav_ct)))
+}
+
+if (length(variance_cav_ctd) < 8) {
+  variance_cav_ctd <- c(variance_cav_ctd, rep(0, 8 - length(variance_cav_ctd)))
+}
+
+### Combining variance explained results to a dataframe
+
+AusCA_PC <- data.frame(
+  PCA_axis = rep(1:8, 6),
+  Variance_Explained = c(variance_cav_control, variance_cav_co2, variance_cav_temperature, variance_cav_drought, variance_cav_ct, variance_cav_ctd),
+  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 8)
+)
+
+ggplot(AusCA_PC, aes(x = AusCA_PC$PCA_axis, y = AusCA_PC$Variance_Explained, color = AusCA_PC$Treatment)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Crepis (All Variables) - Effect of Climatic Factors on Trait Covariation",
+    x = "PCA Axis",
+    y = "Proportion of Variance Explained",
+    color = "Treatment"
+  ) +
+  theme_minimal()
 
 ## Extracting PCA Results----
 ### For Lotus ----
@@ -754,7 +866,6 @@ write.csv(crepis_pca_trait_loadings, "crepis_pca_trait_loadings.csv", row.names 
 write.csv(crepis_pca_eigenvalues, "crepis_pca_eigenvalues.csv", row.names = FALSE)
 write.csv(crepis_pca_variance, "crepis_pca_variance.csv")
 write.csv(crepis_pca_cum_variance, "crepis_pca_cum_variance.csv")
-
 
 
 # Proportion of variance explained
