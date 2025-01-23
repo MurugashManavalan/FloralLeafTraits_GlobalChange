@@ -1,0 +1,29 @@
+
+Call:
+rda(formula = AusRDL[, c(9, 18, 20:23)] ~ C * T * D, data = AusRDL,      scale = TRUE) 
+
+Partitioning of correlations:
+              Inertia Proportion
+Total            6.00       1.00
+Constrained      1.74       0.29
+Unconstrained    4.26       0.71
+
+Eigenvalues, and their contribution to the correlations 
+
+Importance of components:
+                        RDA1    RDA2    RDA3    RDA4     RDA5    PC1    PC2    PC3     PC4     PC5
+Eigenvalue            1.0466 0.36255 0.22233 0.06859 0.039986 1.6586 0.9749 0.7266 0.46830 0.32893
+Proportion Explained  0.1744 0.06043 0.03705 0.01143 0.006664 0.2764 0.1625 0.1211 0.07805 0.05482
+Cumulative Proportion 0.1744 0.23485 0.27191 0.28334 0.290001 0.5664 0.7289 0.8500 0.92806 0.98288
+                          PC6
+Eigenvalue            0.10271
+Proportion Explained  0.01712
+Cumulative Proportion 1.00000
+
+Accumulated constrained eigenvalues
+Importance of components:
+                        RDA1   RDA2   RDA3    RDA4    RDA5
+Eigenvalue            1.0466 0.3626 0.2223 0.06859 0.03999
+Proportion Explained  0.6015 0.2084 0.1278 0.03942 0.02298
+Cumulative Proportion 0.6015 0.8098 0.9376 0.97702 1.00000
+
