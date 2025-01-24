@@ -655,7 +655,13 @@ ggplot(AusL_PC, aes(x = AusL_PC$PCA_axis, y = AusL_PC$Variance_Explained, color 
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme_minimal()
+  theme(
+    plot.title = element_text(size = 18, face = "bold"), # Increase title size
+    axis.title = element_text(size = 14),               # Increase axis labels
+    axis.text = element_text(size = 12),                # Increase tick labels
+    legend.title = element_text(size = 14),             # Increase legend title
+    legend.text = element_text(size = 12)               # Increase legend text
+  ) 
 
 View(AusL_PC)
 
@@ -696,7 +702,13 @@ ggplot(AusCM_PC, aes(x = AusCM_PC$PCA_axis, y = AusCM_PC$Variance_Explained, col
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme_minimal()
+  theme(
+    plot.title = element_text(size = 18, face = "bold"), # Increase title size
+    axis.title = element_text(size = 14),               # Increase axis labels
+    axis.text = element_text(size = 12),                # Increase tick labels
+    legend.title = element_text(size = 14),             # Increase legend title
+    legend.text = element_text(size = 12)               # Increase legend text
+  ) 
 
 ### Crepis (All Variables) ----
 cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
@@ -750,7 +762,13 @@ ggplot(AusCA_PC, aes(x = AusCA_PC$PCA_axis, y = AusCA_PC$Variance_Explained, col
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme_minimal()
+  theme(
+    plot.title = element_text(size = 18, face = "bold"), # Increase title size
+    axis.title = element_text(size = 14),               # Increase axis labels
+    axis.text = element_text(size = 12),                # Increase tick labels
+    legend.title = element_text(size = 14),             # Increase legend title
+    legend.text = element_text(size = 12)               # Increase legend text
+  ) 
 
 ## Extracting PCA Results----
 ### For Lotus ----
@@ -1122,7 +1140,7 @@ write.csv(combined_df, "crepis_a_ctd_pca_combined.csv", row.names = TRUE)
 ## PCA Plots for Each Treatment ----
 ### For Lotus ----
 
-ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
+ggbiplot(lmv_control, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D0", x = "PC1 (42.4%)", y = "PC2 (22.8%)") +
@@ -1132,7 +1150,7 @@ ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
 
-ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
+ggbiplot(lmv_co2, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T0D0", x = "PC1 (45.4%)", y = "PC2 (31.8%)") +
@@ -1142,7 +1160,7 @@ ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
 
-ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
+ggbiplot(lmv_temperature, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T2D0", x = "PC1 (44.2%)", y = "PC2 (29.7%)") +
@@ -1152,7 +1170,7 @@ ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
+ggbiplot(lmv_drought, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D1", x = "PC1 (39.5%)", y = "PC2 (34.9%)") +
@@ -1162,7 +1180,7 @@ ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
+ggbiplot(lmv_ct, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D0", x = "PC1 (44.2%)", y = "PC2 (31.2%)") +
@@ -1172,7 +1190,7 @@ ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
+ggbiplot(lmv_ctd, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D1", x = "PC1 (66.8%)", y = "PC2 (24.7%)") +
@@ -1183,7 +1201,7 @@ ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
   )
 
 ### For Crepis (Main Variables) ----
-ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
+ggbiplot(cmv_control, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D0", x = "PC1 (32.1%)", y = "PC2 (30.6%)") +
@@ -1193,7 +1211,7 @@ ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
 
-ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
+ggbiplot(cmv_co2, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T0D0", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
@@ -1203,7 +1221,7 @@ ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
 
-ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
+ggbiplot(cmv_temperature, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T2D0", x = "PC1 (35.5%)", y = "PC2 (27.8%)") +
@@ -1213,7 +1231,7 @@ ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
+ggbiplot(cmv_drought, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D1", x = "PC1 (42.7%)", y = "PC2 (25.3%)") +
@@ -1223,7 +1241,7 @@ ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
+ggbiplot(cmv_ct, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D0", x = "PC1 (69.7%)", y = "PC2 (15.7%)") +
@@ -1233,7 +1251,7 @@ ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
+ggbiplot(cmv_ctd, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D1", x = "PC1 (49.2%)", y = "PC2 (28.7%)") +
@@ -1244,7 +1262,7 @@ ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
   )
 
 ### For Crepis (All Variables) ----
-ggbiplot(cav_control, varname.size = 6, alpha = 0) +
+ggbiplot(cav_control, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D0", x = "PC1 (33.4%)", y = "PC2 (23.8%)") +
@@ -1254,7 +1272,7 @@ ggbiplot(cav_control, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
 
-ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
+ggbiplot(cav_co2, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T0D0", x = "PC1 (52.0%)", y = "PC2 (36.4%)") +
@@ -1264,7 +1282,7 @@ ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
 
-ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
+ggbiplot(cav_temperature, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T2D0", x = "PC1 (31.5%)", y = "PC2 (30.3%)") +
@@ -1274,7 +1292,7 @@ ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
+ggbiplot(cav_drought, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D1", x = "PC1 (41.6%)", y = "PC2 (27.6%)") +
@@ -1284,7 +1302,7 @@ ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
+ggbiplot(cav_ct, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D0", x = "PC1 (53.9%)", y = "PC2 (20.6%)") +
@@ -1294,7 +1312,7 @@ ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cav_ctd, varname.size = 6, alpha = 0) +
+ggbiplot(cav_ctd, varname.size = 6) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D1", x = "PC1 (42.9%)", y = "PC2 (24.3%)") +
