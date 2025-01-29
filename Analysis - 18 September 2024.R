@@ -585,7 +585,7 @@ lmv
 ggbiplot(lmv, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (32.7%)", y = "PC2 (28.3%)") +
+  labs(x = "PC1 (32.7%)", y = "PC2 (28.2%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16)   # Increase size of y-axis title
@@ -594,7 +594,7 @@ ggbiplot(lmv, varname.size = 6, alpha = 0) +
 ggbiplot(cmv, varname.size = 6 ,alpha = 0) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (33.6%)", y = "PC2 (21.6%)") +
+  labs(x = "PC1 (33.5%)", y = "PC2 (21.6%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16)   # Increase size of y-axis title
@@ -611,6 +611,92 @@ ggbiplot(cav, varname.size = 6 ,alpha = 0) +
 
 
 ## Grouping based on Climatic Variables ----
+## Using Ordispider Package ----
+### For Lotus ----
+l_pca_scores <- as.data.frame(lmv$x)   # Extract PCA individual scores
+l_groups <- AusPC$Treatment[AusPC$Species == "Lotus"]  # Grouping variable
+
+# Define a consistent color palette for the polygons
+unique_groups <- unique(l_groups)
+group_colors <- setNames(rainbow(length(unique_groups)), unique_groups)
+
+# Base plot
+plot(l_pca_scores$PC1, l_pca_scores$PC2, 
+     xlab = "PC1 (32.7%)", ylab = "PC2 (28.3%)", main = "Lotus - PCA",
+     col = group_colors[l_groups], pch = 19, cex = 1.5)
+
+# Add spider diagram (ordihull polygons)
+ordispider(l_pca_scores, l_groups, col = rainbow(length(unique(l_groups))), label = TRUE)
+ordihull(l_pca_scores, l_groups, col = group_colors, draw = "polygon", alpha = 0.4)
+
+# Add legend matching polygon colors
+legend("topright",
+       legend = unique_groups,
+       fill = group_colors,
+       border = "black",
+       title = "Treatment Groups")
+
+# Adding arrows
+l_pca_loadings <- as.data.frame(lmv$rotation[, 1:2])  
+arrows(0, 0, 
+       l_pca_loadings$PC1 * 2,  
+       l_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(l_pca_loadings$PC1 * 2.2, l_pca_loadings$PC2 * 2.2, labels = rownames(l_pca_loadings), col = "blue", cex = 0.8)
+
+### For Crepis (Main Variables) ----
+cm_pca_scores <- as.data.frame(cmv$x)
+c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
+
+#Base plot
+plot(cm_pca_scores$PC1, cm_pca_scores$PC2,
+     xlab = "PC1 (33.6%)", ylab = "PC2 (21.6%)", main = "Crepis - Main Variables - PCA",
+     col=as.factor(c_groups), pch = 19, cex = 1.5)
+
+# Add spider diagram
+ordispider(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
+ordihull(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
+
+# Optional: Add legend
+legend("topright", legend = unique(c_groups), 
+       col = rainbow(length(unique(c_groups))), 
+       pch = 19, bty = "o")
+
+# Adding arrows
+cm_pca_loadings <- as.data.frame(cmv$rotation[, 1:2])  
+arrows(0, 0, 
+       cm_pca_loadings$PC1 * 2,  
+       cm_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(cm_pca_loadings$PC1 * 2.2, cm_pca_loadings$PC2 * 2.2, labels = rownames(cm_pca_loadings), col = "blue", cex = 0.8)
+
+### For Crepis (All Variables) ----
+ca_pca_scores <- as.data.frame(cav$x)
+c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
+
+#Base plot
+plot(ca_pca_scores$PC1, ca_pca_scores$PC2,
+     xlab = "PC1 (28%)", ylab = "PC2 (18.6%)", main = "Crepis - All Variables - PCA",
+     col=as.factor(c_groups), pch = 19, cex = 1.5)
+
+# Add spider diagram
+ordispider(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
+ordihull(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
+
+# Optional: Add legend
+legend("topright", legend = unique(c_groups), 
+       col = rainbow(length(unique(c_groups))),
+       border = "black",
+       pch = 19, bty = "o", title = "Treatment Groups")
+
+# Adding arrows
+ca_pca_loadings <- as.data.frame(cav$rotation[, 1:2])  
+arrows(0, 0, 
+       ca_pca_loadings$PC1 * 2,  
+       ca_pca_loadings$PC2 * 2,  
+       col = "blue", length = 0.1)
+text(ca_pca_loadings$PC1 * 2.2, ca_pca_loadings$PC2 * 2.2, labels = rownames(ca_pca_loadings), col = "blue", cex = 0.8)
+
 ## Rank Abundance Curves ----
 ### Creating PCA for each treatment ----
 ### Lotus ----
@@ -655,13 +741,7 @@ ggplot(AusL_PC, aes(x = AusL_PC$PCA_axis, y = AusL_PC$Variance_Explained, color 
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"), # Increase title size
-    axis.title = element_text(size = 14),               # Increase axis labels
-    axis.text = element_text(size = 12),                # Increase tick labels
-    legend.title = element_text(size = 14),             # Increase legend title
-    legend.text = element_text(size = 12)               # Increase legend text
-  ) 
+  theme_minimal()
 
 View(AusL_PC)
 
@@ -702,13 +782,7 @@ ggplot(AusCM_PC, aes(x = AusCM_PC$PCA_axis, y = AusCM_PC$Variance_Explained, col
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"), # Increase title size
-    axis.title = element_text(size = 14),               # Increase axis labels
-    axis.text = element_text(size = 12),                # Increase tick labels
-    legend.title = element_text(size = 14),             # Increase legend title
-    legend.text = element_text(size = 12)               # Increase legend text
-  ) 
+  theme_minimal()
 
 ### Crepis (All Variables) ----
 cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
@@ -762,18 +836,12 @@ ggplot(AusCA_PC, aes(x = AusCA_PC$PCA_axis, y = AusCA_PC$Variance_Explained, col
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme(
-    plot.title = element_text(size = 18, face = "bold"), # Increase title size
-    axis.title = element_text(size = 14),               # Increase axis labels
-    axis.text = element_text(size = 12),                # Increase tick labels
-    legend.title = element_text(size = 14),             # Increase legend title
-    legend.text = element_text(size = 12)               # Increase legend text
-  ) 
+  theme_minimal()
 
 ## Extracting PCA Results----
 ### For Lotus ----
 
-lotus_pca_trait_loadings <- lmv$rotation*lmv$sdev
+lotus_pca_trait_loadings <- lmv$rotation
 lotus_pca_eigenvalues <- lmv$sdev^2
 lotus_pca_variance <- lotus_pca_eigenvalues/sum(lotus_pca_eigenvalues)
 lotus_pca_cum_variance <- cumsum(lotus_pca_variance)
@@ -895,7 +963,7 @@ write.csv(combined_df, "lotus_ctd_pca_combined.csv", row.names = TRUE)
 
 ### For Crepis (Main Variables) ----
 
-crepis_m_pca_trait_loadings <- cmv$rotation * cmv$sdev
+crepis_m_pca_trait_loadings <- cmv$rotation
 crepis_m_pca_eigenvalues <- cmv$sdev^2
 crepis_m_pca_variance <- crepis_m_pca_eigenvalues / sum(crepis_m_pca_eigenvalues)
 crepis_m_pca_cum_variance <- cumsum(crepis_m_pca_variance)
@@ -1016,7 +1084,7 @@ write.csv(combined_df, "crepis_m_ctd_pca_combined.csv", row.names = TRUE)
 
 ### For Crepis (All Variables) ----
 
-crepis_a_pca_trait_loadings <- cav$rotation * cav$sdev
+crepis_a_pca_trait_loadings <- cav$rotation
 crepis_a_pca_eigenvalues <- cav$sdev^2
 crepis_a_pca_variance <- crepis_a_pca_eigenvalues / sum(crepis_a_pca_eigenvalues)
 crepis_a_pca_cum_variance <- cumsum(crepis_a_pca_variance)
@@ -1140,7 +1208,7 @@ write.csv(combined_df, "crepis_a_ctd_pca_combined.csv", row.names = TRUE)
 ## PCA Plots for Each Treatment ----
 ### For Lotus ----
 
-ggbiplot(lmv_control, varname.size = 6) +
+ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D0", x = "PC1 (42.4%)", y = "PC2 (22.8%)") +
@@ -1150,7 +1218,7 @@ ggbiplot(lmv_control, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
 
-ggbiplot(lmv_co2, varname.size = 6) +
+ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T0D0", x = "PC1 (45.4%)", y = "PC2 (31.8%)") +
@@ -1160,7 +1228,7 @@ ggbiplot(lmv_co2, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
 
-ggbiplot(lmv_temperature, varname.size = 6) +
+ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T2D0", x = "PC1 (44.2%)", y = "PC2 (29.7%)") +
@@ -1170,7 +1238,7 @@ ggbiplot(lmv_temperature, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(lmv_drought, varname.size = 6) +
+ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D1", x = "PC1 (39.5%)", y = "PC2 (34.9%)") +
@@ -1180,7 +1248,7 @@ ggbiplot(lmv_drought, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(lmv_ct, varname.size = 6) +
+ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D0", x = "PC1 (44.2%)", y = "PC2 (31.2%)") +
@@ -1190,7 +1258,7 @@ ggbiplot(lmv_ct, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(lmv_ctd, varname.size = 6) +
+ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D1", x = "PC1 (66.8%)", y = "PC2 (24.7%)") +
@@ -1201,7 +1269,7 @@ ggbiplot(lmv_ctd, varname.size = 6) +
   )
 
 ### For Crepis (Main Variables) ----
-ggbiplot(cmv_control, varname.size = 6) +
+ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D0", x = "PC1 (32.1%)", y = "PC2 (30.6%)") +
@@ -1211,7 +1279,7 @@ ggbiplot(cmv_control, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
 
-ggbiplot(cmv_co2, varname.size = 6) +
+ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T0D0", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
@@ -1221,7 +1289,7 @@ ggbiplot(cmv_co2, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
 
-ggbiplot(cmv_temperature, varname.size = 6) +
+ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T2D0", x = "PC1 (35.5%)", y = "PC2 (27.8%)") +
@@ -1231,7 +1299,7 @@ ggbiplot(cmv_temperature, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cmv_drought, varname.size = 6) +
+ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D1", x = "PC1 (42.7%)", y = "PC2 (25.3%)") +
@@ -1241,7 +1309,7 @@ ggbiplot(cmv_drought, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cmv_ct, varname.size = 6) +
+ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D0", x = "PC1 (69.7%)", y = "PC2 (15.7%)") +
@@ -1251,7 +1319,7 @@ ggbiplot(cmv_ct, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cmv_ctd, varname.size = 6) +
+ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D1", x = "PC1 (49.2%)", y = "PC2 (28.7%)") +
@@ -1262,7 +1330,7 @@ ggbiplot(cmv_ctd, varname.size = 6) +
   )
 
 ### For Crepis (All Variables) ----
-ggbiplot(cav_control, varname.size = 6) +
+ggbiplot(cav_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D0", x = "PC1 (33.4%)", y = "PC2 (23.8%)") +
@@ -1272,7 +1340,7 @@ ggbiplot(cav_control, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
 
-ggbiplot(cav_co2, varname.size = 6) +
+ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T0D0", x = "PC1 (52.0%)", y = "PC2 (36.4%)") +
@@ -1282,7 +1350,7 @@ ggbiplot(cav_co2, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
 
-ggbiplot(cav_temperature, varname.size = 6) +
+ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T2D0", x = "PC1 (31.5%)", y = "PC2 (30.3%)") +
@@ -1292,7 +1360,7 @@ ggbiplot(cav_temperature, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cav_drought, varname.size = 6) +
+ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C0T0D1", x = "PC1 (41.6%)", y = "PC2 (27.6%)") +
@@ -1302,7 +1370,7 @@ ggbiplot(cav_drought, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cav_ct, varname.size = 6) +
+ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D0", x = "PC1 (53.9%)", y = "PC2 (20.6%)") +
@@ -1312,7 +1380,7 @@ ggbiplot(cav_ct, varname.size = 6) +
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 
-ggbiplot(cav_ctd, varname.size = 6) +
+ggbiplot(cav_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(title = "C2T2D1", x = "PC1 (42.9%)", y = "PC2 (24.3%)") +
@@ -1334,12 +1402,12 @@ crepis_rows <- AusRD[AusRD$Species == "Crepis",]
 crepis_rows <- crepis_rows[-c(46:78),]
 AusRDC <- crepis_rows[,-c(10:17)]
 ## Redundancy Analysis for Lotus ----
-names(AusRDL)[names(AusRDL) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
-names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
-names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
-names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
-names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "F-DA"
-names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "L-LA"
+names(AusRDL)[names(AusRDL) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
+names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
+names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
+names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
+names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
+names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
 names(AusRDL)[names(AusRDL) == "CO2"] <- "C"
 names(AusRDL)[names(AusRDL) == "Temperature"] <- "T"
 names(AusRDL)[names(AusRDL) == "Drought"] <- "D"
@@ -1362,6 +1430,7 @@ l_rda_proportion_explained
 summary(rda.ln)
 
 # Changing Name of Interaction ----
+library(vegan)
 
 bp_scores <- scores(rda.ln, display = "bp")
 rownames(bp_scores)
@@ -1388,14 +1457,14 @@ arrows(0, 0, scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[
 text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(bp_scores), col = 'red', pos = 3, cex = 1)
 
 ## Redundancy Analysis for Crepis ----
-names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "F-SPA"
-names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "F-PDMC"
-names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "L-SLA"
-names(AusRDC)[names(AusRDC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "L-LDMC"
-names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "F-DA"
-names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "L-LA"
-names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "S-SN"
-names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "S-SM"
+names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
+names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
+names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
+names(AusRDC)[names(AusRDC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
+names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "DA"
+names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "LA"
+names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "SN"
+names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "SM"
 names(AusRDC)[names(AusRDC) == "CO2"] <- "C"
 names(AusRDC)[names(AusRDC) == "Temperature"] <- "T"
 names(AusRDC)[names(AusRDC) == "Drought"] <- "D"
@@ -1430,6 +1499,7 @@ text(scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], lab
 
 rda.cn <- rda(AusRDC[,c(18:23)] ~ Drought + Condition(AusRDC$`Temperature Level`*AusRDC$`CO2 Level`), data = AusRDC, scale = TRUE)
 View(AusRD)
+rda.cn
 ## Redundancy Analysis for both Crepis and Lotus ----
 
 rda.1 <- rda(AusRD[,c(18,20:22)] ~ CO2*Temperature*Drought, data = AusRD, scale = TRUE)
@@ -1877,7 +1947,7 @@ ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
-  scale_fill_manual(values = c("seagreen3", "mediumpurple", "royalblue3", "goldenrod2", "darkorange2"), 
+  scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
                     labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "(CO2 + Temperature) :Drought")) +
   coord_flip() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
