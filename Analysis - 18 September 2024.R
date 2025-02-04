@@ -4,7 +4,6 @@ install.packages("ggrepel") #  Enhances ggplot2 by adding labels that repel each
 install.packages("Hmisc") # Provides tools for data manipulation, descriptive statistics, and creating correlation matrices with significance tests.
 install.packages("VennDiagram") # Creates Venn diagrams to visualize intersections, unions, and unique elements among sets.
 install.packages("devtools") # Facilitates package development and installation, including GitHub-based packages.
-install.github("vqv/ggbiplot")# Extends ggplot2 to visualize PCA results through biplots for exploring variable and observation relationships.
 install_github("kassambara/factoextra") # For Grouping in PCA
 install.packages("ggeffects") # Simplifies the creation of effect plots for regression models to interpret model predictions.
 install.packages("igraph") # Focused on network analysis and visualization, allowing the creation and analysis of graph structures.
@@ -707,7 +706,7 @@ lmv_temperature <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C
 lmv_co2 <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
 lmv_ct <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
 lmv_ctd <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
-lmv_ctd
+lmv_ct
 lmv_control
 ### Extracting Variance Explained for each treatment
 variance_lmv_control <- lmv_control$sdev^2 / sum(lmv_control$sdev^2)
@@ -1408,18 +1407,14 @@ names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
 names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
-names(AusRDL)[names(AusRDL) == "CO2"] <- "C"
-names(AusRDL)[names(AusRDL) == "Temperature"] <- "T"
-names(AusRDL)[names(AusRDL) == "Drought"] <- "D"
 
-
-rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ C*T*D, data = AusRDL, scale = TRUE)
-Lotus_RDA <- anova.cca(rda.l, permutations = 9999, by = "terms")
+rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDL, scale = TRUE)
+summary(rda.l)
+Lotus_RDA <- anova(rda.l, permutations = 9999, by = "terms")
+Lotus_RDA
 Lotus_RDA <- as.data.frame(Lotus_RDA)
 View(Lotus_RDA) # CO2, Temperature, Drought and CO2:Drought are significant
-anova(rda.l)
-summary(rda.l)
-names(AusRDL)
+
 ### Extracting Values for Lotus RDA ----
 summary_text <- capture.output(summary(rda.l))
 writeLines(summary_text, "lotus_rda_summary.txt")
@@ -1427,34 +1422,21 @@ l_rda_eigenvalues <- eigenvals(rda.l, constrained = TRUE)
 l_rda_proportion_explained <- l_rda_eigenvalues/sum(l_rda_eigenvalues) 
 l_rda_proportion_explained
 
-summary(rda.ln)
-
-# Changing Name of Interaction ----
-library(vegan)
-
-bp_scores <- scores(rda.ln, display = "bp")
-rownames(bp_scores)
-# Rename the fourth row
-rownames(bp_scores)[4] <- "(C+T)xD"
-
-# View the updated biplot scores
-rownames(bp_scores)
-
-rownames(scores(rda.ln, display = "bp"))[4] <- "(CT):D"
+### Preparing Model for Plotting ----
+rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Drought, data = AusRDL, scale = TRUE) # Without C:T Interaction
+l_bp_scores <- scores(rda.ln, display = "bp") #Extracting Names of Predictors
+rownames(l_bp_scores)
+rownames(l_bp_scores)<- c("C", "T", "D", "(C+T)xD")
 
 ### Plot for Lotus RDA ----
 
-rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ C + T + D + C:D, data = AusRDL, scale = TRUE)
-plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (60.15%)", ylab = "RDA2 (20.84%)")
-site_scores <- scores(rda.ln, display = "sites")
-plot(rda.ln, display = "both", cex = 0.7)
-points(site_scores, pch = 16, col = "red", cex = 0.5) # Ignore this to not get points
+plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (17.44%)", ylab = "RDA2 (6%)")
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], col = 'blue', length = 0.1)
 text(scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], labels = rownames(scores(rda.ln, display = "species")), col = 'blue', pos = 3, cex = 1)
 ### Adding Arrows and Text for Predictor Variables
 arrows(0, 0, scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], col = 'red', length = 0.1)
-text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(bp_scores), col = 'red', pos = 3, cex = 1)
+text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(l_bp_scores), col = 'red', pos = 3, cex = 1)
 
 ## Redundancy Analysis for Crepis ----
 names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -1465,17 +1447,14 @@ names(AusRDC)[names(AusRDC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRDC)[names(AusRDC) == "Leaf Area (LA)(cm2)"] <- "LA"
 names(AusRDC)[names(AusRDC) == "Number of Seeds (SN)"] <- "SN"
 names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "SM"
-names(AusRDC)[names(AusRDC) == "CO2"] <- "C"
-names(AusRDC)[names(AusRDC) == "Temperature"] <- "T"
-names(AusRDC)[names(AusRDC) == "Drought"] <- "D"
 
-rda.c <- rda(AusRDC[,c(9:10,12:17)] ~ C*T*D, data = AusRDC, scale = TRUE)
-Crepis_RDA <- anova.cca(rda.c, permutations = 9999, by = "terms")
+rda.c <- rda(AusRDC[,c(9:10,12:17)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDC, scale = TRUE)
+summary(rda.c)
+Crepis_RDA <- anova(rda.c, permutations = 9999, by = "terms")
 Crepis_RDA # Drought and CO2: Temperature are significant
 Crepis_RDA <- as.data.frame(Crepis_RDA)
 View(Crepis_RDA)
-summary(rda.c)
-plot(AusC$`Leaf Area (LA)(cm2)`~AusC$Temperature)
+
 ### Extracting Values for Crepis RDA ----
 summary_text <- capture.output(summary(rda.c))
 writeLines(summary_text, "crepis_rda_summary.txt")
@@ -1483,40 +1462,20 @@ c_rda_eigenvalues <- eigenvals(rda.c, constrained = TRUE)
 c_rda_proportion_explained <- c_rda_eigenvalues/sum(c_rda_eigenvalues) 
 c_rda_proportion_explained
 
-### Plot for Crepis RDA ----
-rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ D + C:T + Condition(C+T), data = AusRDC, scale = TRUE)
+### Preparing Model for Plotting ----
+rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2 + Temperature,CO2:Drought), data = AusRDC, scale = TRUE)
+c_bp_scores <- scores(rda.cn, display = "bp") #Extracting Names of Predictors
+rownames(c_bp_scores)
+rownames(c_bp_scores)<- c("D", "CxT")
 
-plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-0.5,0.5), xlab = "RDA1 (65.15%)", ylab = "RDA2 (20.54%)")
-site_scores <- scores(rda.cn, display = "sites")
-plot(rda.cn, display = "both", cex = 0.7)
-points(site_scores, pch = 16, col = "red", cex = 0.5) # Ignore this to not get row names 
+### Plot for Crepis RDA ----
+plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-0.5,0.5), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species")[,2], col = 'blue', length = 0.1)
 text(scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species")[,2], labels = rownames(scores(rda.cn, display = "species")), col = 'blue', pos = 3, cex = 1)
 ### Adding Arrows and Text for Predictor Variables
 arrows(0, 0, scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], col = 'red', length = 0.1)
-text(scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], labels = rownames(scores(rda.cn, display = "bp")), col = 'red', pos = 3, cex = 1)
-
-rda.cn <- rda(AusRDC[,c(18:23)] ~ Drought + Condition(AusRDC$`Temperature Level`*AusRDC$`CO2 Level`), data = AusRDC, scale = TRUE)
-View(AusRD)
-rda.cn
-## Redundancy Analysis for both Crepis and Lotus ----
-
-rda.1 <- rda(AusRD[,c(18,20:22)] ~ CO2*Temperature*Drought, data = AusRD, scale = TRUE)
-View(AusRD)
-ordiplot(rda.1, type = "text", scale = TRUE)
-anova.cca(rda.1, permutations = 9999)
-anova.cca(rda.1, permutations = 9999, by = "axis")
-anova.cca(rda.1, permutations = 9999, by = "terms")
-Combined_RDA <- anova.cca(rda.1, permutations = 9999, by = "terms")
-Combined_RDA # Only Drought is Significant
-writeLines(capture.output(Combined_RDA), "Combined_rda_anova.txt")
-Combined_RDA$F
-Combined_RDA$`Pr(>F)`
-
-summary_rda <- summary(rda.1)
-summary_rda
-
+text(scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], labels = rownames(c_bp_scores), col = 'red', pos = 3, cex = 1)
 
 # Preparing function which exports anova results to CSV ----
 anova_to_csv <- function(model, csv_file_path) {
@@ -1595,7 +1554,6 @@ anova_to_csv(c_log_SLAmodel, anova_output_csv)
 anova_to_csv(c_sq_LDMCmodel, anova_output_csv)
 anova_to_csv(sq_SNmodel, anova_output_csv)
 anova_to_csv(log_SMmodel, anova_output_csv)
-
 
 # Correlogram ----
 ## For Lotus ----
@@ -1693,7 +1651,6 @@ ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
 
 ## For Crepis ----
 names(AusC)
-Crecor_Data <- AusC[,c(9,10,12:17)]
 names(Crecor_Data)
 names(Crecor_Data)[names(Crecor_Data) == "Display Area (DA)(cm2)"] <- "DA"
 names(Crecor_Data)[names(Crecor_Data) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -1807,7 +1764,6 @@ cv_log_SLAmodel <- lm(AusC$`log_Specific Leaf Area (SLA)(cm2/g)` ~ CO2 + Tempera
 cv_sq_LDMCmodel <- lm(AusC$`sqrt_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
 cv_sq_SNmodel <- lm(AusC$`sqrt_Number of Seeds (SN)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
 cv_log_SMmodel <- lm(AusC$`log_Seed Mass (SM)(g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
-anova(cv_sq_DAmodel)
 
 ### Creation of Plot for Lotus ----
 l_model <- list(
@@ -1915,15 +1871,11 @@ ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
 
 #### Including RDA ----
 
-rda.lv <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDL, scale = TRUE)
-
-lv_RDA <- anova.cca(rda.lv, permutations = 9999, by = "terms")
-
-lv_rda_results_df <- lv_RDA %>% 
+lv_rda_results_df <- Lotus_RDA %>% 
   as.data.frame() %>%  # Ensure it is a data frame
   mutate(
     PropVar = Variance / sum(Variance),  # Calculate proportion of variance explained
-    Factor = rownames(lv_RDA),           # Add Factor names as a new column
+    Factor = rownames(Lotus_RDA),           # Add Factor names as a new column
     Trait = "RDA"                        # Label this as RDA to differentiate in the plot
   ) %>%
   filter(Factor != "Residual")  # Correct filter condition to exclude residuals
@@ -1937,7 +1889,7 @@ lv_rda_results_selected <- lv_rda_results_df[, c("PropVar", "Factor", "Trait")]
 combined_results_df <- rbind(all_results_selected, lv_rda_results_selected)
 
 combined_results_df
-desired_order <- c("RDA", "LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
+desired_order <- c("RDA", "LDMC", "SLA", "LA", "DA")
 
 # Convert 'Trait' to a factor with the desired order
 combined_results_df$Trait <- factor(combined_results_df$Trait, levels = desired_order)
@@ -1948,7 +1900,7 @@ ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   theme_minimal() +
   labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
   scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
-                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "(CO2 + Temperature) :Drought")) +
+                    labels = c("CO2", "(CO2 + Temperature) :Drought", "CO2:Temperature", "Drought", "Temperature")) +
   coord_flip() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
         axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
@@ -2064,15 +2016,12 @@ ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
 
 
 #### Including RDA ----
-rda.cv <- rda(AusRDC[,c(9:10,12:17)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDC, scale = TRUE)
 
-cv_RDA <- anova.cca(rda.cv, permutations = 9999, by = "terms")
-
-cv_rda_results_df <- lv_RDA %>% 
+cv_rda_results_df <- Crepis_RDA %>% 
   as.data.frame() %>%  # Ensure it is a data frame
   mutate(
     PropVar = Variance / sum(Variance),  # Calculate proportion of variance explained
-    Factor = rownames(lv_RDA),           # Add Factor names as a new column
+    Factor = rownames(Crepis_RDA),           # Add Factor names as a new column
     Trait = "RDA"                        # Label this as RDA to differentiate in the plot
   ) %>%
   filter(Factor != "Residual")  # Correct filter condition to exclude residuals
@@ -2096,40 +2045,12 @@ ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(x = " Traits", y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
-  scale_fill_manual(values = c("seagreen3", "mediumpurple", "royalblue3", "goldenrod2", "darkorange2"), 
-                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "(CO2 + Temperature) :Drought")) +
+  scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
+                    labels = c("CO2", "(CO2 + Temperature) : Drought", "CO2 : Temperature", "Drought", "Temperature")) +
   coord_flip() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
         axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
         axis.title = element_text(size = 16),   # Increase axis title font size
         plot.title = element_text(size = 18),   # Increase plot title font size
-        legend.position = "bottom", 
-        legend.title = element_blank())
-
-
-
-### Plotting for a single Trait ----
-
-anova_results <- Anova(lv_DAmodel, type = "III")
-
-# Convert ANOVA results to a data frame
-anova_results_df <- as.data.frame(anova_results)
-
-# Calculate the proportion of variance explained for each factor
-anova_results_df <- anova_results_df %>%
-  mutate(PropVar = `Sum Sq` / sum(`Sum Sq`),
-         Factor = rownames(anova_results_df)) %>%
-  filter(Factor != "(Intercept)" & Factor != "Residuals") # Exclude intercept and residuals
-
-# Create a stacked bar plot
-ggplot(anova_results_df, aes(x = 1, y = PropVar, fill = Factor)) +
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  labs(x = NULL, y = "Proportion of Variance Explained", title = "Proportion of Variance Explained by Predictors") +
-  scale_fill_manual(values = c("grey80", "grey50", "black", "red", "blue"), # Adjust colors to match the example
-                    labels = c("CO2", "Temperature", "Drought", "CO2:Temperature", "CO2:Drought")) +
-  coord_flip() +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
         legend.position = "bottom", 
         legend.title = element_blank())
