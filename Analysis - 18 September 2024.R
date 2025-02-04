@@ -716,13 +716,6 @@ variance_lmv_co2 <- lmv_co2$sdev^2 / sum(lmv_co2$sdev^2)
 variance_lmv_ct <- lmv_ct$sdev^2 / sum(lmv_ct$sdev^2)
 variance_lmv_ctd <- lmv_ctd$sdev^2 / sum(lmv_ctd$sdev^2)
 
-### Combining Variance Explained Results to a dataframe
-AusL_PC <- data.frame(
-  PCA_axis = rep(1:6,6),
-  Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
-  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
-)
-
 ### Adding zero to treatments with insufficient PCA Axis 
 if (length(variance_lmv_drought) < 6) {
   variance_lmv_drought <- c(variance_lmv_drought, rep(0, 6 - length(variance_lmv_drought)))
@@ -731,9 +724,17 @@ if (length(variance_lmv_ct) < 6) {
   variance_lmv_ct <- c(variance_lmv_ct, rep(0, 6 - length(variance_lmv_ct)))
 }
 
-ggplot(AusL_PC, aes(x = AusL_PC$PCA_axis, y = AusL_PC$Variance_Explained, color = AusL_PC$Treatment)) +
+### Combining Variance Explained Results to a dataframe
+AusL_PC <- data.frame(
+  PCA_axis = rep(1:6,6),
+  Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
+  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
+)
+
+ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
+  scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
   labs(
     title = "Lotus - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
@@ -772,9 +773,10 @@ AusCM_PC <- data.frame(
   Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
 )
 
-ggplot(AusCM_PC, aes(x = AusCM_PC$PCA_axis, y = AusCM_PC$Variance_Explained, color = AusCM_PC$Treatment)) +
+ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
+  scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
   labs(
     title = "Crepis (Main Variables) - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
@@ -826,9 +828,10 @@ AusCA_PC <- data.frame(
   Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 8)
 )
 
-ggplot(AusCA_PC, aes(x = AusCA_PC$PCA_axis, y = AusCA_PC$Variance_Explained, color = AusCA_PC$Treatment)) +
+ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
+  scale_x_continuous(breaks = 1:8, labels = 1:8) +
   labs(
     title = "Crepis (All Variables) - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
