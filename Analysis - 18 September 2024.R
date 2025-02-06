@@ -185,23 +185,23 @@ log_SMmodel <- lm(`log_Seed Mass (SM)(g)` ~ CO2 * Temperature * Drought, data = 
 
 
 # ANOVA Analysis ----
-## Anova test for Reponse Variables in Lotus ----
-anova(l_DAmodel) # Significance: Temperature and CO2:Drought in ME; Temperature, CO2:Temperature and CO2:Drought in LM
-anova(log_SSPAmodel) # Significance: CO2: Drought marginally significant in LM
-anova(log_SW1PAmodel)
-anova(SW2PAmodel) # Significance: Drought in LM
-anova(sq_SKPAmodel)
-anova(log_SPMAmodel) # Significance: CO2: Drought marginally significant in LM
-anova(log_W1PMAmodel)
-anova(log_W2PMAmodel) # Significance: Drought and CO2: Temperature in LM (Latter marginally significant)
-anova(log_KPMAmodel)
-anova(l_sq_SPAmodel) # Significance: Drought marginally significant in LM
-anova(l_log_PMAmodel) # Significance: Drought marginally significant in LM
-anova(l_PDMCmodel)
-anova(l_LAmodel) # Significance: CO2 and CO2:Drought in ME; Same in LM
-anova(l_SLAmodel) # Significance: Drought and CO2: Temperature in ME (Latter marginally significant); CO2, Drought and CO2: Temperature in LM
-anova(l_log_LDMCmodel) # Significance: CO2, Drought and CO2:Drought in ME (Latter marginally significant); CO2, Drought and CO2: Drought in LM
-
+  ## Anova test for Response Variables in Lotus ----
+  anova(l_DAmodel) # Significance: Temperature and CO2:Drought in ME; Temperature, CO2:Temperature and CO2:Drought in LM
+  anova(log_SSPAmodel) # Significance: CO2: Drought marginally significant in LM
+  anova(log_SW1PAmodel)
+  anova(SW2PAmodel) # Significance: Drought in LM
+  anova(sq_SKPAmodel)
+  anova(log_SPMAmodel) # Significance: CO2: Drought marginally significant in LM
+  anova(log_W1PMAmodel)
+  anova(log_W2PMAmodel) # Significance: Drought and CO2: Temperature in LM (Latter marginally significant)
+  anova(log_KPMAmodel)
+  anova(l_sq_SPAmodel) # Significance: Drought marginally significant in LM
+  anova(l_log_PMAmodel) # Significance: Drought marginally significant in LM
+  anova(l_PDMCmodel)
+  anova(l_LAmodel) # Significance: CO2 and CO2:Drought in ME; Same in LM
+  anova(l_SLAmodel) # Significance: Drought and CO2: Temperature in ME (Latter marginally significant); CO2, Drought and CO2: Temperature in LM
+  anova(l_log_LDMCmodel) # Significance: CO2, Drought and CO2:Drought in ME (Latter marginally significant); CO2, Drought and CO2: Drought in LM
+  
 ## Anova test for Response Variables in Crepis ----
 anova(c_sq_DAmodel) # Significance: Drought in ME; Drought in LM
 anova(c_sq_SPAmodel) # Significance: Temperature and CO2: Temperature both marginally significant in ME; Drought and CO2: Temperature in LM (latter marginally significant) 
@@ -741,8 +741,14 @@ ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme_minimal()
-
+  theme(
+    plot.title = element_text(size = 18, face = "bold"), # Increase title size
+    axis.title = element_text(size = 14),               # Increase axis labels
+    axis.text = element_text(size = 12),                # Increase tick labels
+    legend.title = element_text(size = 14),             # Increase legend title
+    legend.text = element_text(size = 12)           
+  )
+    
 View(AusL_PC)
 
 ### Crepis (Main Variables) ----
@@ -783,7 +789,13 @@ ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme_minimal()
+  theme(
+    plot.title = element_text(size = 18, face = "bold"), # Increase title size
+    axis.title = element_text(size = 14),               # Increase axis labels
+    axis.text = element_text(size = 12),                # Increase tick labels
+    legend.title = element_text(size = 14),             # Increase legend title
+    legend.text = element_text(size = 12)           
+  )
 
 ### Crepis (All Variables) ----
 cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
@@ -838,7 +850,13 @@ ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
-  theme_minimal()
+  theme(
+    plot.title = element_text(size = 18, face = "bold"), # Increase title size
+    axis.title = element_text(size = 14),               # Increase axis labels
+    axis.text = element_text(size = 12),                # Increase tick labels
+    legend.title = element_text(size = 14),             # Increase legend title
+    legend.text = element_text(size = 12)           
+  )
 
 ## Extracting PCA Results----
 ### For Lotus ----
@@ -1962,7 +1980,7 @@ ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
   labs(x = " Traits", y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
-  scale_fill_manual(values = c("#7e57c2", "#00bfc4", "#f7756d","#fbc02d"), 
+  scale_fill_manual(values = c("#00bfc4","#fbc02d","#f7756d","#7e57c2","#ff9800"), 
                     labels = c("(CO2 + Temperature) : Drought", "CO2 : Temperature", "Drought", "Temperature")) +
   coord_flip() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
