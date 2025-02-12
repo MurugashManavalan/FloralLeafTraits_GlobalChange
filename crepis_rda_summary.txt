@@ -1,0 +1,29 @@
+
+Call:
+rda(formula = AusRDC[, c(9:10, 12:17)] ~ CO2 + Temperature +      Drought + CO2:Temperature + CO2:Drought, data = AusRDC, scale = TRUE) 
+
+Partitioning of correlations:
+              Inertia Proportion
+Total           8.000     1.0000
+Constrained     1.601     0.2002
+Unconstrained   6.399     0.7998
+
+Eigenvalues, and their contribution to the correlations 
+
+Importance of components:
+                        RDA1    RDA2    RDA3     RDA4     RDA5    PC1    PC2    PC3   PC4     PC5     PC6
+Eigenvalue            1.0431 0.32897 0.14343 0.076822 0.008842 1.5638 1.1962 1.0307 0.848 0.62567 0.61028
+Proportion Explained  0.1304 0.04112 0.01793 0.009603 0.001105 0.1955 0.1495 0.1288 0.106 0.07821 0.07628
+Cumulative Proportion 0.1304 0.17151 0.18944 0.199045 0.200151 0.3956 0.5451 0.6740 0.780 0.85820 0.93449
+                          PC7     PC8
+Eigenvalue            0.35241 0.17170
+Proportion Explained  0.04405 0.02146
+Cumulative Proportion 0.97854 1.00000
+
+Accumulated constrained eigenvalues
+Importance of components:
+                        RDA1   RDA2    RDA3    RDA4     RDA5
+Eigenvalue            1.0431 0.3290 0.14343 0.07682 0.008842
+Proportion Explained  0.6515 0.2055 0.08958 0.04798 0.005522
+Cumulative Proportion 0.6515 0.8569 0.94650 0.99448 1.000000
+
