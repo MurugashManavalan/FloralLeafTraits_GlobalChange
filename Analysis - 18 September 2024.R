@@ -35,7 +35,7 @@ library(factoextra)
 View(AusC)
 
 # Loading Files into R ----
-setwd("/Users/murugash/Desktop/PhD/Austria Experiment/R Analysis/Crepis and Lotus Samples - R Analysis")
+setwd("/Users/murugash/Desktop/PhD/Austria Experiment/R Analysis")
 AusL <- read_csv("Austria Experiment - Lotus Data - Core Response Variables - 12 February 2025.csv")
 AusC <- read_csv("Austria Experiment - Crepis Data - Core Response Variables - 15 August 2024.csv")
 AusC <- AusC[-c(63:163),]
@@ -47,6 +47,7 @@ AusL1 <- AusL[AusL$`Plot No.`!= "P16",]
 AusRC <- read_csv("Austria Experiment - Crepis and Leaf Data - RAC - 12 February 2025.csv")
 AusRC <- AusRC[-c(67:99),]
 dir()
+getwd()
 AusC
 View(AusRC)
 # Function to Log and Square Root transform Response Variables ----
