@@ -4,7 +4,6 @@ install.packages("ggrepel") #  Enhances ggplot2 by adding labels that repel each
 install.packages("Hmisc") # Provides tools for data manipulation, descriptive statistics, and creating correlation matrices with significance tests.
 install.packages("VennDiagram") # Creates Venn diagrams to visualize intersections, unions, and unique elements among sets.
 install.packages("devtools") # Facilitates package development and installation, including GitHub-based packages.
-install_github("kassambara/factoextra") # For Grouping in PCA
 install.packages("ggeffects") # Simplifies the creation of effect plots for regression models to interpret model predictions.
 install.packages("igraph") # Focused on network analysis and visualization, allowing the creation and analysis of graph structures.
 install.packages("qgraph") # Builds visualizations for networks and integrates with igraph, often used for correlation networks and psychological studies.
@@ -45,10 +44,11 @@ AusPC <- AusPC[-c(85:117),]
 AusRD <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 12 February 2025.csv")
 AusRD <- AusRD[-c(85:117),]
 AusL1 <- AusL[AusL$`Plot No.`!= "P16",]
-View(AusRD)
+AusRC <- read_csv("Austria Experiment - Crepis and Leaf Data - RAC - 12 February 2025.csv")
+AusRC <- AusRC[-c(67:99),]
 dir()
 AusC
-View(AusPC)
+View(AusRC)
 # Function to Log and Square Root transform Response Variables ----
 log_sqrt_transform <- function(df, cols) {
   # Check if cols are numeric (indices)
@@ -121,6 +121,13 @@ AusRD$Temperature <- as.factor(AusRD$Temperature)
 AusRD$Drought <- as.factor(AusRD$Drought)
 AusRD$Species <- as.factor(AusRD$Species)
 
+## In RAC Dataset ----
+AusRC$`Plot No.` <- as.factor(AusRC$`Plot No.`)
+AusRC$CO2 <- as.factor(AusRC$CO2)
+AusRC$Temperature <- as.factor(AusRC$Temperature)
+AusRC$Drought <- as.factor(AusRC$Drought)
+AusRC$Species <- as.factor(AusRC$Species)
+
 names(AusC)
 
 # Preparation of Mixed Effect Model ----
@@ -170,6 +177,7 @@ l_PDMCmodel <- lm(`Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 * Temperature * D
 l_log_LAmodel <- lm(`log_Leaf Area (LA)(cm2)` ~ CO2 * Temperature * Drought, data = AusL)
 l_SLAmodel <- lm(`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusL)
 l_log_LDMCmodel <- lm(`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought, data = AusL)
+
 ## Linear Models for Response Variables of Crepis ----
 c_sq_DAmodel <- lm(`Display Area (DA)(cm2)`~ CO2 * Temperature * Drought, data = AusC)
 c_sq_SPAmodel <- lm(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusC)
@@ -184,7 +192,7 @@ log_SMmodel <- lm(`log_Seed Mass (SM)(g)` ~ CO2 * Temperature * Drought, data = 
 
 
 # ANOVA Analysis ----
-  ## Anova test for Response Variables in Lotus ----
+## Anova test for Response Variables in Lotus ----
   anova(l_DAmodel) # Significance: Temperature and CO2:Drought in ME; Temperature, CO2:Temperature and CO2:Drought in LM
   anova(log_SSPAmodel) # Significance: CO2: Drought marginally significant in LM
   anova(log_SW1PAmodel)
@@ -376,25 +384,6 @@ ggplot(AusL, aes(x = CO2, y = AusL$`Display Area (DA)(cm2)`, fill = Drought)) +
     legend.text = element_text(size = 22)    # Increase legend text size
   )
 
-ggplot(AusL, aes(x = CO2, y = AusL$`Leaf Area (LA)(cm2)`, fill = Drought)) +
-  geom_boxplot() +
-  facet_wrap(~ Drought) +
-  labs(
-    title = "Lotus - Effect of Combined Interaction on LA",
-    x = "CO2 + Temperature Level",
-    y = "Leaf Area (LA)(cm2)",
-    fill = "Drought"
-  ) +
-  theme(
-    plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 28),  # Increase x-axis title size
-    axis.title.y = element_text(size = 28),  # Increase y-axis title size
-    axis.text.x = element_text(size = 26),   # Increase x-axis text size
-    axis.text.y = element_text(size = 26),   # Increase y-axis text size
-    legend.title = element_text(size = 24),  # Increase legend title size
-    legend.text = element_text(size = 22)    # Increase legend text size
-  )
-
 ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
   geom_boxplot() +
   facet_wrap(~ Drought) +
@@ -551,11 +540,6 @@ lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
 cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
 cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale =  TRUE)
 
-lcav <- prcomp(AusPC[,c(16, 18,19,20)], center = TRUE, scale = TRUE)
-names(AusPC)
-
-colnames(AusPC)
-View(AusPC)
 ## Plotting of PCA models ---- 
 names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
@@ -570,7 +554,6 @@ biplot(lmv)
 biplot(cmv, scale = 1, alpha = 0)
 biplot(lcav, scale = 0)
 scores(lmv, display = "species")
-?biplot
 lmv_scores <- lmv$x
 lmv_scores[,3]
 summary(lmv)
@@ -583,7 +566,7 @@ lmv
 ggbiplot(lmv, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(x = "PC1 (32.7%)", y = "PC2 (28.2%)") +
+  labs(x = "PC1 (35.2%)", y = "PC2 (28.8%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16)   # Increase size of y-axis title
@@ -609,104 +592,18 @@ ggbiplot(cav, varname.size = 6 ,alpha = 0) +
 
 
 ## Grouping based on Climatic Variables ----
-## Using Ordispider Package ----
-### For Lotus ----
-l_pca_scores <- as.data.frame(lmv$x)   # Extract PCA individual scores
-l_groups <- AusPC$Treatment[AusPC$Species == "Lotus"]  # Grouping variable
-
-# Define a consistent color palette for the polygons
-unique_groups <- unique(l_groups)
-group_colors <- setNames(rainbow(length(unique_groups)), unique_groups)
-
-# Base plot
-plot(l_pca_scores$PC1, l_pca_scores$PC2, 
-     xlab = "PC1 (32.7%)", ylab = "PC2 (28.3%)", main = "Lotus - PCA",
-     col = group_colors[l_groups], pch = 19, cex = 1.5)
-
-# Add spider diagram (ordihull polygons)
-ordispider(l_pca_scores, l_groups, col = rainbow(length(unique(l_groups))), label = TRUE)
-ordihull(l_pca_scores, l_groups, col = group_colors, draw = "polygon", alpha = 0.4)
-
-# Add legend matching polygon colors
-legend("topright",
-       legend = unique_groups,
-       fill = group_colors,
-       border = "black",
-       title = "Treatment Groups")
-
-# Adding arrows
-l_pca_loadings <- as.data.frame(lmv$rotation[, 1:2])  
-arrows(0, 0, 
-       l_pca_loadings$PC1 * 2,  
-       l_pca_loadings$PC2 * 2,  
-       col = "blue", length = 0.1)
-text(l_pca_loadings$PC1 * 2.2, l_pca_loadings$PC2 * 2.2, labels = rownames(l_pca_loadings), col = "blue", cex = 0.8)
-
-### For Crepis (Main Variables) ----
-cm_pca_scores <- as.data.frame(cmv$x)
-c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
-
-#Base plot
-plot(cm_pca_scores$PC1, cm_pca_scores$PC2,
-     xlab = "PC1 (33.6%)", ylab = "PC2 (21.6%)", main = "Crepis - Main Variables - PCA",
-     col=as.factor(c_groups), pch = 19, cex = 1.5)
-
-# Add spider diagram
-ordispider(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
-ordihull(cm_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
-
-# Optional: Add legend
-legend("topright", legend = unique(c_groups), 
-       col = rainbow(length(unique(c_groups))), 
-       pch = 19, bty = "o")
-
-# Adding arrows
-cm_pca_loadings <- as.data.frame(cmv$rotation[, 1:2])  
-arrows(0, 0, 
-       cm_pca_loadings$PC1 * 2,  
-       cm_pca_loadings$PC2 * 2,  
-       col = "blue", length = 0.1)
-text(cm_pca_loadings$PC1 * 2.2, cm_pca_loadings$PC2 * 2.2, labels = rownames(cm_pca_loadings), col = "blue", cex = 0.8)
-
-### For Crepis (All Variables) ----
-ca_pca_scores <- as.data.frame(cav$x)
-c_groups <- AusPC$Treatment[AusPC$Species == "Crepis"]
-
-#Base plot
-plot(ca_pca_scores$PC1, ca_pca_scores$PC2,
-     xlab = "PC1 (28%)", ylab = "PC2 (18.6%)", main = "Crepis - All Variables - PCA",
-     col=as.factor(c_groups), pch = 19, cex = 1.5)
-
-# Add spider diagram
-ordispider(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))), label = TRUE)
-ordihull(ca_pca_scores, c_groups, col = rainbow(length(unique(c_groups))),draw = "polygon")
-
-# Optional: Add legend
-legend("topright", legend = unique(c_groups), 
-       col = rainbow(length(unique(c_groups))),
-       border = "black",
-       pch = 19, bty = "o", title = "Treatment Groups")
-
-# Adding arrows
-ca_pca_loadings <- as.data.frame(cav$rotation[, 1:2])  
-arrows(0, 0, 
-       ca_pca_loadings$PC1 * 2,  
-       ca_pca_loadings$PC2 * 2,  
-       col = "blue", length = 0.1)
-text(ca_pca_loadings$PC1 * 2.2, ca_pca_loadings$PC2 * 2.2, labels = rownames(ca_pca_loadings), col = "blue", cex = 0.8)
-
 ## Rank Abundance Curves ----
 ### Creating PCA for each treatment ----
 ### Lotus ----
-lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
-lmv_control <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
-lmv_drought <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
-lmv_temperature <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
-lmv_co2 <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
-lmv_ct <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
-lmv_ctd <- prcomp(AusPC[AusPC$Species == "Lotus" & AusPC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
-lmv_ct
-lmv_control
+
+lmv <- prcomp(AusRC[AusRC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
+lmv_control <- prcomp(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
+lmv_drought <- prcomp(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
+lmv_temperature <- prcomp(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
+lmv_co2 <- prcomp(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
+lmv_ct <- prcomp(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
+lmv_ctd <- prcomp(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
+
 ### Extracting Variance Explained for each treatment
 variance_lmv_control <- lmv_control$sdev^2 / sum(lmv_control$sdev^2)
 variance_lmv_drought <- lmv_drought$sdev^2 / sum(lmv_drought$sdev^2)
@@ -715,25 +612,32 @@ variance_lmv_co2 <- lmv_co2$sdev^2 / sum(lmv_co2$sdev^2)
 variance_lmv_ct <- lmv_ct$sdev^2 / sum(lmv_ct$sdev^2)
 variance_lmv_ctd <- lmv_ctd$sdev^2 / sum(lmv_ctd$sdev^2)
 
-### Adding zero to treatments with insufficient PCA Axis 
-if (length(variance_lmv_drought) < 6) {
-  variance_lmv_drought <- c(variance_lmv_drought, rep(0, 6 - length(variance_lmv_drought)))
-}
-if (length(variance_lmv_ct) < 6) {
-  variance_lmv_ct <- c(variance_lmv_ct, rep(0, 6 - length(variance_lmv_ct)))
-}
+lengths <- sapply(list(variance_lmv_control, variance_lmv_drought, variance_lmv_temperature, variance_lmv_co2, variance_lmv_ct, variance_lmv_ctd), length)
+print(lengths)
 
+  
 ### Combining Variance Explained Results to a dataframe
 AusL_PC <- data.frame(
-  PCA_axis = rep(1:6,6),
+  PCA_axis = rep(1:5,6),
   Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
-  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
+  Treatment = rep(c("A", "C", "T", "D", "CT", "CTD"), each = 5)
 )
+AusL_PC$Treatment <- factor(AusL_PC$Treatment, levels = c("A", "C", "T", "D", "CT", "CTD"))
 
 ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
+  scale_color_manual(
+    values = c(
+      "A" = "#1976d2",      # Control
+      "C" = "#7e57c2",       # Elevated CO2
+      "T" = "#ff9800",        # Elevated temperature
+      "D" = "#f7756d",      # Drought stress
+      "CT" = "#fbc02d",     # CO2 & temperature stress
+      "CTD" = "#00bfc4"      # CO2, temperature, and drought stress
+    )
+  ) +
   labs(
     title = "Lotus - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
@@ -741,23 +645,23 @@ ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
     color = "Treatment"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"), # Increase title size
-    axis.title = element_text(size = 14),               # Increase axis labels
-    axis.text = element_text(size = 12),                # Increase tick labels
-    legend.title = element_text(size = 14),             # Increase legend title
-    legend.text = element_text(size = 12)           
+    plot.title = element_text(size = 20, face = "bold"), # Increase title size
+    axis.title = element_text(size = 16),               # Increase axis labels
+    axis.text = element_text(size = 14),                # Increase tick labels
+    legend.title = element_text(size = 16),             # Increase legend title
+    legend.text = element_text(size = 14)           
   )
     
 View(AusL_PC)
 
 ### Crepis (Main Variables) ----
-cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
-cmv_control <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
-cmv_drought <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
-cmv_temperature <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
-cmv_co2 <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
-cmv_ct <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
-cmv_ctd <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
+cmv <- prcomp(AusRC[AusRC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
+cmv_control <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
+cmv_drought <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
+cmv_temperature <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
+cmv_co2 <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
+cmv_ct <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
+cmv_ctd <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D1", c(9,18,20:23)], scale = TRUE)
 
 ### Extracting variance explained for each treatment 
 variance_cmv_control <- cmv_control$sdev^2 / sum(cmv_control$sdev^2)
@@ -775,13 +679,26 @@ print(lengths)
 AusCM_PC <- data.frame(
   PCA_axis = rep(1:6, 6),
   Variance_Explained = c(variance_cmv_control, variance_cmv_co2, variance_cmv_temperature, variance_cmv_drought, variance_cmv_ct, variance_cmv_ctd),
-  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 6)
+  Treatment = rep(c("A", "C", "T", "D", "CT", "CTD"), each = 6)
 )
+
+AusCM_PC$Treatment <- factor(AusCM_PC$Treatment, levels = c("A", "C", "T", "D", "CT", "CTD"))
+
 
 ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
+  scale_color_manual(
+    values = c(
+      "A" = "#1976d2",      # Control
+      "C" = "#7e57c2",       # Elevated CO2
+      "T" = "#ff9800",        # Elevated temperature
+      "D" = "#f7756d",      # Drought stress
+      "CT" = "#fbc02d",     # CO2 & temperature stress
+      "CTD" = "#00bfc4"      # CO2, temperature, and drought stress
+    )
+  ) +
   labs(
     title = "Crepis (Main Variables) - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
@@ -789,22 +706,21 @@ ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
     color = "Treatment"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"), # Increase title size
-    axis.title = element_text(size = 14),               # Increase axis labels
-    axis.text = element_text(size = 12),                # Increase tick labels
-    legend.title = element_text(size = 14),             # Increase legend title
-    legend.text = element_text(size = 12)           
+    plot.title = element_text(size = 20, face = "bold"), # Increase title size
+    axis.title = element_text(size = 16),               # Increase axis labels
+    axis.text = element_text(size = 14),                # Increase tick labels
+    legend.title = element_text(size = 16),             # Increase legend title
+    legend.text = element_text(size = 14)           
   )
 
 ### Crepis (All Variables) ----
-cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
-
-cav_control <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D0", c(9,18,20:25)], scale = TRUE)
-cav_drought <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T0D1", c(9,18,20:25)], scale = TRUE)
-cav_temperature <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C0T2D0", c(9,18,20:25)], scale = TRUE)
-cav_co2 <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T0D0", c(9,18,20:25)], scale = TRUE)
-cav_ct <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D0", c(9,18,20:25)], scale = TRUE)
-cav_ctd <- prcomp(AusPC[AusPC$Species == "Crepis" & AusPC$Treatment == "C2T2D1", c(9,18,20:25)], scale = TRUE)
+cav <- prcomp(AusRC[AusRC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
+cav_control <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", c(9,18,20:25)], scale = TRUE)
+cav_drought <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", c(9,18,20:25)], scale = TRUE)
+cav_temperature <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T2D0", c(9,18,20:25)], scale = TRUE)
+cav_co2 <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T0D0", c(9,18,20:25)], scale = TRUE)
+cav_ct <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", c(9,18,20:25)], scale = TRUE)
+cav_ctd <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D1", c(9,18,20:25)], scale = TRUE)
 
 ### Extracting variance explained for each treatment 
 variance_cav_control <- cav_control$sdev^2 / sum(cav_control$sdev^2)
@@ -818,31 +734,30 @@ variance_cav_ctd <- cav_ctd$sdev^2 / sum(cav_ctd$sdev^2)
 lengths <- sapply(list(variance_cav_control, variance_cav_co2, variance_cav_temperature, variance_cav_drought, variance_cav_ct, variance_cav_ctd), length)
 print(lengths)
 
-### Adding zero to treatments with insufficient PCA Axis 
-if (length(variance_cav_co2) < 8) {
-  variance_cav_co2 <- c(variance_cav_co2, rep(0, 8 - length(variance_cav_co2)))
-}
-
-if (length(variance_cav_ct) < 8) {
-  variance_cav_ct <- c(variance_cav_ct, rep(0, 8 - length(variance_cav_ct)))
-}
-
-if (length(variance_cav_ctd) < 8) {
-  variance_cav_ctd <- c(variance_cav_ctd, rep(0, 8 - length(variance_cav_ctd)))
-}
-
 ### Combining variance explained results to a dataframe
 
 AusCA_PC <- data.frame(
-  PCA_axis = rep(1:8, 6),
+  PCA_axis = rep(1:6, 6),
   Variance_Explained = c(variance_cav_control, variance_cav_co2, variance_cav_temperature, variance_cav_drought, variance_cav_ct, variance_cav_ctd),
-  Treatment = rep(c("C0T0D0", "C2T0D0", "C0T2D0", "C0T0D2", "C2T2D0", "C2T2D1"), each = 8)
+  Treatment = rep(c("A", "C", "T", "D", "CT", "CTD"), each = 6)
 )
+
+AusCA_PC$Treatment <- factor(AusCA_PC$Treatment, levels = c("A", "C", "T", "D", "CT", "CTD"))
 
 ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = 1:8, labels = 1:8) +
+  scale_color_manual(
+    values = c(
+      "A" = "#1976d2",      # Control
+      "C" = "#7e57c2",       # Elevated CO2
+      "T" = "#ff9800",        # Elevated temperature
+      "D" = "#f7756d",      # Drought stress
+      "CT" = "#fbc02d",     # CO2 & temperature stress
+      "CTD" = "#00bfc4"      # CO2, temperature, and drought stress
+    )
+  ) +
   labs(
     title = "Crepis (All Variables) - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
@@ -850,11 +765,11 @@ ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
     color = "Treatment"
   ) +
   theme(
-    plot.title = element_text(size = 18, face = "bold"), # Increase title size
-    axis.title = element_text(size = 14),               # Increase axis labels
-    axis.text = element_text(size = 12),                # Increase tick labels
-    legend.title = element_text(size = 14),             # Increase legend title
-    legend.text = element_text(size = 12)           
+    plot.title = element_text(size = 20, face = "bold"), # Increase title size
+    axis.title = element_text(size = 16),               # Increase axis labels
+    axis.text = element_text(size = 14),                # Increase tick labels
+    legend.title = element_text(size = 16),             # Increase legend title
+    legend.text = element_text(size = 14)           
   )
 
 ## Extracting PCA Results----
@@ -1225,12 +1140,20 @@ write.csv(combined_df, "crepis_a_ctd_pca_combined.csv", row.names = TRUE)
 
 
 ## PCA Plots for Each Treatment ----
-### For Lotus ----
+names(AusRC)[names(AusRC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
+names(AusRC)[names(AusRC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
+names(AusRC)[names(AusRC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
+names(AusRC)[names(AusRC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
+names(AusRC)[names(AusRC) == "Number of Seeds (SN)"] <- "SN"
+names(AusRC)[names(AusRC) == "Seed Mass (SM)(g)"] <- "SM"
+names(AusRC)[names(AusRC) == "Display Area (DA)(cm2)"] <- "DA"
+names(AusRC)[names(AusRC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
+### For Lotus ----
 ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T0D0", x = "PC1 (42.4%)", y = "PC2 (22.8%)") +
+  labs(title = "A", x = "PC1 (45%)", y = "PC2 (35.6%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
@@ -1240,7 +1163,7 @@ ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
 ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T0D0", x = "PC1 (45.4%)", y = "PC2 (31.8%)") +
+  labs(title = "C", x = "PC1 (59.6%)", y = "PC2 (24.6%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
@@ -1250,7 +1173,7 @@ ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
 ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T2D0", x = "PC1 (44.2%)", y = "PC2 (29.7%)") +
+  labs(title = "T", x = "PC1 (36.5%)", y = "PC2 (28.2%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1260,7 +1183,7 @@ ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
 ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T0D1", x = "PC1 (39.5%)", y = "PC2 (34.9%)") +
+  labs(title = "D", x = "PC1 (46.5%)", y = "PC2 (33.8%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1270,7 +1193,7 @@ ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
 ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T2D0", x = "PC1 (44.2%)", y = "PC2 (31.2%)") +
+  labs(title = "CT", x = "PC1 (35.7%)", y = "PC2 (33%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1280,7 +1203,7 @@ ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
 ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T2D1", x = "PC1 (66.8%)", y = "PC2 (24.7%)") +
+  labs(title = "CTD", x = "PC1 (65.3%)", y = "PC2 (29.8%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1291,7 +1214,7 @@ ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
 ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T0D0", x = "PC1 (32.1%)", y = "PC2 (30.6%)") +
+  labs(title = "A", x = "PC1 (38.3%)", y = "PC2 (33%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
@@ -1301,7 +1224,7 @@ ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
 ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T0D0", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
+  labs(title = "C", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
@@ -1311,7 +1234,7 @@ ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
 ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T2D0", x = "PC1 (35.5%)", y = "PC2 (27.8%)") +
+  labs(title = "T", x = "PC1 (47.6%)", y = "PC2 (26.7%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1321,7 +1244,7 @@ ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
 ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T0D1", x = "PC1 (42.7%)", y = "PC2 (25.3%)") +
+  labs(title = "D", x = "PC1 (57.4%)", y = "PC2 (21.4%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1331,7 +1254,7 @@ ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
 ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T2D0", x = "PC1 (69.7%)", y = "PC2 (15.7%)") +
+  labs(title = "CT", x = "PC1 (74.5%)", y = "PC2 (12.4%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1341,7 +1264,7 @@ ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
 ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T2D1", x = "PC1 (49.2%)", y = "PC2 (28.7%)") +
+  labs(title = "CTD", x = "PC1 (49.2%)", y = "PC2 (29.6%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1352,7 +1275,7 @@ ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
 ggbiplot(cav_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T0D0", x = "PC1 (33.4%)", y = "PC2 (23.8%)") +
+  labs(title = "A", x = "PC1 (44.9%)", y = "PC2 (25.2%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
@@ -1362,7 +1285,7 @@ ggbiplot(cav_control, varname.size = 6, alpha = 0) +
 ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T0D0", x = "PC1 (52.0%)", y = "PC2 (36.4%)") +
+  labs(title = "C", x = "PC1 (52.1%)", y = "PC2 (36.4%)") +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
@@ -1372,7 +1295,7 @@ ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
 ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T2D0", x = "PC1 (31.5%)", y = "PC2 (30.3%)") +
+  labs(title = "T", x = "PC1 (45.2%)", y = "PC2 (24.1%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1382,7 +1305,7 @@ ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
 ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C0T0D1", x = "PC1 (41.6%)", y = "PC2 (27.6%)") +
+  labs(title = "D", x = "PC1 (48.2%)", y = "PC2 (23.8%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1392,7 +1315,7 @@ ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
 ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T2D0", x = "PC1 (53.9%)", y = "PC2 (20.6%)") +
+  labs(title = "CT", x = "PC1 (59.7%)", y = "PC2 (18.6%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1402,7 +1325,7 @@ ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
 ggbiplot(cav_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C2T2D1", x = "PC1 (42.9%)", y = "PC2 (24.3%)") +
+  labs(title = "CTD", x = "PC1 (43%)", y = "PC2 (23.6%)") +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
@@ -1443,11 +1366,13 @@ l_rda_proportion_explained <- l_rda_eigenvalues/sum(l_rda_eigenvalues)
 l_rda_proportion_explained
 
 ### Preparing Model for Plotting ----
-rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ Temperature + Drought + Condition(CO2, CO2:Drought ), data = AusRDL, scale = TRUE) # Without C:T Interaction
+anova(rda.ln, permutations = 9999, by = "terms")
+rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ Temperature + Drought + CO2:Drought + Condition(CO2), data = AusRDL, scale = TRUE) # Without C:T Interaction
+
 l_bp_scores <- scores(rda.ln, display = "bp") #Extracting Names of Predictors
 
 rownames(l_bp_scores)
-rownames(l_bp_scores)<- c("T", "D")
+rownames(l_bp_scores)<- c("T", "D", "(C+T)xD")
 
 ### Plot for Lotus RDA ----
 
@@ -1484,7 +1409,7 @@ c_rda_proportion_explained <- c_rda_eigenvalues/sum(c_rda_eigenvalues)
 c_rda_proportion_explained
 
 ### Preparing Model for Plotting ----
-rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2 + Temperature,CO2:Drought), data = AusRDC, scale = TRUE)
+rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2+Temperature), data = AusRDC, scale = TRUE)
 c_bp_scores <- scores(rda.cn, display = "bp") #Extracting Names of Predictors
 rownames(c_bp_scores)
 rownames(c_bp_scores)<- c("D", "CxT")
@@ -1672,6 +1597,7 @@ ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
 
 ## For Crepis ----
 names(AusC)
+Crecor_Data <- AusC[,c(9:10,12:17)]
 names(Crecor_Data)
 names(Crecor_Data)[names(Crecor_Data) == "Display Area (DA)(cm2)"] <- "DA"
 names(Crecor_Data)[names(Crecor_Data) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -1775,7 +1701,7 @@ lv_PDMCmodel <- lm(AusL$`Petal Dry Matter Content (PDMC)(g/g)` ~CO2 + Temperatur
 lv_log_LAmodel <- lm(AusL$`log_Leaf Area (LA)(cm2)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
 lv_SLAmodel <- lm(AusL$`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
 lv_log_LDMCmodel <- lm(AusL$`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
-anova(lv_log_LAmodel)
+
 ### For Crepis ----
 cv_sq_DAmodel <- lm(AusC$`Display Area (DA)(cm2)`~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
 cv_sq_SPAmodel <- lm(AusC$`Specific Petal Area (SPA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
