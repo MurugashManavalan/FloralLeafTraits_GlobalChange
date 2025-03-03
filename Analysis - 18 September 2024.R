@@ -32,8 +32,6 @@ library(car) # Provides tools for regression analysis, ANOVA, and diagnostic plo
 library(reshape2) # Offers functions for reshaping data frames, such as melting and casting, to prepare tidy datasets.
 library(vegan)
 library(factoextra)
-View(AusC)
-# New comment
 
 # Loading Files into R ----
 setwd("/Users/murugash/Desktop/PhD/Austria Experiment/R Analysis")
