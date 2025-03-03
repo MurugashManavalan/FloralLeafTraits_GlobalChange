@@ -534,14 +534,7 @@ ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
   )
 
 # Principal Component Analysis ----
-## Creation of PCA models ----
-View(AusPC)
-colnames(AusPC)
-lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
-cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
-cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale =  TRUE)
-
-## Plotting of PCA models ---- 
+## Renaming of PCA Names ---- 
 names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusPC)[names(AusPC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
@@ -550,6 +543,13 @@ names(AusPC)[names(AusPC) == "Number of Seeds (SN)"] <- "SN"
 names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "SM"
 names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "LA"
+
+## Creation of PCA models  ----
+View(AusPC)
+colnames(AusPC)
+lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
+cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
+cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale =  TRUE)
 
 biplot(lmv)
 biplot(cmv, scale = 1, alpha = 0)
@@ -569,8 +569,8 @@ ggbiplot(lmv, varname.size = 6, alpha = 0) +
   ylim(-2, 2) +
   labs(x = "PC1 (35.2%)", y = "PC2 (28.8%)") +
   theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+    axis.title.x = element_text(size = 20),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 20)   # Increase size of y-axis title
   )
 
 ggbiplot(cmv, varname.size = 6 ,alpha = 0) + 
@@ -578,8 +578,8 @@ ggbiplot(cmv, varname.size = 6 ,alpha = 0) +
   ylim(-2, 2) +
   labs(x = "PC1 (33.5%)", y = "PC2 (21.6%)") +
   theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+    axis.title.x = element_text(size = 20),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 20)   # Increase size of y-axis title
   )
 
 ggbiplot(cav, varname.size = 6 ,alpha = 0) + 
@@ -587,8 +587,8 @@ ggbiplot(cav, varname.size = 6 ,alpha = 0) +
   ylim(-2, 2) +
   labs(x = "PC1 (28%)", y = "PC2 (18.6%)") +
   theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16)   # Increase size of y-axis title
+    axis.title.x = element_text(size = 20),  # Increase size of x-axis title
+    axis.title.y = element_text(size = 20)   # Increase size of y-axis title
   )
 
 
@@ -1352,19 +1352,21 @@ names(AusRDL)[names(AusRDL) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
 names(AusRDL)[names(AusRDL) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
 
+
 rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDL, scale = TRUE)
-summary(rda.l)
 Lotus_RDA <- anova(rda.l, permutations = 9999, by = "terms")
-Lotus_RDA
 Lotus_RDA <- as.data.frame(Lotus_RDA)
 View(Lotus_RDA) # Temperature, Drought and CO2:Drought are significant (Latter marginally significant)
-
+anova(rda.l)
+trait_loadings <- scores(rda.l, display = "all")
+trait_loadings
 ### Extracting Values for Lotus RDA ----
 summary_text <- capture.output(summary(rda.l))
 writeLines(summary_text, "lotus_rda_summary.txt")
 l_rda_eigenvalues <- eigenvals(rda.l, constrained = TRUE)
 l_rda_proportion_explained <- l_rda_eigenvalues/sum(l_rda_eigenvalues) 
 l_rda_proportion_explained
+
 
 ### Preparing Model for Plotting ----
 anova(rda.ln, permutations = 9999, by = "terms")
@@ -1373,7 +1375,7 @@ rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ Temperature + Drought + CO2:Drought + Con
 l_bp_scores <- scores(rda.ln, display = "bp") #Extracting Names of Predictors
 
 rownames(l_bp_scores)
-rownames(l_bp_scores)<- c("T", "D", "(C+T)xD")
+rownames(l_bp_scores)<- c("T", "D", "CTD")
 
 ### Plot for Lotus RDA ----
 
@@ -1413,7 +1415,7 @@ c_rda_proportion_explained
 rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2+Temperature), data = AusRDC, scale = TRUE)
 c_bp_scores <- scores(rda.cn, display = "bp") #Extracting Names of Predictors
 rownames(c_bp_scores)
-rownames(c_bp_scores)<- c("D", "CxT")
+rownames(c_bp_scores)<- c("D", "CT")
 
 ### Plot for Crepis RDA ----
 plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-0.5,0.5), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
