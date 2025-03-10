@@ -35,20 +35,21 @@ library(factoextra)
 
 # Loading Files into R ----
 setwd("/Users/murugash/Desktop/PhD/Austria Experiment/R Analysis")
-AusL <- read_csv("Austria Experiment - Lotus Data - Core Response Variables - 12 February 2025.csv")
-AusC <- read_csv("Austria Experiment - Crepis Data - Core Response Variables - 15 August 2024.csv")
-AusC <- AusC[-c(63:163),]
-AusPC <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 12 February 2025.csv")
-AusPC <- AusPC[-c(85:117),]
-AusRD <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 12 February 2025.csv")
-AusRD <- AusRD[-c(85:117),]
+AusL <- read_csv("Austria Experiment - Lotus Data - Core Response Variables - 7 March 2025.csv")
+AusL <- AusL[c(1:93),]
+AusC <- read_csv("Austria Experiment - Crepis Data - Core Response Variables - 7 March 2025.csv")
+AusC <- AusC[c(1:62),]
+AusPC <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv")
+AusPC <- AusPC[c(1:84),]
+AusRD <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv")
+AusRD <- AusRD[c(1:84),]
 AusL1 <- AusL[AusL$`Plot No.`!= "P16",]
-AusRC <- read_csv("Austria Experiment - Crepis and Leaf Data - RAC - 12 February 2025.csv")
-AusRC <- AusRC[-c(67:99),]
+AusRC <- read_csv("Austria Experiment - Crepis and Leaf Data - RAC - 7 March 2025.csv")
+AusRC <- AusRC[c(1:66),]
 dir()
 getwd()
 AusC
-View(AusRC)
+View(AusC)
 # Function to Log and Square Root transform Response Variables ----
 log_sqrt_transform <- function(df, cols) {
   # Check if cols are numeric (indices)
@@ -240,6 +241,7 @@ ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
     x = "CO2 Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -248,19 +250,20 @@ ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
     axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-ggplot(AusL, aes(x = CO2,y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
+ggplot(AusL, aes(x = as.factor(CO2), y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
   geom_boxplot(fill = "#f7766d") +
   labs(
     title = "Lotus - Effect of CO2 on LDMC",
     x = "CO2 Level",
     y = "Leaf Dry Matter Content (LDMC) (g/g)"
   ) +
+  theme_bw() + 
   theme(
-    plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
-    axis.title.x = element_text(size = 32),  # Increase x-axis title size
-    axis.title.y = element_text(size = 32),  # Increase y-axis title size
-    axis.text.x = element_text(size = 28),   # Increase x-axis text size
-    axis.text.y = element_text(size = 28)    # Increase y-axis text size
+    plot.title = element_text(size = 36, face = "bold"),  # Bold, larger title
+    axis.title.x = element_text(size = 32),  # Larger x-axis title
+    axis.title.y = element_text(size = 32),  # Larger y-axis title
+    axis.text.x = element_text(size = 28),   # Larger x-axis text
+    axis.text.y = element_text(size = 28)    # Larger y-axis text
   )
 
 ### Temperature ----
@@ -271,6 +274,7 @@ ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
     x = "Temperature Level",
     y = "Display Area (DA)(cm2)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -287,6 +291,7 @@ ggplot(AusL, aes(x = AusL$Drought, y = AusL$`Leaf Area (LA)(cm2)`))+
     x = "Drought Level",
     y = "Leaf Area (LA)(cm2)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -302,6 +307,7 @@ ggplot(AusL, aes(x = AusL$Drought, y= AusL$`Specific Leaf Area (SLA)(cm2/g)`)) +
     x = "Drought Level",
     y = "Specific Leaf Area (SLA) (cm2/g)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -317,6 +323,7 @@ ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
     x = "Drought Level",
     y = "Leaf Dry Matter Content (LDMC) (g/g)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -336,6 +343,7 @@ ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
     y = "Display Area (DA)(cm2)",
     fill = "Temperature"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 28),  # Increase x-axis title size
@@ -356,6 +364,7 @@ ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperat
     y = "Specific Leaf Area (SLA) (cm2/g)",
     fill = "Temperature"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 28),  # Increase x-axis title size
@@ -374,6 +383,7 @@ ggplot(AusL, aes(x = CO2, y = AusL$`Display Area (DA)(cm2)`, fill = Drought)) +
     y = "Display Area (DA)(cm2)",
     fill = "Drought"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 28),  # Increase x-axis title size
@@ -393,6 +403,7 @@ ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drou
     y = "Leaf Dry Matter Content (LDMC)(g/g)",
     fill = "Drought"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 28),  # Increase x-axis title size
@@ -424,6 +435,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
     x = "Drought Level",
     y = "Display Area (DA)(cm2)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -439,6 +451,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Specific Petal Area (SPA)(cm2/g)`)) +
     x = "Drought Level",
     y = "Specific Petal Area (SPA)(cm2/g)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -454,6 +467,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Petal Dry Matter Content (PDMC)(g/g)`)) +
     x = "Drought Level",
     y = "Petal Dry Matter Content (PDMC)(g/g)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -469,6 +483,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     x = "Drought Level",
     y = "Leaf Dry Matter Content (g/g)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -484,6 +499,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
     x = "Drought Level",
     y = "Number of Seeds (SN)"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 36, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 32),  # Increase x-axis title size
@@ -503,6 +519,7 @@ ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Tempera
     y = "Specific Petal Area (SPA)(cm2/g)",
     fill = "Temperature"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 28),  # Increase x-axis title size
@@ -522,6 +539,7 @@ ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
     y = "Number of Seeds (SN)",
     fill = "Temperature"
   ) +
+  theme_bw() +
   theme(
     plot.title = element_text(size = 30, face = "bold"),  # Increase plot title size and make it bold
     axis.title.x = element_text(size = 28),  # Increase x-axis title size
@@ -562,33 +580,40 @@ summary(cav)
 lmv
 
 ### PCA plots using ggbiplot ----
-
+png("Lotus - PCA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(lmv, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(x = "PC1 (35.2%)", y = "PC2 (28.8%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),  # Increase size of x-axis title
     axis.title.y = element_text(size = 20)   # Increase size of y-axis title
   )
 
+png("Crepis (Main Variables) - PCA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cmv, varname.size = 6 ,alpha = 0) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(x = "PC1 (33.5%)", y = "PC2 (21.6%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),  # Increase size of x-axis title
     axis.title.y = element_text(size = 20)   # Increase size of y-axis title
   )
 
+png("Crepis (All Variables) - PCA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cav, varname.size = 6 ,alpha = 0) + 
   xlim(-2, 2) + 
   ylim(-2, 2) +
   labs(x = "PC1 (28%)", y = "PC2 (18.6%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),  # Increase size of x-axis title
     axis.title.y = element_text(size = 20)   # Increase size of y-axis title
   )
+
+dev.off()
 
 
 ## Grouping based on Climatic Variables ----
@@ -620,37 +645,37 @@ print(lengths)
 AusL_PC <- data.frame(
   PCA_axis = rep(1:5,6),
   Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
-  Treatment = rep(c("A", "C", "T", "D", "CT", "CTD"), each = 5)
+  Treatment = rep(c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"), each = 5)
 )
-AusL_PC$Treatment <- factor(AusL_PC$Treatment, levels = c("A", "C", "T", "D", "CT", "CTD"))
-
+AusL_PC$Treatment <- factor(AusL_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
+png("Lotus - Proportion of Variance Explained - 10 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
   scale_color_manual(
     values = c(
-      "A" = "#1976d2",      # Control
-      "C" = "#7e57c2",       # Elevated CO2
-      "T" = "#ff9800",        # Elevated temperature
-      "D" = "#f7756d",      # Drought stress
-      "CT" = "#fbc02d",     # CO2 & temperature stress
-      "CTD" = "#00bfc4"      # CO2, temperature, and drought stress
+      "C0T0D0" = "#1976d2",      # Control
+      "C1T0D0" = "#7e57c2",       # Elevated CO2
+      "C0T1D0" = "#ff9800",        # Elevated temperature
+      "C0T0D1" = "#f7756d",      # Drought stress
+      "C1T1D0" = "#fbc02d",     # CO2 & temperature stress
+      "C1T1D1" = "#00bfc4"      # CO2, temperature, and drought stress
     )
   ) +
   labs(
-    title = "Lotus - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
+  theme_bw()+
   theme(
-    plot.title = element_text(size = 20, face = "bold"), # Increase title size
-    axis.title = element_text(size = 16),               # Increase axis labels
-    axis.text = element_text(size = 14),                # Increase tick labels
-    legend.title = element_text(size = 16),             # Increase legend title
-    legend.text = element_text(size = 14)           
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 16),
   )
+dev.off()
     
 View(AusL_PC)
 
@@ -679,39 +704,38 @@ print(lengths)
 AusCM_PC <- data.frame(
   PCA_axis = rep(1:6, 6),
   Variance_Explained = c(variance_cmv_control, variance_cmv_co2, variance_cmv_temperature, variance_cmv_drought, variance_cmv_ct, variance_cmv_ctd),
-  Treatment = rep(c("A", "C", "T", "D", "CT", "CTD"), each = 6)
+  Treatment = rep(c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"), each = 6)
 )
 
-AusCM_PC$Treatment <- factor(AusCM_PC$Treatment, levels = c("A", "C", "T", "D", "CT", "CTD"))
-
-
+AusCM_PC$Treatment <- factor(AusCM_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
+png("Crepis (Main Variables) - Proportion of Variance Explained - 10 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
   scale_color_manual(
     values = c(
-      "A" = "#1976d2",      # Control
-      "C" = "#7e57c2",       # Elevated CO2
-      "T" = "#ff9800",        # Elevated temperature
-      "D" = "#f7756d",      # Drought stress
-      "CT" = "#fbc02d",     # CO2 & temperature stress
-      "CTD" = "#00bfc4"      # CO2, temperature, and drought stress
+      "C0T0D0" = "#1976d2",      # Control
+      "C1T0D0" = "#7e57c2",       # Elevated CO2
+      "C0T1D0" = "#ff9800",        # Elevated temperature
+      "C0T0D1" = "#f7756d",      # Drought stress
+      "C1T1D0" = "#fbc02d",     # CO2 & temperature stress
+      "C1T1D1" = "#00bfc4"      # CO2, temperature, and drought stress
     )
   ) +
   labs(
-    title = "Crepis (Main Variables) - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
+  theme_bw()+
   theme(
-    plot.title = element_text(size = 20, face = "bold"), # Increase title size
-    axis.title = element_text(size = 16),               # Increase axis labels
-    axis.text = element_text(size = 14),                # Increase tick labels
-    legend.title = element_text(size = 16),             # Increase legend title
-    legend.text = element_text(size = 14)           
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 16),
   )
+dev.off()
 
 ### Crepis (All Variables) ----
 cav <- prcomp(AusRC[AusRC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
@@ -739,38 +763,38 @@ print(lengths)
 AusCA_PC <- data.frame(
   PCA_axis = rep(1:6, 6),
   Variance_Explained = c(variance_cav_control, variance_cav_co2, variance_cav_temperature, variance_cav_drought, variance_cav_ct, variance_cav_ctd),
-  Treatment = rep(c("A", "C", "T", "D", "CT", "CTD"), each = 6)
+  Treatment = rep(c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"), each = 6)
 )
 
-AusCA_PC$Treatment <- factor(AusCA_PC$Treatment, levels = c("A", "C", "T", "D", "CT", "CTD"))
-
+AusCA_PC$Treatment <- factor(AusCA_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
+png("Crepis (All Variables) - Proportion of Variance Explained - 10 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = 1:8, labels = 1:8) +
   scale_color_manual(
     values = c(
-      "A" = "#1976d2",      # Control
-      "C" = "#7e57c2",       # Elevated CO2
-      "T" = "#ff9800",        # Elevated temperature
-      "D" = "#f7756d",      # Drought stress
-      "CT" = "#fbc02d",     # CO2 & temperature stress
-      "CTD" = "#00bfc4"      # CO2, temperature, and drought stress
+      "C0T0D0" = "#1976d2",      # Control
+      "C1T0D0" = "#7e57c2",       # Elevated CO2
+      "C0T1D0" = "#ff9800",        # Elevated temperature
+      "C0T0D1" = "#f7756d",      # Drought stress
+      "C1T1D0" = "#fbc02d",     # CO2 & temperature stress
+      "C1T1D1" = "#00bfc4"      # CO2, temperature, and drought stress
     )
   ) +
   labs(
-    title = "Crepis (All Variables) - Effect of Climatic Factors on Trait Covariation",
     x = "PCA Axis",
     y = "Proportion of Variance Explained",
     color = "Treatment"
   ) +
+  theme_bw()+
   theme(
-    plot.title = element_text(size = 20, face = "bold"), # Increase title size
-    axis.title = element_text(size = 16),               # Increase axis labels
-    axis.text = element_text(size = 14),                # Increase tick labels
-    legend.title = element_text(size = 16),             # Increase legend title
-    legend.text = element_text(size = 14)           
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 16),  
   )
+dev.off()
 
 ## Extracting PCA Results----
 ### For Lotus ----
@@ -1150,187 +1174,240 @@ names(AusRC)[names(AusRC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRC)[names(AusRC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
 ### For Lotus ----
+png("Lotus - C0T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "A", x = "PC1 (45%)", y = "PC2 (35.6%)") +
+  labs(title = "C0T0D0", x = "PC1 (45%)", y = "PC2 (35.6%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
+dev.off()
 
+png("Lotus - C1T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C", x = "PC1 (59.6%)", y = "PC2 (24.6%)") +
+  labs(title = "C1T0D0", x = "PC1 (59.6%)", y = "PC2 (24.6%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
+dev.off()
 
+png("Lotus - C0T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "T", x = "PC1 (36.5%)", y = "PC2 (28.2%)") +
+  labs(title = "C0T1D0", x = "PC1 (36.5%)", y = "PC2 (28.2%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Lotus - C0T0D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "D", x = "PC1 (46.5%)", y = "PC2 (33.8%)") +
+  labs(title = "C0T0D1", x = "PC1 (46.5%)", y = "PC2 (33.8%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Lotus - C1T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "CT", x = "PC1 (35.7%)", y = "PC2 (33%)") +
+  labs(title = "C1T1D0", x = "PC1 (35.7%)", y = "PC2 (33%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Lotus - C1T1D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "CTD", x = "PC1 (65.3%)", y = "PC2 (29.8%)") +
+  labs(title = "C1T1D1", x = "PC1 (65.3%)", y = "PC2 (29.8%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
-
+dev.off()
 ### For Crepis (Main Variables) ----
+png("Crepis (Main Variables) - C0T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "A", x = "PC1 (38.3%)", y = "PC2 (33%)") +
+  labs(title = "C0T0D0", x = "PC1 (38.3%)", y = "PC2 (33%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
+dev.off()
 
+png("Crepis (Main Variables) - C1T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
+  labs(title = "C1T0D0", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
+dev.off()
 
+png("Crepis (Main Variables) - C0T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "T", x = "PC1 (47.6%)", y = "PC2 (26.7%)") +
+  labs(title = "C0T1D0", x = "PC1 (47.6%)", y = "PC2 (26.7%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Crepis (Main Variables) - C0T0D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "D", x = "PC1 (57.4%)", y = "PC2 (21.4%)") +
+  labs(title = "C0T0D1", x = "PC1 (57.4%)", y = "PC2 (21.4%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Crepis (Main Variables) - C1T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "CT", x = "PC1 (74.5%)", y = "PC2 (12.4%)") +
+  labs(title = "C1T1D0", x = "PC1 (74.5%)", y = "PC2 (12.4%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Crepis (Main Variables) - C1T1D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "CTD", x = "PC1 (49.2%)", y = "PC2 (29.6%)") +
+  labs(title = "C1T1D1", x = "PC1 (49.2%)", y = "PC2 (29.6%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
 ### For Crepis (All Variables) ----
+png("Crepis (All Variables) - C0T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cav_control, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "A", x = "PC1 (44.9%)", y = "PC2 (25.2%)") +
+  labs(title = "C0T0D0", x = "PC1 (44.9%)", y = "PC2 (25.2%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
   )
+dev.off()
 
+png("Crepis (All Variables) - C1T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "C", x = "PC1 (52.1%)", y = "PC2 (36.4%)") +
+  labs(title = "C1T0D0", x = "PC1 (52.1%)", y = "PC2 (36.4%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),  # Increase size of x-axis title
     axis.title.y = element_text(size = 16),  # Increase size of y-axis title
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
   )
+dev.off()
 
+png("Crepis (All Variables) - C0T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "T", x = "PC1 (45.2%)", y = "PC2 (24.1%)") +
+  labs(title = "C0T1D0", x = "PC1 (45.2%)", y = "PC2 (24.1%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Crepis (All Variables) - C0T0D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "D", x = "PC1 (48.2%)", y = "PC2 (23.8%)") +
+  labs(title = "C0T0D1", x = "PC1 (48.2%)", y = "PC2 (23.8%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Crepis (All Variables) - C1T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "CT", x = "PC1 (59.7%)", y = "PC2 (18.6%)") +
+  labs(title = "C1T1D0", x = "PC1 (59.7%)", y = "PC2 (18.6%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
+png("Crepis (All Variables) - C1T1D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 ggbiplot(cav_ctd, varname.size = 6, alpha = 0) +
   xlim(-2, 2) + 
   ylim(-2, 2) +
-  labs(title = "CTD", x = "PC1 (43%)", y = "PC2 (23.6%)") +
+  labs(title = "C1T1D1", x = "PC1 (43%)", y = "PC2 (23.6%)") +
+  theme_bw() +
   theme(
     axis.title.x = element_text(size = 16),
     axis.title.y = element_text(size = 16),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
+dev.off()
 
 # Redundancy Analysis ----
 ### Sub-setting Data frames for Lotus and Crepis ----
@@ -1368,23 +1445,23 @@ l_rda_proportion_explained
 
 
 ### Preparing Model for Plotting ----
-anova(rda.ln, permutations = 9999, by = "terms")
 rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ Temperature + Drought + CO2:Drought + Condition(CO2), data = AusRDL, scale = TRUE) # Without C:T Interaction
 
 l_bp_scores <- scores(rda.ln, display = "bp") #Extracting Names of Predictors
 
 rownames(l_bp_scores)
-rownames(l_bp_scores)<- c("T", "D", "CTD")
+rownames(l_bp_scores)<- c("T", "D", "CTxD")
 
 ### Plot for Lotus RDA ----
-
+png("Lotus - RDA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (19.03%)", ylab = "RDA2 (4.7%)")
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], col = 'blue', length = 0.1)
-text(scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], labels = rownames(scores(rda.ln, display = "species")), col = 'blue', pos = 3, cex = 1)
+text(scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], labels = rownames(scores(rda.ln, display = "species")), col = 'blue', pos = 3, cex = 2)
 ### Adding Arrows and Text for Predictor Variables
 arrows(0, 0, scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], col = 'red', length = 0.1)
-text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(l_bp_scores), col = 'red', pos = 3, cex = 1)
+text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(l_bp_scores), col = 'red', pos = 3, cex = 2)
+dev.off()
 
 ## Redundancy Analysis for Crepis ----
 names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -1414,16 +1491,18 @@ c_rda_proportion_explained
 rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2+Temperature), data = AusRDC, scale = TRUE)
 c_bp_scores <- scores(rda.cn, display = "bp") #Extracting Names of Predictors
 rownames(c_bp_scores)
-rownames(c_bp_scores)<- c("D", "CT")
+rownames(c_bp_scores)<- c("D", "CxT")
 
 ### Plot for Crepis RDA ----
+png("Crepis - RDA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-0.5,0.5), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species")[,2], col = 'blue', length = 0.1)
-text(scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species")[,2], labels = rownames(scores(rda.cn, display = "species")), col = 'blue', pos = 3, cex = 1)
+text(scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species")[,2], labels = rownames(scores(rda.cn, display = "species")), col = 'blue', pos = 3, cex = 1.5)
 ### Adding Arrows and Text for Predictor Variables
 arrows(0, 0, scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], col = 'red', length = 0.1)
-text(scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], labels = rownames(c_bp_scores), col = 'red', pos = 3, cex = 1)
+text(scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], labels = rownames(c_bp_scores), col = 'red', pos = 3, cex = 1.5)
+dev.off()
 
 # Preparing function which exports anova results to CSV ----
 anova_to_csv <- function(model, csv_file_path) {
@@ -2003,3 +2082,172 @@ ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
         plot.title = element_text(size = 18),   # Increase plot title font size
         legend.position = "bottom", 
         legend.title = element_blank())
+
+# Exporting Plots ----
+## For Lotus ----
+
+l_plots <- list(
+  Lotus_CO2_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Lotus - Effect of CO2 on SLA",
+         x = "CO2 Level", y = "Specific Leaf Area (SLA) (cm2/g)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Lotus_CO2_LDMC = ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Lotus - Effect of CO2 on LDMC",
+         x = "CO2 Level", y = "Leaf Dry Matter Content (LDMC) (g/g)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Lotus_T_DA = ggplot(AusL, aes(x = Temperature, y = `Display Area (DA)(cm2)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Lotus - Effect of Temperature on DA",
+         x = "Temperature Level", y = "Display Area (DA)(cm2)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Lotus_D_LA = ggplot(AusL, aes(x = Drought, y = `Leaf Area (LA)(cm2)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Lotus - Effect of Drought on LA",
+         x = "Drought Level", y = "Leaf Area (LA)(cm2)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Lotus_D_SLA = ggplot(AusL, aes(x = Drought, y = `Specific Leaf Area (SLA)(cm2/g)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Lotus - Effect of Drought on SLA",
+         x = "Drought Level", y = "Specific Leaf Area (SLA)(cm2/g)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Lotus_D_LDMC = ggplot(AusL, aes(x = Drought, y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Lotus - Effect of Drought on LDMC",
+         x = "Drought Level", y = "Leaf Dry Matter Content (LDMC)(g/g)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Lotus_CxT_DA = ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
+    geom_boxplot() + facet_wrap(~ Temperature) +
+    labs(title = "Lotus - Effect of CO2 and Temperature on DA",
+         x = "CO2 Level", y = "Display Area (DA)(cm2)", fill = "Temperature") + theme_bw() +
+    theme(plot.title = element_text(size = 30, face = "bold"),
+          axis.title = element_text(size = 28),
+          axis.text = element_text(size = 26),
+          legend.title = element_text(size = 24),
+          legend.text = element_text(size = 22)),
+  
+  Lotus_CxT_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperature)) +
+    geom_boxplot() + facet_wrap(~ Temperature) +
+    labs(title = "Lotus - Effect of CO2 and Temperature on SLA",
+         x = "CO2 Level", y = "Specific Leaf Area (SLA)(cm2/g)", fill = "Temperature") + theme_bw() +
+    theme(plot.title = element_text(size = 30, face = "bold"),
+          axis.title = element_text(size = 28),
+          axis.text = element_text(size = 26),
+          legend.title = element_text(size = 24),
+          legend.text = element_text(size = 22)),
+  
+  Lotus_CTxD_LDMC = ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
+    geom_boxplot() + facet_wrap(~ Drought) +
+    labs(title = "Lotus - Effect of Combined Interaction on LDMC",
+         x = "CO2 + Temperature Level", y = "Leaf Dry Matter Content (LDMC)(g/g)", fill = "Drought") + theme_bw() +
+    theme(plot.title = element_text(size = 30, face = "bold"),
+          axis.title = element_text(size = 28),
+          axis.text = element_text(size = 26),
+          legend.title = element_text(size = 24),
+          legend.text = element_text(size = 22))
+)
+
+# Save each plot as a separate PNG
+for (i in seq_along(l_plots)) {
+  ggsave(filename = paste0(names(l_plots)[i], ".png"), 
+         plot = l_plots[[i]], 
+         width = 12, height = 12, dpi = 300)
+}
+
+## For Crepis ----
+# Create a list of ggplots for Crepis
+c_plots<- list(
+  Crepis_D_DA = ggplot(AusC, aes(x = Drought, y = `Display Area (DA)(cm2)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Crepis - Effect of Drought on DA",
+         x = "Drought Level", y = "Display Area (DA)(cm2)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Crepis_D_SPA = ggplot(AusC, aes(x = Drought, y = `Specific Petal Area (SPA)(cm2/g)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Crepis - Effect of Drought on SPA",
+         x = "Drought Level", y = "Specific Petal Area (SPA)(cm2/g)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Crepis_D_PDMC = ggplot(AusC, aes(x = Drought, y = `Petal Dry Matter Content (PDMC)(g/g)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Crepis - Effect of Drought on PDMC",
+         x = "Drought Level", y = "Petal Dry Matter Content (PDMC)(g/g)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Crepis_D_LDMC = ggplot(AusC, aes(x = Drought, y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Crepis - Effect of Drought on LDMC",
+         x = "Drought Level", y = "Leaf Dry Matter Content (LDMC) (g/g)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Crepis_D_SN = ggplot(AusC, aes(x = Drought, y = `Number of Seeds (SN)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Crepis - Effect of Drought on SN",
+         x = "Drought Level", y = "Number of Seeds (SN)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  Crepis_T_SN = ggplot(AusC, aes(x = Temperature, y = `Number of Seeds (SN)`)) +
+    geom_boxplot(fill = "#f7766d") +
+    labs(title = "Crepis - Effect of Temperature on SN",
+         x = "Temperature Level", y = "Number of Seeds (SN)") + theme_bw() +
+    theme(plot.title = element_text(size = 36, face = "bold"),
+          axis.title = element_text(size = 32),
+          axis.text = element_text(size = 28)),
+  
+  # Interaction plots
+  Crepis_CxT_SPA = ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
+    geom_boxplot() + facet_wrap(~ Temperature) +
+    labs(title = "Crepis - Effect of CO2 and Temperature on SPA",
+         x = "CO2 Level", y = "Specific Petal Area (SPA)(cm2/g)", fill = "Temperature") + theme_bw() +
+    theme(plot.title = element_text(size = 30, face = "bold"),
+          axis.title = element_text(size = 28),
+          axis.text = element_text(size = 26),
+          legend.title = element_text(size = 24),
+          legend.text = element_text(size = 22)),
+  
+  Crepis_CxT_SN = ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
+    geom_boxplot() + facet_wrap(~ Temperature) +
+    labs(title = "Crepis - Effect of CO2 and Temperature on SN",
+         x = "CO2 Level", y = "Number of Seeds (SN)", fill = "Temperature") + theme_bw() +
+    theme(plot.title = element_text(size = 30, face = "bold"),
+          axis.title = element_text(size = 28),
+          axis.text = element_text(size = 26),
+          legend.title = element_text(size = 24),
+          legend.text = element_text(size = 22))
+)
+
+for (i in seq_along(c_plots)) {
+  ggsave(filename = paste0(names(c_plots)[i], ".png"), 
+         plot = c_plots[[i]], 
+         width = 12, height = 12, dpi = 300)
+}
