@@ -49,7 +49,7 @@ AusRC <- AusRC[c(1:66),]
 dir()
 getwd()
 AusC
-View(AusC)
+View(AusL)
 # Function to Log and Square Root transform Response Variables ----
 log_sqrt_transform <- function(df, cols) {
   # Check if cols are numeric (indices)
