@@ -1923,19 +1923,23 @@ desired_order <- c("RDA", "LDMC", "SLA", "LA", "DA")
 combined_results_df$Trait <- factor(combined_results_df$Trait, levels = desired_order)
 combined_results_df
 # Create a stacked bar plot for all models
+png("Lotus - Variance Partitioning Plot (With RDA) - 13 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "L. corniculatus - Variance Explained by Climatic Variables") +
+  labs(x = "Traits", y = "Proportion of Variance Explained") +
   scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
-                    labels = c("CO2", "(CO2 + Temperature) :Drought", "CO2:Temperature", "Drought", "Temperature")) +
+                    labels = c("C", "CTxD", "CxT", "D", "T")) +
   coord_flip() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),  # Increase x-axis text size
         axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
         axis.title = element_text(size = 16),   # Increase axis title font size
         plot.title = element_text(size = 18),   # Increase plot title font size
+        legend.text = element_text(size = 14),  # Increase legend labels size
         legend.position = "bottom", 
         legend.title = element_blank())
+
+dev.off()
 
 ### Creation of plot for Crepis ----
 
@@ -2069,19 +2073,23 @@ desired_order <- c("RDA", "SM", "SN", "LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
 combined_results_df$Trait <- factor(combined_results_df$Trait, levels = desired_order)
 combined_results_df
 # Create a stacked bar plot for all models
+
+png("Crepis - Variance Partitioning Plot (With RDA) - 13 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
-  labs(x = " Traits", y = "Proportion of Variance Explained", title = "C. capillaris - Variance Explained by Climatic Variables") +
+  labs(x = " Traits", y = "Proportion of Variance Explained") +
   scale_fill_manual(values = c("#7e57c2", "#00bfc4","#fbc02d","#f7756d", "#ff9800"), 
-                    labels = c("CO2", "(CO2 + Temperature) : Drought", "CO2 : Temperature", "Drought", "Temperature")) +
+                    labels = c("C", "CTxD", "CxT", "D", "T")) +
   coord_flip() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Increase x-axis text size
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),  # Increase x-axis text size
         axis.text.y = element_text(size = 14),  # Increase y-axis text size (trait names)
         axis.title = element_text(size = 16),   # Increase axis title font size
         plot.title = element_text(size = 18),   # Increase plot title font size
+        legend.text = element_text(size = 14),  # Increase legend labels size
         legend.position = "bottom", 
         legend.title = element_blank())
+dev.off()
 
 # Exporting Plots ----
 ## For Lotus ----
