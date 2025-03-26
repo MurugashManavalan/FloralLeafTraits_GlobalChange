@@ -32,19 +32,18 @@ library(car) # Provides tools for regression analysis, ANOVA, and diagnostic plo
 library(reshape2) # Offers functions for reshaping data frames, such as melting and casting, to prepare tidy datasets.
 library(vegan)
 library(factoextra)
+library(here)
 
 # Loading Files into R ----
-setwd("/Users/murugash/Desktop/PhD/Austria Experiment/R Analysis")
-AusL <- read_csv("Austria Experiment - Lotus Data - Core Response Variables - 7 March 2025.csv")
+AusL <- read_csv(here("Austria Experiment - Lotus Data - Core Response Variables - 7 March 2025.csv"))
 AusL <- AusL[c(1:93),]
-AusC <- read_csv("Austria Experiment - Crepis Data - Core Response Variables - 7 March 2025.csv")
+AusC <- read_csv(here("Austria Experiment - Crepis Data - Core Response Variables - 7 March 2025.csv"))
 AusC <- AusC[c(1:62),]
-AusPC <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv")
+AusPC <- read_csv(here("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
 AusPC <- AusPC[c(1:84),]
-AusRD <- read_csv("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv")
+AusRD <- read_csv(here("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
 AusRD <- AusRD[c(1:84),]
-AusL1 <- AusL[AusL$`Plot No.`!= "P16",]
-AusRC <- read_csv("Austria Experiment - Crepis and Leaf Data - RAC - 7 March 2025.csv")
+AusRC <- read_csv(here("Austria Experiment - Crepis and Leaf Data - RAC - 7 March 2025.csv"))
 AusRC <- AusRC[c(1:66),]
 dir()
 getwd()
