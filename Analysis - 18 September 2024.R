@@ -613,7 +613,7 @@ AusL_PC <- data.frame(
   Treatment = rep(c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"), each = 5)
 )
 AusL_PC$Treatment <- factor(AusL_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
-png("Lotus - Proportion of Variance Explained - 10 March 2025.png", width = 2000, height = 1600, res = 200)
+png("Lotus - Proportion of Variance Explained - 27 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
@@ -635,10 +635,10 @@ ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   ) +
   theme_bw()+
   theme(
-    axis.title = element_text(size = 20),
-    axis.text = element_text(size = 14),
-    legend.title = element_text(size = 18),
-    legend.text = element_text(size = 16),
+    axis.title = element_text(size = 24),
+    axis.text = element_text(size = 24),
+    legend.title = element_text(size = 22),
+    legend.text = element_text(size = 18),
   )
 dev.off()
     
@@ -673,7 +673,7 @@ AusCM_PC <- data.frame(
 )
 
 AusCM_PC$Treatment <- factor(AusCM_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
-png("Crepis (Main Variables) - Proportion of Variance Explained - 10 March 2025.png", width = 2000, height = 1600, res = 200)
+png("Crepis (Main Variables) - Proportion of Variance Explained - 27 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
@@ -695,10 +695,10 @@ ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   ) +
   theme_bw()+
   theme(
-    axis.title = element_text(size = 20),
-    axis.text = element_text(size = 14),
-    legend.title = element_text(size = 18),
-    legend.text = element_text(size = 16),
+    axis.title = element_text(size = 24),
+    axis.text = element_text(size = 24),
+    legend.title = element_text(size = 22),
+    legend.text = element_text(size = 18),
   )
 dev.off()
 
@@ -732,7 +732,7 @@ AusCA_PC <- data.frame(
 )
 
 AusCA_PC$Treatment <- factor(AusCA_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
-png("Crepis (All Variables) - Proportion of Variance Explained - 10 March 2025.png", width = 2000, height = 1600, res = 200)
+png("Crepis (All Variables) - Proportion of Variance Explained - 27 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   geom_line() +
   geom_point() +
@@ -754,10 +754,10 @@ ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   ) +
   theme_bw()+
   theme(
-    axis.title = element_text(size = 20),
-    axis.text = element_text(size = 14),
-    legend.title = element_text(size = 18),
-    legend.text = element_text(size = 16),  
+    axis.title = element_text(size = 24),
+    axis.text = element_text(size = 24),
+    legend.title = element_text(size = 22),
+    legend.text = element_text(size = 18),
   )
 dev.off()
 
