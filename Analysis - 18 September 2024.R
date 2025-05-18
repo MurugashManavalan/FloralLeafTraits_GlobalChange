@@ -606,17 +606,27 @@ lengths <- sapply(list(variance_lmv_control, variance_lmv_drought, variance_lmv_
 print(lengths)
 
   
-### Combining Variance Explained Results to a dataframe
+### Combi### Combi### Combining Variance Explained Results to a dataframe
 AusL_PC <- data.frame(
   PCA_axis = rep(1:5,6),
   Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
   Treatment = rep(c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"), each = 5)
 )
+library(ggplot2)
 AusL_PC$Treatment <- factor(AusL_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
 png("Lotus - Proportion of Variance Explained - 27 March 2025.png", width = 2000, height = 1600, res = 200)
-ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
+ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment, #size = Treatment
+                    )) +
   geom_line() +
   geom_point() +
+  # scale_size_manual(values = c(
+  #  "C0T0D0" = 1.5,
+  #  "C1T0D0" = 0.5,  # Bold this one (larger size)
+  #  "C0T1D0" = 0.5,
+  #  "C0T0D1" = 0.5,
+  #  "C1T1D0" = 1.5,  # Another bold one
+  #  "C1T1D1" = 0.5
+  # ))+ 
   scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
   scale_color_manual(
     values = c(
@@ -628,6 +638,7 @@ ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
       "C1T1D1" = "#00bfc4"      # CO2, temperature, and drought stress
     )
   ) +
+  guides(size = "none") +  # Hide size from legend
   labs(
     x = "PCA Axis",
     y = "Proportion of Variance Explained",
@@ -674,9 +685,18 @@ AusCM_PC <- data.frame(
 
 AusCM_PC$Treatment <- factor(AusCM_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
 png("Crepis (Main Variables) - Proportion of Variance Explained - 27 March 2025.png", width = 2000, height = 1600, res = 200)
-ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
+ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment, # size = Treatment
+                     )) +
   geom_line() +
   geom_point() +
+  # scale_size_manual(values = c(
+  #  "C0T0D0" = 1.5,
+  #  "C1T0D0" = 0.5,  # Bold this one (larger size)
+  #  "C0T1D0" = 0.5,
+  #  "C0T0D1" = 0.5,
+  #  "C1T1D0" = 1.5,  # Another bold one
+  #  "C1T1D1" = 0.5
+  # ))+ 
   scale_x_continuous(breaks = unique(AusL_PC$PCA_axis)) +
   scale_color_manual(
     values = c(
@@ -688,6 +708,7 @@ ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
       "C1T1D1" = "#00bfc4"      # CO2, temperature, and drought stress
     )
   ) +
+  guides(size = "none") +  # Hide size from legend
   labs(
     x = "PCA Axis",
     y = "Proportion of Variance Explained",
