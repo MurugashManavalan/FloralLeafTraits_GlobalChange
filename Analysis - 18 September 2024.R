@@ -1441,6 +1441,8 @@ rownames(l_bp_scores)<- c("T", "D", "CTxD")
 ### Plot for Lotus RDA ----
 png("Lotus - RDA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
 plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (19.03%)", ylab = "RDA2 (4.7%)")
+### Adding Individual Observations
+points(scores(rda.ln, display = "sites")[,1], scores(rda.ln, display = "sites")[,2], pch = 21, bg = "white", col = "black", cex = 1.2)
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], col = 'blue', length = 0.1)
 text(scores(rda.ln, display = "species")[,1], scores(rda.ln, display = "species")[,2], labels = rownames(scores(rda.ln, display = "species")), col = 'blue', pos = 3, cex = 2)
@@ -1481,7 +1483,9 @@ rownames(c_bp_scores)<- c("D", "CxT")
 
 ### Plot for Crepis RDA ----
 png("Crepis - RDA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-0.5,0.5), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
+plot(rda.cn, type = "n", xlim = c(-2,2), ylim = c(-2,2), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
+### Adding Individual Observations
+points(scores(rda.cn, display = "sites")[,1], scores(rda.cn, display = "sites")[,2], pch = 21, bg = "white", col = "black", cex = 1.2)
 ### Adding Arrows and Text for Response Variables
 arrows(0, 0, scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species")[,2], col = 'blue', length = 0.1)
 text(scores(rda.cn, display = "species")[,1], scores(rda.cn, display = "species")[,2], labels = rownames(scores(rda.cn, display = "species")), col = 'blue', pos = 3, cex = 1.5)
