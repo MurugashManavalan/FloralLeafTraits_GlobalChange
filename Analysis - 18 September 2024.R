@@ -583,16 +583,19 @@ lmv
 ### PCA plots using ggbiplot ----
 png("Lotus - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv,
-                col.var = lmv_group_factor,   # Color by custom groups
-                palette = c("tomato", "seagreen"),  # One color per group
-                label = "var",                # Show variable names
+                col.var = lmv_group_factor,          # Color by custom groups
+                palette = c("tomato", "seagreen"),   # One color per group
+                label = "var",                       # Show variable names
+                labelsize = 6,                       # Increase size of variable names
                 repel = TRUE) +
-  labs(colour = "Trait Group",x = "PC1 (35.2%)", y = "PC2 (28.8%)") +
+  labs(colour = "Trait Group", x = "PC1 (35.2%)", y = "PC2 (28.8%)") +
   ggtitle(NULL) +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
-    axis.title.y = element_text(size = 20)
+    axis.title.y = element_text(size = 20),
+    legend.text = element_text(size = 16),          # Legend label size
+    legend.title = element_text(size = 18)          # Legend title size
   )
 dev.off()
 
@@ -601,13 +604,16 @@ fviz_pca_biplot(cmv,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
+                labelsize = 6,
                 repel = TRUE) +
   labs(colour = "Trait Group", x = "PC1 (33.5%)", y = "PC2 (21.6%)") +
   ggtitle(NULL) +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
-    axis.title.y = element_text(size = 20)
+    axis.title.y = element_text(size = 20),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -616,13 +622,16 @@ fviz_pca_biplot(cav,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
                 label = "var",
+                labelsize = 6,
                 repel = TRUE) +
   labs(colour = "Trait Group", x = "PC1 (28%)", y = "PC2 (18.6%)") +
   ggtitle(NULL) +
   theme_bw() +
-  theme (
+  theme(
     axis.title.x = element_text(size = 20),
-    axis.title.y = element_text(size = 20)
+    axis.title.y = element_text(size = 20),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1212,14 +1221,17 @@ fviz_pca_biplot(lmv_control,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T0D0") +
   labs(colour = "Trait Group", x = "PC1 (45%)", y = "PC2 (35.6%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1229,14 +1241,17 @@ fviz_pca_biplot(lmv_co2,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T0D0") +
   labs(colour = "Trait Group", x = "PC1 (59.6%)", y = "PC2 (24.6%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1246,14 +1261,17 @@ fviz_pca_biplot(lmv_temperature,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T1D0") +
   labs(colour = "Trait Group", x = "PC1 (36.5%)", y = "PC2 (28.2%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1263,14 +1281,17 @@ fviz_pca_biplot(lmv_drought,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T0D1") +
   labs(colour = "Trait Group", x = "PC1 (46.5%)", y = "PC2 (33.8%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1280,14 +1301,17 @@ fviz_pca_biplot(lmv_ct,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T1D0") +
   labs(colour = "Trait Group", x = "PC1 (35.7%)", y = "PC2 (33%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1297,14 +1321,17 @@ fviz_pca_biplot(lmv_ctd,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T1D1") +
   labs(colour = "Trait Group", x = "PC1 (65.3%)", y = "PC2 (29.8%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1315,14 +1342,17 @@ fviz_pca_biplot(cmv_control,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T0D0") +
   labs(colour = "Trait Group", x = "PC1 (38.3%)", y = "PC2 (33%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1332,14 +1362,17 @@ fviz_pca_biplot(cmv_co2,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T0D0") +
   labs(colour = "Trait Group", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1349,14 +1382,17 @@ fviz_pca_biplot(cmv_temperature,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T1D0") +
   labs(colour = "Trait Group", x = "PC1 (47.6%)", y = "PC2 (26.7%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1366,14 +1402,17 @@ fviz_pca_biplot(cmv_drought,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T0D1") +
   labs(colour = "Trait Group", x = "PC1 (57.4%)", y = "PC2 (21.4%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1383,14 +1422,17 @@ fviz_pca_biplot(cmv_ct,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T1D0") +
   labs(colour = "Trait Group", x = "PC1 (74.5%)", y = "PC2 (12.4%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1400,14 +1442,17 @@ fviz_pca_biplot(cmv_ctd,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T1D1") +
   labs(colour = "Trait Group", x = "PC1 (49.2%)", y = "PC2 (29.6%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1418,14 +1463,17 @@ fviz_pca_biplot(cav_control,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T0D0") +
   labs(colour = "Trait Group", x = "PC1 (44.9%)", y = "PC2 (25.2%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1435,14 +1483,17 @@ fviz_pca_biplot(cav_co2,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T0D0") +
   labs(colour = "Trait Group", x = "PC1 (52.1%)", y = "PC2 (36.4%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1452,14 +1503,17 @@ fviz_pca_biplot(cav_temperature,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T1D0") +
   labs(colour = "Trait Group", x = "PC1 (45.2%)", y = "PC2 (24.1%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1469,14 +1523,17 @@ fviz_pca_biplot(cav_drought,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C0T0D1") +
   labs(colour = "Trait Group", x = "PC1 (48.2%)", y = "PC2 (23.8%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1486,14 +1543,17 @@ fviz_pca_biplot(cav_ct,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T1D0") +
   labs(colour = "Trait Group", x = "PC1 (59.7%)", y = "PC2 (18.6%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -1503,14 +1563,17 @@ fviz_pca_biplot(cav_ctd,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
                 label = "var",
-                repel = TRUE) +
+                repel = TRUE,
+                labelsize = 6) +
   ggtitle("C1T1D1") +
   labs(colour = "Trait Group", x = "PC1 (43%)", y = "PC2 (23.6%)") +
   theme_bw() +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
+    legend.text = element_text(size = 16),
+    legend.title = element_text(size = 18)
   )
 dev.off()
 
@@ -2267,7 +2330,7 @@ l_plots <- list(
     facet_wrap(~ Temperature) +
     scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800"),
                       labels = c("0" = "Ambient Temp.", "1" = "High Temp.")) +
-    labs(x = "CO2", y = "DA (cm2)", fill = "Temperature") +
+    labs(x = "CO2", y = "SLA (cm2/g)", fill = "Temperature") +
     theme_bw() +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32),
@@ -2292,7 +2355,7 @@ l_plots <- list(
 for (i in seq_along(l_plots)) {
   ggsave(filename = paste0(names(l_plots)[i], ".png"), 
          plot = l_plots[[i]], 
-         width = 14, height = 12, dpi = 300)
+         width = 12, height = 12, dpi = 300)
 }
 
 ## For Crepis ----
@@ -2347,7 +2410,7 @@ c_plots<- list(
     facet_wrap(~ Temperature) +
     scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800"),
                       labels = c("0" = "Ambient Temp.", "1" = "High Temp.")) +
-    labs(x = "CO2", y = "DA (cm2)", fill = "Temperature") +
+    labs(x = "CO2", y = "SPA (cm2/g)", fill = "Temperature") +
     theme_bw() +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32),
@@ -2361,7 +2424,7 @@ c_plots<- list(
     facet_wrap(~ Temperature) +
     scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800"),
                       labels = c("0" = "Ambient Temp.", "1" = "High Temp.")) +
-    labs(x = "CO2", y = "DA (cm2)", fill = "Temperature") +
+    labs(x = "CO2", y = "SN", fill = "Temperature") +
     theme_bw() +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32),
@@ -2372,5 +2435,5 @@ c_plots<- list(
 for (i in seq_along(c_plots)) {
   ggsave(filename = paste0(names(c_plots)[i], ".png"), 
          plot = c_plots[[i]], 
-         width = 14, height = 12, dpi = 300)
+         width = 12, height = 12, dpi = 300)
 }
