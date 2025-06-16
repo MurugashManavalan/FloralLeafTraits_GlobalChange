@@ -548,12 +548,26 @@ names(AusPC)[names(AusPC) == "Seed Mass (SM)(g)"] <- "SM"
 names(AusPC)[names(AusPC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusPC)[names(AusPC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
+pca_var_groups <- c(
+  "LA" = "Leaf traits",
+  "SLA" = "Leaf traits",
+  "LDMC" = "Leaf traits",
+  "DA" = "Floral traits",
+  "SPA" = "Floral traits",
+  "PDMC" = "Floral traits",
+  "SN" = "Seed traits",
+  "SM" = "Seed traits"
+)
+
 ## Creation of PCA models  ----
 View(AusPC)
 colnames(AusPC)
 lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
 cmv <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
 cav <- prcomp(AusPC[AusPC$Species == "Crepis", c(9,18,20:25)], scale =  TRUE)
+lmv_group_factor <- factor(pca_var_groups[rownames(lmv$rotation)])
+cmv_group_factor <- factor(pca_var_groups[rownames(cmv$rotation)])
+cav_group_factor <- factor(pca_var_groups[rownames(cav$rotation)])
 
 biplot(lmv)
 biplot(cmv, scale = 1, alpha = 0)
@@ -567,39 +581,49 @@ summary(cav)
 lmv
 
 ### PCA plots using ggbiplot ----
-png("Lotus - PCA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(lmv, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(x = "PC1 (35.2%)", y = "PC2 (28.8%)") +
+png("Lotus - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(lmv,
+                col.var = lmv_group_factor,   # Color by custom groups
+                palette = c("tomato", "seagreen"),  # One color per group
+                label = "var",                # Show variable names
+                repel = TRUE) +
+  labs(colour = "Trait Group",x = "PC1 (35.2%)", y = "PC2 (28.8%)") +
+  ggtitle(NULL) +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 20),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 20)   # Increase size of y-axis title
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20)
   )
+dev.off()
 
-png("Crepis (Main Variables) - PCA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cmv, varname.size = 6 ,alpha = 0) + 
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(x = "PC1 (33.5%)", y = "PC2 (21.6%)") +
+png("Crepis (Main Variables) - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cmv,
+                col.var = cmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  labs(colour = "Trait Group", x = "PC1 (33.5%)", y = "PC2 (21.6%)") +
+  ggtitle(NULL) +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 20),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 20)   # Increase size of y-axis title
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20)
   )
+dev.off()
 
-png("Crepis (All Variables) - PCA - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cav, varname.size = 6 ,alpha = 0) + 
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(x = "PC1 (28%)", y = "PC2 (18.6%)") +
+png("Crepis (All Variables) - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cav,
+                col.var = cav_group_factor,
+                palette = c("tomato", "seagreen", "saddlebrown"),
+                label = "var",
+                repel = TRUE) +
+  labs(colour = "Trait Group", x = "PC1 (28%)", y = "PC2 (18.6%)") +
+  ggtitle(NULL) +
   theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 20),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 20)   # Increase size of y-axis title
+  theme (
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20)
   )
-
 dev.off()
 
 
