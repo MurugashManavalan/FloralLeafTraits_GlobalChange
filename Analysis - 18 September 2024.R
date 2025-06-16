@@ -1206,237 +1206,310 @@ names(AusRC)[names(AusRC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRC)[names(AusRC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
 ### For Lotus ----
-png("Lotus - C0T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(lmv_control, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T0D0", x = "PC1 (45%)", y = "PC2 (35.6%)") +
+# C0T0D0
+png("Lotus - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(lmv_control,
+                col.var = lmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T0D0") +
+  labs(colour = "Trait Group", x = "PC1 (45%)", y = "PC2 (35.6%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
-  )
-dev.off()
-
-png("Lotus - C1T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(lmv_co2, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T0D0", x = "PC1 (59.6%)", y = "PC2 (24.6%)") +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
-  )
-dev.off()
-
-png("Lotus - C0T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(lmv_temperature, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T1D0", x = "PC1 (36.5%)", y = "PC2 (28.2%)") +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Lotus - C0T0D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(lmv_drought, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T0D1", x = "PC1 (46.5%)", y = "PC2 (33.8%)") +
+# C1T0D0
+png("Lotus - C1T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(lmv_co2,
+                col.var = lmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T0D0") +
+  labs(colour = "Trait Group", x = "PC1 (59.6%)", y = "PC2 (24.6%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Lotus - C1T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(lmv_ct, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T1D0", x = "PC1 (35.7%)", y = "PC2 (33%)") +
+# C0T1D0
+png("Lotus - C0T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(lmv_temperature,
+                col.var = lmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T1D0") +
+  labs(colour = "Trait Group", x = "PC1 (36.5%)", y = "PC2 (28.2%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Lotus - C1T1D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(lmv_ctd, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T1D1", x = "PC1 (65.3%)", y = "PC2 (29.8%)") +
+# C0T0D1
+png("Lotus - C0T0D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(lmv_drought,
+                col.var = lmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T0D1") +
+  labs(colour = "Trait Group", x = "PC1 (46.5%)", y = "PC2 (33.8%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
+
+# C1T1D0
+png("Lotus - C1T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(lmv_ct,
+                col.var = lmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T1D0") +
+  labs(colour = "Trait Group", x = "PC1 (35.7%)", y = "PC2 (33%)") +
+  theme_bw() +
+  theme(
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+dev.off()
+
+# C1T1D1
+png("Lotus - C1T1D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(lmv_ctd,
+                col.var = lmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T1D1") +
+  labs(colour = "Trait Group", x = "PC1 (65.3%)", y = "PC2 (29.8%)") +
+  theme_bw() +
+  theme(
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+dev.off()
+
 ### For Crepis (Main Variables) ----
-png("Crepis (Main Variables) - C0T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cmv_control, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T0D0", x = "PC1 (38.3%)", y = "PC2 (33%)") +
+# C0T0D0
+png("Crepis (Main Variables) - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cmv_control,
+                col.var = cmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T0D0") +
+  labs(colour = "Trait Group", x = "PC1 (38.3%)", y = "PC2 (33%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
-  )
-dev.off()
-
-png("Crepis (Main Variables) - C1T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cmv_co2, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T0D0", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
-  )
-dev.off()
-
-png("Crepis (Main Variables) - C0T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cmv_temperature, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T1D0", x = "PC1 (47.6%)", y = "PC2 (26.7%)") +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Crepis (Main Variables) - C0T0D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cmv_drought, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T0D1", x = "PC1 (57.4%)", y = "PC2 (21.4%)") +
+# C1T0D0
+png("Crepis (Main Variables) - C1T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cmv_co2,
+                col.var = cmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T0D0") +
+  labs(colour = "Trait Group", x = "PC1 (51.2%)", y = "PC2 (41.5%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Crepis (Main Variables) - C1T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cmv_ct, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T1D0", x = "PC1 (74.5%)", y = "PC2 (12.4%)") +
+# C0T1D0
+png("Crepis (Main Variables) - C0T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cmv_temperature,
+                col.var = cmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T1D0") +
+  labs(colour = "Trait Group", x = "PC1 (47.6%)", y = "PC2 (26.7%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Crepis (Main Variables) - C1T1D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cmv_ctd, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T1D1", x = "PC1 (49.2%)", y = "PC2 (29.6%)") +
+# C0T0D1
+png("Crepis (Main Variables) - C0T0D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cmv_drought,
+                col.var = cmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T0D1") +
+  labs(colour = "Trait Group", x = "PC1 (57.4%)", y = "PC2 (21.4%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+dev.off()
+
+# C1T1D0
+png("Crepis (Main Variables) - C1T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cmv_ct,
+                col.var = cmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T1D0") +
+  labs(colour = "Trait Group", x = "PC1 (74.5%)", y = "PC2 (12.4%)") +
+  theme_bw() +
+  theme(
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+dev.off()
+
+# C1T1D1
+png("Crepis (Main Variables) - C1T1D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cmv_ctd,
+                col.var = cmv_group_factor,
+                palette = c("tomato", "seagreen"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T1D1") +
+  labs(colour = "Trait Group", x = "PC1 (49.2%)", y = "PC2 (29.6%)") +
+  theme_bw() +
+  theme(
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
 ### For Crepis (All Variables) ----
-png("Crepis (All Variables) - C0T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cav_control, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T0D0", x = "PC1 (44.9%)", y = "PC2 (25.2%)") +
+# C0T0D0
+png("Crepis (All Variables) - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cav_control,
+                col.var = cav_group_factor,
+                palette = c("tomato", "seagreen", "saddlebrown"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T0D0") +
+  labs(colour = "Trait Group", x = "PC1 (44.9%)", y = "PC2 (25.2%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge the title
-  )
-dev.off()
-
-png("Crepis (All Variables) - C1T0D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cav_co2, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T0D0", x = "PC1 (52.1%)", y = "PC2 (36.4%)") +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 16),  # Increase size of x-axis title
-    axis.title.y = element_text(size = 16),  # Increase size of y-axis title
-    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)  # Center and enlarge title
-  )
-dev.off()
-
-png("Crepis (All Variables) - C0T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cav_temperature, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T1D0", x = "PC1 (45.2%)", y = "PC2 (24.1%)") +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Crepis (All Variables) - C0T0D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cav_drought, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C0T0D1", x = "PC1 (48.2%)", y = "PC2 (23.8%)") +
+# C1T0D0
+png("Crepis (All Variables) - C1T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cav_co2,
+                col.var = cav_group_factor,
+                palette = c("tomato", "seagreen", "saddlebrown"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T0D0") +
+  labs(colour = "Trait Group", x = "PC1 (52.1%)", y = "PC2 (36.4%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Crepis (All Variables) - C1T1D0 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cav_ct, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T1D0", x = "PC1 (59.7%)", y = "PC2 (18.6%)") +
+# C0T1D0
+png("Crepis (All Variables) - C0T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cav_temperature,
+                col.var = cav_group_factor,
+                palette = c("tomato", "seagreen", "saddlebrown"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T1D0") +
+  labs(colour = "Trait Group", x = "PC1 (45.2%)", y = "PC2 (24.1%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
 
-png("Crepis (All Variables) - C1T1D1 - 10 March 2025.png", width = 1600, height = 1600, res = 200)
-ggbiplot(cav_ctd, varname.size = 6, alpha = 0) +
-  xlim(-2, 2) + 
-  ylim(-2, 2) +
-  labs(title = "C1T1D1", x = "PC1 (43%)", y = "PC2 (23.6%)") +
+# C0T0D1
+png("Crepis (All Variables) - C0T0D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cav_drought,
+                col.var = cav_group_factor,
+                palette = c("tomato", "seagreen", "saddlebrown"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C0T0D1") +
+  labs(colour = "Trait Group", x = "PC1 (48.2%)", y = "PC2 (23.8%)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 16),
-    axis.title.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+dev.off()
+
+# C1T1D0
+png("Crepis (All Variables) - C1T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cav_ct,
+                col.var = cav_group_factor,
+                palette = c("tomato", "seagreen", "saddlebrown"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T1D0") +
+  labs(colour = "Trait Group", x = "PC1 (59.7%)", y = "PC2 (18.6%)") +
+  theme_bw() +
+  theme(
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
+  )
+dev.off()
+
+# C1T1D1
+png("Crepis (All Variables) - C1T1D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+fviz_pca_biplot(cav_ctd,
+                col.var = cav_group_factor,
+                palette = c("tomato", "seagreen", "saddlebrown"),
+                label = "var",
+                repel = TRUE) +
+  ggtitle("C1T1D1") +
+  labs(colour = "Trait Group", x = "PC1 (43%)", y = "PC2 (23.6%)") +
+  theme_bw() +
+  theme(
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5)
   )
 dev.off()
