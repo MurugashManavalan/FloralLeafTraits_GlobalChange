@@ -2,20 +2,16 @@ source(here::here("Functions.R"))
 install_and_load_all_packages()
 
 # Loading Files into R ----
-AusL <- read_csv(here("Austria Experiment - Lotus Data - Core Response Variables - 7 March 2025.csv"))
+AusL <- read_csv(here("Data", "Austria Experiment - Lotus Data - Core Response Variables - 7 March 2025.csv"))
 AusL <- AusL[c(1:93),]
-AusC <- read_csv(here("Austria Experiment - Crepis Data - Core Response Variables - 7 March 2025.csv"))
+AusC <- read_csv(here("Data", "Austria Experiment - Crepis Data - Core Response Variables - 7 March 2025.csv"))
 AusC <- AusC[c(1:62),]
-AusPC <- read_csv(here("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
+AusPC <- read_csv(here("Data", "Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
 AusPC <- AusPC[c(1:84),]
-AusRD <- read_csv(here("Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
+AusRD <- read_csv(here("Data", "Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
 AusRD <- AusRD[c(1:84),]
-AusRC <- read_csv(here("Austria Experiment - Crepis and Leaf Data - RAC - 7 March 2025.csv"))
+AusRC <- read_csv(here("Data", "Austria Experiment - Crepis and Leaf Data - RAC - 7 March 2025.csv"))
 AusRC <- AusRC[c(1:66),]
-dir()
-getwd()
-AusC
-View(AusL)
 
 # Log and Square Root transform Response Variables ----
 AusL <- log_sqrt_transform(AusL, c(9:23))
