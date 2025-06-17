@@ -449,6 +449,10 @@ pca_var_groups <- c(
   "SM" = "Seed traits"
 )
 
+## Statistical Testing of PCAs ----
+l_pc_test <- PCAtest(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], 100,100, 0.05, varcorr=FALSE, counter=FALSE, plot=TRUE)
+
+View()
 ## Creation of PCA models  ----
 View(AusPC)
 colnames(AusPC)
@@ -517,6 +521,40 @@ dev.off()
 
 ## Grouping based on Climatic Variables ----
 ## Rank Abundance Curves ----
+### Statistical Testing of PCAs ----
+#### Lotus ----
+m_cols <- c(9, 18, 20:23)
+a_cols <- c(9,18, 20:25)
+
+PCAtest_lmv <- PCAtest(AusRC[AusRC$Species == "Lotus", m_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv_control <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv_drought <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D1", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv_temperature <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T2D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv_co2 <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv_ct <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv_ctd <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D1", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+
+#### Crepis (Main Variables) ----
+PCAtest_cmv <- PCAtest(AusRC[AusRC$Species == "Crepis", m_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cmv_control <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cmv_drought <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cmv_temperature <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T2D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cmv_co2 <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T0D0", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cmv_ct <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cmv_ctd <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D1", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+
+#### Crepis (All Variables) ----#### Crepis (All Variables) ----TRUE
+PCAtest_cav <- PCAtest(AusRC[AusRC$Species == "Crepis", a_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cav_control <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cav_drought <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cav_temperature <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T2D0", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cav_co2 <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T0D0", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cav_ct <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", a_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_cav_ctd <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D1", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+
+
+
+
 ### Creating PCA for each treatment ----
 ### Lotus ----
 
