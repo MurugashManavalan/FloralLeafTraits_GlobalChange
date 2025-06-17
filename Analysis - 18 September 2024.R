@@ -526,7 +526,7 @@ dev.off()
 m_cols <- c(9, 18, 20:23)
 a_cols <- c(9,18, 20:25)
 
-PCAtest_lmv <- PCAtest(AusRC[AusRC$Species == "Lotus", m_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv <- PCAtest(AusRC[AusRC$Species == "Lotus", m_cols], nperm = 10000, nboot = 10000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_control <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_drought <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D1", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_temperature <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T2D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
