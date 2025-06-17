@@ -1,4 +1,4 @@
-source(here::here("Functions.R"))
+source(here::here("Analysis", "Functions.R"))
 install_and_load_all_packages()
 
 # Loading Files into R ----
@@ -6,13 +6,25 @@ AusL <- read_csv(here("Data", "Austria Experiment - Lotus Data - Core Response V
 AusL <- AusL[c(1:93),]
 AusC <- read_csv(here("Data", "Austria Experiment - Crepis Data - Core Response Variables - 7 March 2025.csv"))
 AusC <- AusC[c(1:62),]
-AusPC <- read_csv(here("Data", "Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
+AusPC <- read_csv(here("Data", "Austria Experiment - Crepis and Lotus Data - RDA - 7 March 2025.csv"))
 AusPC <- AusPC[c(1:84),]
-AusRD <- read_csv(here("Data", "Austria Experiment - Crepis and Leaf Data - RDA - 7 March 2025.csv"))
+AusRD <- read_csv(here("Data", "Austria Experiment - Crepis and Lotus Data - RDA - 7 March 2025.csv"))
 AusRD <- AusRD[c(1:84),]
-AusRC <- read_csv(here("Data", "Austria Experiment - Crepis and Leaf Data - RAC - 7 March 2025.csv"))
+AusRC <- read_csv(here("Data", "Austria Experiment - Crepis and Lotus Data - RAC - 7 March 2025.csv"))
 AusRC <- AusRC[c(1:66),]
+AusRC <- AusRD %>%
+  group_by(Species, Treatment) %>%
+  group_split() %>%
+  map_dfr(function(df) {
+    n <- if (unique(df$Species) == "Crepis") 6 else if (unique(df$Species) == "Lotus") 5 else NA
+    if (nrow(df) >= n) {
+      df %>% slice_sample(n = n)
+    } else {
+      df  # return full group if too few rows
+    }
+  })
 
+View(AusRC)
 # Log and Square Root transform Response Variables ----
 AusL <- log_sqrt_transform(AusL, c(9:23))
 AusC <- log_sqrt_transform(AusC, c(9:17))
@@ -522,7 +534,7 @@ dev.off()
 m_cols <- c(9, 18, 20:23)
 a_cols <- c(9,18, 20:25)
 
-PCAtest_lmv <- PCAtest(AusRC[AusRC$Species == "Lotus", m_cols], nperm = 10000, nboot = 10000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+PCAtest_lmv <- PCAtest(AusRC[AusRC$Species == "Lotus", m_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_control <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_drought <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D1", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_temperature <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T2D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
