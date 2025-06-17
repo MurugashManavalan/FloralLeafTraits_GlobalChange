@@ -1,38 +1,5 @@
-# Installing Packages ----
-install.packages("corrplot") # Used to visualize correlation matrices and create correlograms to identify data patterns.
-install.packages("ggrepel") #  Enhances ggplot2 by adding labels that repel each other, avoiding overlap in plots.
-install.packages("Hmisc") # Provides tools for data manipulation, descriptive statistics, and creating correlation matrices with significance tests.
-install.packages("VennDiagram") # Creates Venn diagrams to visualize intersections, unions, and unique elements among sets.
-install.packages("devtools") # Facilitates package development and installation, including GitHub-based packages.
-install.packages("ggeffects") # Simplifies the creation of effect plots for regression models to interpret model predictions.
-install.packages("igraph") # Focused on network analysis and visualization, allowing the creation and analysis of graph structures.
-install.packages("qgraph") # Builds visualizations for networks and integrates with igraph, often used for correlation networks and psychological studies.
-install.packages("vegan")# Provides tools for ecological data analysis, including ordination, diversity analysis, and multivariate statistics.
-install.packages("factoextra") # For Grouping in PCA
-library(readr) # Offers fast and user-friendly functions for importing datasets (e.g., CSV, TSV) into R.
-library(lme4) # Fits linear and generalized linear mixed-effects models, useful for hierarchical data or random effects.
-library(lmerTest) # Extends lme4 by adding p-values and other summaries for mixed models.
-library(ggplot2) # A fundamental package for creating customizable and advanced visualizations based on the grammar of graphics.
-library(vegan)
-library(dplyr) # A data manipulation package with easy-to-use functions and piping (%>%) for filtering and summarizing data.
-library(corrplot) # For Correlation Matrix and Corellogram
-library(igraph) # For Correlation Matrix
-library(qgraph) # For Correlation Matrix
-library(qgraph)
-library(igraph)
-library(Hmisc)
-library(ggrepel)
-library(tidyr) # Simplifies reshaping data (wide to long format) and managing missing values, often used with dplyr.
-library(ggbiplot)
-library(devtools)
-library(ggbiplot)
-library(plyr) # Provides functions to split, apply, and combine operations on datasets, though less commonly used due to dplyr.
-library(ggeffects)
-library(car) # Provides tools for regression analysis, ANOVA, and diagnostic plots, including variance partitioning.
-library(reshape2) # Offers functions for reshaping data frames, such as melting and casting, to prepare tidy datasets.
-library(vegan)
-library(factoextra)
-library(here)
+source(here::here("Functions.R"))
+install_and_load_all_packages()
 
 # Loading Files into R ----
 AusL <- read_csv(here("Austria Experiment - Lotus Data - Core Response Variables - 7 March 2025.csv"))
@@ -49,40 +16,11 @@ dir()
 getwd()
 AusC
 View(AusL)
-# Function to Log and Square Root transform Response Variables ----
-log_sqrt_transform <- function(df, cols) {
-  # Check if cols are numeric (indices)
-  if (is.numeric(cols)) {
-    cols <- names(df)[cols]
-  }
-  
-  for (col in cols) {
-    log_col_name <- paste0("log_", col)
-    sqrt_col_name <- paste0("sqrt_", col)
-    df[[log_col_name]] <- log(df[[col]])
-    df[[sqrt_col_name]] <- sqrt(df[[col]])
-  }
-  
-  return(df)
-}
 
+# Function to Log and Square Root transform Response Variables ----
 AusL <- log_sqrt_transform(AusL, c(9:23))
 AusC <- log_sqrt_transform(AusC, c(9:17))
-View(AusC)
-# Function to create Histogram of Response Variables ----
-
-hist_df <- function(df, cols) {
-  # Check if cols are numeric (indices)
-  if (is.numeric(cols)) {
-    cols <- names(df)[cols]
-  }
-  for(col in cols) {
-    hist(df[[col]], main = paste0("Histogram of ", col), xlab = col)
-  }
-}
-
 # Histogram of Response Variables ----
-
 hist_df(AusL, c(9:53))
 hist_df(AusC, c(9:35))
 hist_df(AusPC, c(9:25))
