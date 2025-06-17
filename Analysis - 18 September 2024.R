@@ -17,7 +17,7 @@ getwd()
 AusC
 View(AusL)
 
-# Function to Log and Square Root transform Response Variables ----
+# Log and Square Root transform Response Variables ----
 AusL <- log_sqrt_transform(AusL, c(9:23))
 AusC <- log_sqrt_transform(AusC, c(9:17))
 # Histogram of Response Variables ----
@@ -67,36 +67,6 @@ AusRC$Drought <- as.factor(AusRC$Drought)
 AusRC$Species <- as.factor(AusRC$Species)
 
 names(AusC)
-
-# Preparation of Mixed Effect Model ----
-## Mixed-effect Models for Response Variables of Lotus ----
-l_DAmodel <- lmer(`Display Area (DA)(cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-log_SSPAmodel <- lmer(`log_Specific Standard Petal Area (SSA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-log_SW1PAmodel <- lmer(`log_Specific Wing 1 Petal Area (SW1A)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-SW2PAmodel <- lmer(`Specific Wing 2 Petal Area (SW2A)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-sq_SKPAmodel <- lmer(`sqrt_Specific Keel Petal Area (SKA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-log_SPMAmodel <- lmer(`log_Standard Petal Mass per Area (SPMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-log_W1PMAmodel <- lmer(`log_Wing 1 Petal Mass per Area (W1PMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-log_W2PMAmodel <- lmer(`log_Wing 2 Petal Mass per Area (W2PMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-log_KPMAmodel <- lmer(`log_Keel Petal Mass per Area (KPMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-l_sq_SPAmodel <- lmer(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-l_log_PMAmodel <- lmer(`log_Petal Mass per Area (PMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-l_PDMCmodel <- lmer(`Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-l_log_LAmodel <- lmer(`log_Leaf Area (LA)(cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-l_SLAmodel <- lmer(`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-l_log_LDMCmodel <- lmer(`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusL)
-
-## Mixed Effect Models for Response Variables of Crepis ----
-c_sq_DAmodel <- lmer(`Display Area (DA)(cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-c_sq_SPAmodel <- lmer(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-c_log_PMAmodel <- lmer(`log_Petal Mass Per Area (PMA)(g/cm2)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-c_sq_PDMCmodel <- lmer(`sqrt_Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-c_log_LAmodel <- lmer(`log_Leaf Area (LA)(cm2)`~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-c_log_SLAmodel <- lmer(`log_Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-c_sq_LDMCmodel <- lmer(`sqrt_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-sq_SNmodel <- lmer(`sqrt_Number of Seeds (SN)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-log_SMmodel <- lmer(`log_Seed Mass (SM)(g)` ~ CO2 * Temperature * Drought + (1|`Plot No.`), data = AusC)
-
 
 # Preparation of Linear Models ----
 ## Linear Models for Response Variables of Lotus ----
@@ -161,15 +131,6 @@ anova(log_SMmodel)
 
 # Plotting Significant Response Variables against Predictor Variables ----
 ## Plots in Lotus ----
-plot(AusL$`Display Area (DA)(cm2)`~AusL$Temperature, main = "Temperature on DA", xlab = "Temperature Level", ylab = "Display Area (DA)(cm2)")
-plot(AusL$`Specific Petal Area (SPA)(cm2/g)`~AusL$Drought, main= "Drought on SPA", xlab = "Drought Level", ylab = "Specific Petal Area (SPA) (cm2/g)")
-plot(AusL$`Leaf Area (LA)(cm2)`~AusL$Drought, main = "Drought on LA", xlab = "Drought Level", ylab = "Leaf Area (LA)(cm2)")
-plot(AusL$`Specific Leaf Area (SLA)(cm2/g)`~AusL$CO2, main = "CO2 on SLA", xlab = "CO2 Level", ylab = "Specific Leaf Area (SLA)(cm2/g)")
-plot(AusL$`Specific Leaf Area (SLA)(cm2/g)`~AusL$Drought, main = "Drought on SLA", xlab = "Drought Level", ylab = "Specific Leaf Area (SLA)(cm2/g)")
-plot(AusL$`Leaf Dry Matter Content (LDMC)(g/g)`~AusL$CO2, main = "CO2 on LDMC", xlab = "CO2 Level", ylab = "Leaf Dry Matter Content (LDMC)(g/g)")
-plot(AusL$`Leaf Dry Matter Content (LDMC)(g/g)`~AusL$Drought, main = "Drought on LDMC", xlab = "Drought Level", ylab = "Leaf Dry Matter Content (LDMC)(g/g)")
-
-## Plots in Lotus (Using ggplot) ----
 ### CO2 ----
 ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
   geom_boxplot(fill = "#7e57c2") +
@@ -339,15 +300,6 @@ ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drou
 
 anova(lv_LAmodel)
 ## Plots in Crepis ----
-plot(AusC$`Display Area (DA)(cm2)`~AusC$Drought, main = "Drought on DA", xlab = "Drought Level", ylab = "Display Area (DA)(cm2)")
-plot(AusC$`Specific Petal Area (SPA)(cm2/g)`~AusC$Drought, main = "Drought on SPA", xlab = "Drought Level", ylab = "Specific Petal Area (SPA) (cm2/g)")
-plot(AusC$`Petal Dry Matter Content (PDMC)(g/g)`~AusC$Drought, main = "Drought on PDMC", xlab = "Drought Level", ylab = "Petal Dry Matter Content (PDMC) (g/g)")
-plot(AusC$`Leaf Area (LA)(cm2)`~AusC$Temperature, main = "Temperature on Leaf Area", xlab = "Temperature Level", ylab = "Leaf Area (LA)(cm2)")
-plot(AusC$`Leaf Dry Matter Content (LDMC)(g/g)`~AusC$Drought, main = "Drought on LDMC", xlab = "Drought Level", ylab = "Leaf Dry Matter Content (PDMC) (g/g)")
-plot(AusC$`Number of Seeds (SN)`~AusC$Temperature, main = "Temperature on No. of Seeds", xlab = "Temperature Level", ylab = "No. of Seeds")
-plot(AusC$`Number of Seeds (SN)`~AusC$Drought, main = "Drought on No. of Seeds", xlab = "Drought", ylab = "No. of Seeds")
-
-## Plots in Crepis (Using ggplot) ----
 View(AusC)
 
 ### Temperature ----
@@ -507,18 +459,7 @@ lmv_group_factor <- factor(pca_var_groups[rownames(lmv$rotation)])
 cmv_group_factor <- factor(pca_var_groups[rownames(cmv$rotation)])
 cav_group_factor <- factor(pca_var_groups[rownames(cav$rotation)])
 
-biplot(lmv)
-biplot(cmv, scale = 1, alpha = 0)
-biplot(lcav, scale = 0)
-scores(lmv, display = "species")
-lmv_scores <- lmv$x
-lmv_scores[,3]
-summary(lmv)
-summary(cmv)
-summary(cav)
-lmv
-
-### PCA plots using ggbiplot ----
+### PCA plots ----
 png("Lotus - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv,
                 col.var = lmv_group_factor,          # Color by custom groups
