@@ -2362,7 +2362,7 @@ for (i in seq_along(c_plots)) {
          plot = c_plots[[i]], 
          width = 12, height = 12, dpi = 300)
 }
-# Network Analysis
+# Network Analysis ----
   ## For Lotus ----
 ln_trait_data <- AusRD[AusRD$Species == "Lotus", m_cols]
 ln_trait_corr <- cor(ln_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
@@ -2377,13 +2377,12 @@ ln_num_clusters <- length(unique(ln_cluster_membership))
 ln_cluster_colors <- rainbow(ln_num_clusters)  # Generate distinct colors
 V(ln_network)$color <- ln_cluster_colors[ln_cluster_membership]
 
-png("ln_network_plot.png", width = 12, height = 12, units = "in", res = 100)
+png("ln_network_plot.png", width = 14, height = 12, units = "in", res = 300)
 plot(ln_ceb, ln_network,
      vertex.size = 7,
      vertex.label.cex = 1.5,
      vertex.color = V(ln_network)$color,
      vertex.label.dist = 1)  # Increase this to move labels further away
-plot(ln_ceb, ln_network, vertex.size = 7, vertex.label.cex = 1.5, vertex.color = V(ln_network)$color)
 dev.off()
 
 ln_modularity_value <- modularity(ln_network, ln_cluster_membership) # Calculate modularity 
@@ -2403,7 +2402,13 @@ ln_assortativity_value <- assortativity_degree(ln_network)
 ln_pagerank_values <- page_rank(ln_network)$vector
 ln_transitivity_value <- transitivity(ln_network)
 
-## For Crepis (Main Variables) ----
+ln_modularity_value
+ln_degree_centrality
+ln_betweenness_centrality
+ln_eigenvector_centrality
+ln_clustering_coefficient
+
+  ## For Crepis (Main Variables) ----
 cmn_trait_data <- AusRD[AusRD$Species == "Crepis", m_cols]
 cmn_trait_corr <- cor(cmn_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
 cmn_p_values <- cor.mtest(cmn_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
@@ -2439,7 +2444,7 @@ cmn_assortativity_value <- assortativity_degree(cmn_network)
 cmn_pagerank_values <- page_rank(cmn_network)$vector
 cmn_transitivity_value <- transitivity(cmn_network)
 
-## For Crepis (All Variables) ----
+  ## For Crepis (All Variables) ----
 can_trait_data <- AusRD[AusRD$Species == "Crepis", a_cols]
 can_trait_corr <- cor(can_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
 can_p_values <- cor.mtest(can_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
@@ -2453,8 +2458,12 @@ can_num_clusters <- length(unique(can_cluster_membership))
 can_cluster_colors <- rainbow(can_num_clusters)  # Generate distinct colors
 V(can_network)$color <- can_cluster_colors[can_cluster_membership]
 
-png("can_network_plot.png", width = 800, height = 600)
-plot(can_ceb, can_network, vertex.size = 7, vertex.label.cex = 1, vertex.color = V(can_network)$color)
+png("can_network_plot.png", width = 14, height = 12, units = "in", res = 300)
+plot(can_ceb, can_network,
+     vertex.size = 7,
+     vertex.label.cex = 1.5,
+     vertex.color = V(ln_network)$color,
+     vertex.label.dist = 1)  # Increase this to move labels further away
 dev.off()
 
 can_modularity_value <- modularity(can_network, can_cluster_membership) # Calculate modularity 
@@ -2474,3 +2483,10 @@ can_density_value <- edge_density(can_network)
 can_assortativity_value <- assortativity_degree(can_network)
 can_pagerank_values <- page_rank(can_network)$vector
 can_transitivity_value <- transitivity(can_network)
+
+can_modularity_value
+can_degree_centrality
+can_betweenness_centrality
+can_eigenvector_centrality
+can_clustering_coefficient
+
