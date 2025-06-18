@@ -41,33 +41,33 @@ Crepis_shapiro_results
 colnames(AusC)
 
 # Converting Grouping variables, fixed effect predictor variables and response variables to Factors ----
-## In Lotus Dataset ----
+  ## In Lotus Dataset ----
 AusL$CO2 <- as.factor(AusL$CO2)
 AusL$Temperature <- as.factor(AusL$Temperature)
 AusL$Drought <- as.factor(AusL$Drought)
 AusL$`Plot No.` <- as.factor(AusL$`Plot No.`)
 
-## In Crepis Dataset ----
+  ## In Crepis Dataset ----
 AusC$CO2 <- as.factor(AusC$CO2)
 AusC$Temperature <- as.factor(AusC$Temperature)
 AusC$Drought <- as.factor(AusC$Drought)
 AusC$`Plot No.` <- as.factor(AusC$`Plot No.`)
 
-## In PCA Dataset ----
+  ## In PCA Dataset ----
 AusPC$CO2 <- as.factor(AusPC$CO2)
 AusPC$Temperature <- as.factor(AusPC$Temperature)
 AusPC$Drought <- as.factor(AusPC$Drought)
 AusPC$`Plot No.` <- as.factor(AusPC$`Plot No.`)
 AusPC$Species <- as.factor(AusPC$Species)
 
-## In RDA Dataset----
+  ## In RDA Dataset----
 AusRD$`Plot No.` <- as.factor(AusRD$`Plot No.`)
 AusRD$CO2 <- as.factor(AusRD$CO2)
 AusRD$Temperature <- as.factor(AusRD$Temperature)
 AusRD$Drought <- as.factor(AusRD$Drought)
 AusRD$Species <- as.factor(AusRD$Species)
 
-## In RAC Dataset ----
+  ## In RAC Dataset ----
 AusRC$`Plot No.` <- as.factor(AusRC$`Plot No.`)
 AusRC$CO2 <- as.factor(AusRC$CO2)
 AusRC$Temperature <- as.factor(AusRC$Temperature)
@@ -77,7 +77,7 @@ AusRC$Species <- as.factor(AusRC$Species)
 names(AusC)
 
 # Preparation of Linear Models ----
-## Linear Models for Response Variables of Lotus ----
+  ## Linear Models for Response Variables of Lotus ----
 l_DAmodel <- lm(`Display Area (DA)(cm2)` ~ CO2 * Temperature * Drought, data = AusL)
 log_SSPAmodel <- lm(`log_Specific Standard Petal Area (SSA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusL)
 log_SW1PAmodel <- lm(`log_Specific Wing 1 Petal Area (SW1A)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusL)
@@ -94,7 +94,7 @@ l_log_LAmodel <- lm(`log_Leaf Area (LA)(cm2)` ~ CO2 * Temperature * Drought, dat
 l_SLAmodel <- lm(`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusL)
 l_log_LDMCmodel <- lm(`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 * Temperature * Drought, data = AusL)
 
-## Linear Models for Response Variables of Crepis ----
+  ## Linear Models for Response Variables of Crepis ----
 c_sq_DAmodel <- lm(`Display Area (DA)(cm2)`~ CO2 * Temperature * Drought, data = AusC)
 c_sq_SPAmodel <- lm(`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 * Temperature * Drought, data = AusC)
 c_log_PMAmodel <- lm(`log_Petal Mass Per Area (PMA)(g/cm2)` ~ CO2 * Temperature * Drought, data = AusC)
@@ -108,7 +108,7 @@ log_SMmodel <- lm(`log_Seed Mass (SM)(g)` ~ CO2 * Temperature * Drought, data = 
 
 
 # ANOVA Analysis ----
-## Anova test for Response Variables in Lotus ----
+  ## Anova test for Response Variables in Lotus ----
   anova(l_DAmodel) # Significance: Temperature and CO2:Drought in ME; Temperature, CO2:Temperature and CO2:Drought in LM
   anova(log_SSPAmodel) # Significance: CO2: Drought marginally significant in LM
   anova(log_SW1PAmodel)
@@ -125,7 +125,7 @@ log_SMmodel <- lm(`log_Seed Mass (SM)(g)` ~ CO2 * Temperature * Drought, data = 
   anova(l_SLAmodel) # Significance: Drought and CO2: Temperature in ME (Latter marginally significant); CO2, Drought and CO2: Temperature in LM
   anova(l_log_LDMCmodel) # Significance: CO2, Drought and CO2:Drought in ME (Latter marginally significant); CO2, Drought and CO2: Drought in LM
   
-## Anova test for Response Variables in Crepis ----
+  ## Anova test for Response Variables in Crepis ----
 anova(c_sq_DAmodel) # Significance: Drought in ME; Drought in LM
 anova(c_sq_SPAmodel) # Significance: Temperature and CO2: Temperature both marginally significant in ME; Drought and CO2: Temperature in LM (latter marginally significant) 
 anova(c_log_PMAmodel) # Significance: Temperature marginally significant in ME; Drought in LM
@@ -138,8 +138,8 @@ anova(log_SMmodel)
 
 
 # Plotting Significant Response Variables against Predictor Variables ----
-## Plots in Lotus ----
-### CO2 ----
+  ## Plots in Lotus ----
+    ### CO2 ----
 ggplot(AusL, aes(x = CO2,y= `Specific Leaf Area (SLA)(cm2/g)`)) +
   geom_boxplot(fill = "#7e57c2") +
   scale_x_discrete(labels = c("0"="Ambient CO2", "1"="Elevated CO2")) +
@@ -170,7 +170,7 @@ ggplot(AusL, aes(x = as.factor(CO2), y = `Leaf Dry Matter Content (LDMC)(g/g)`))
     axis.text.y = element_text(size = 28)    # Larger y-axis text
   )
 
-### Temperature ----
+    ### Temperature ----
 ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
   geom_boxplot(fill = "#ff9800") +
   scale_x_discrete(labels = c("0"="Ambient Temp", "1"="Elevated Temp")) +
@@ -186,7 +186,7 @@ ggplot(AusL, aes(x = AusL$Temperature, y = AusL$`Display Area (DA)(cm2)`))+
     axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-### Drought ----
+    ### Drought ----
 ggplot(AusL, aes(x = AusL$Drought, y = AusL$`Leaf Area (LA)(cm2)`))+
   scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
   geom_boxplot(fill = "#f7766d") +
@@ -232,7 +232,7 @@ ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
     axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-### Interactions ----
+    ### Interactions ----
 
 ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
   geom_boxplot() +
@@ -307,10 +307,10 @@ ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drou
   )
 
 anova(lv_LAmodel)
-## Plots in Crepis ----
+  ## Plots in Crepis ----
 View(AusC)
 
-### Temperature ----
+    ### Temperature ----
 ggplot(AusC, aes(x = Temperature, y = `Number of Seeds (SN)`)) +
   scale_x_discrete(labels = c("0"="Ambient Temp", "1"="Elevated Temp")) +
   geom_boxplot(fill = "#ff9800") +
@@ -321,7 +321,7 @@ ggplot(AusC, aes(x = Temperature, y = `Number of Seeds (SN)`)) +
          axis.text.y = element_text(size = 32)    # Increase y-axis text size
         )
 
-### Drought ----
+    ### Drought ----
 ggplot(AusC, aes(x = AusC$Drought, y= `Display Area (DA)(cm2)`)) +
   scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
   geom_boxplot(fill = "#f7766d")+
@@ -397,7 +397,7 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
     axis.text.y = element_text(size = 28)    # Increase y-axis text size
   )
 
-### Interactions ----
+    ### Interactions ----
 
 ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
   geom_boxplot() +
@@ -436,7 +436,7 @@ ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
   )
 
 # Principal Component Analysis ----
-## Renaming of PCA Names ---- 
+  ## Renaming of PCA Names ---- 
 names(AusPC)[names(AusPC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusPC)[names(AusPC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusPC)[names(AusPC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
@@ -457,11 +457,11 @@ pca_var_groups <- c(
   "SM" = "Seed traits"
 )
 
-## Statistical Testing of PCAs ----
+  ## Statistical Testing of PCAs ----
 l_pc_test <- PCAtest(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], 100,100, 0.05, varcorr=FALSE, counter=FALSE, plot=TRUE)
 
 View()
-## Creation of PCA models  ----
+  ## Creation of PCA models  ----
 View(AusPC)
 colnames(AusPC)
 lmv <- prcomp(AusPC[AusPC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
@@ -471,7 +471,7 @@ lmv_group_factor <- factor(pca_var_groups[rownames(lmv$rotation)])
 cmv_group_factor <- factor(pca_var_groups[rownames(cmv$rotation)])
 cav_group_factor <- factor(pca_var_groups[rownames(cav$rotation)])
 
-### PCA plots ----
+    ### PCA plots ----
 png("Lotus - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv,
                 col.var = lmv_group_factor,          # Color by custom groups
@@ -527,10 +527,10 @@ fviz_pca_biplot(cav,
 dev.off()
 
 
-## Grouping based on Climatic Variables ----
-## Rank Abundance Curves ----
-### Statistical Testing of PCAs ----
-#### Lotus ----
+  ## Grouping based on Climatic Variables ----
+  ## Rank Abundance Curves ----
+    ### Statistical Testing of PCAs ----
+      #### Lotus ----
 m_cols <- c(9, 18, 20:23)
 a_cols <- c(9,18, 20:25)
 
@@ -542,7 +542,7 @@ PCAtest_lmv_co2 <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "
 PCAtest_lmv_ct <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_ctd <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D1", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 
-#### Crepis (Main Variables) ----
+      #### Crepis (Main Variables) ----
 PCAtest_cmv <- PCAtest(AusRC[AusRC$Species == "Crepis", m_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_cmv_control <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_cmv_drought <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
@@ -551,7 +551,7 @@ PCAtest_cmv_co2 <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == 
 PCAtest_cmv_ct <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_cmv_ctd <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D1", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 
-#### Crepis (All Variables) ----#### Crepis (All Variables) ----TRUE
+      #### Crepis (All Variables) ----
 PCAtest_cav <- PCAtest(AusRC[AusRC$Species == "Crepis", a_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_cav_control <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_cav_drought <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
@@ -563,8 +563,8 @@ PCAtest_cav_ctd <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == 
 
 
 
-### Creating PCA for each treatment ----
-### Lotus ----
+    ### Creating PCA for each treatment ----
+    ### Lotus ----
 
 lmv <- prcomp(AusRC[AusRC$Species == "Lotus", c(9,18,20:23)], scale = TRUE)
 lmv_control <- prcomp(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
@@ -635,7 +635,7 @@ dev.off()
     
 View(AusL_PC)
 
-### Crepis (Main Variables) ----
+    ### Crepis (Main Variables) ----
 cmv <- prcomp(AusRC[AusRC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
 cmv_control <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
 cmv_drought <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
@@ -703,7 +703,7 @@ ggplot(AusCM_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment, # 
   )
 dev.off()
 
-### Crepis (All Variables) ----
+    ### Crepis (All Variables) ----
 cav <- prcomp(AusRC[AusRC$Species == "Crepis", c(9,18,20:25)], scale = TRUE)
 cav_control <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", c(9,18,20:25)], scale = TRUE)
 cav_drought <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", c(9,18,20:25)], scale = TRUE)
@@ -762,8 +762,8 @@ ggplot(AusCA_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment)) +
   )
 dev.off()
 
-## Extracting PCA Results----
-### For Lotus ----
+  ## Extracting PCA Results----
+    ### For Lotus ----
 
 lotus_pca_trait_loadings <- lmv$rotation
 lotus_pca_eigenvalues <- lmv$sdev^2
@@ -885,7 +885,7 @@ combined_df <- rbind(
 write.csv(combined_df, "lotus_ctd_pca_combined.csv", row.names = TRUE)
 
 
-### For Crepis (Main Variables) ----
+    ### For Crepis (Main Variables) ----
 
 crepis_m_pca_trait_loadings <- cmv$rotation
 crepis_m_pca_eigenvalues <- cmv$sdev^2
@@ -1006,7 +1006,7 @@ combined_df <- rbind(
 )
 write.csv(combined_df, "crepis_m_ctd_pca_combined.csv", row.names = TRUE)
 
-### For Crepis (All Variables) ----
+    ### For Crepis (All Variables) ----
 
 crepis_a_pca_trait_loadings <- cav$rotation
 crepis_a_pca_eigenvalues <- cav$sdev^2
@@ -1129,7 +1129,7 @@ write.csv(combined_df, "crepis_a_ctd_pca_combined.csv", row.names = TRUE)
 
 
 
-## PCA Plots for Each Treatment ----
+  ## PCA Plots for Each Treatment ----
 names(AusRC)[names(AusRC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusRC)[names(AusRC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusRC)[names(AusRC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
@@ -1139,7 +1139,7 @@ names(AusRC)[names(AusRC) == "Seed Mass (SM)(g)"] <- "SM"
 names(AusRC)[names(AusRC) == "Display Area (DA)(cm2)"] <- "DA"
 names(AusRC)[names(AusRC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
-### For Lotus ----
+    ### For Lotus ----
 # C0T0D0
 png("Lotus - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_control,
@@ -1260,7 +1260,7 @@ fviz_pca_biplot(lmv_ctd,
   )
 dev.off()
 
-### For Crepis (Main Variables) ----
+    ### For Crepis (Main Variables) ----
 # C0T0D0
 png("Crepis (Main Variables) - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv_control,
@@ -1381,7 +1381,7 @@ fviz_pca_biplot(cmv_ctd,
   )
 dev.off()
 
-### For Crepis (All Variables) ----
+    ### For Crepis (All Variables) ----
 # C0T0D0
 png("Crepis (All Variables) - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav_control,
@@ -1503,7 +1503,7 @@ fviz_pca_biplot(cav_ctd,
 dev.off()
 
 # Redundancy Analysis ----
-### Sub-setting Data frames for Lotus and Crepis ----
+  ### Sub-setting Data frames for Lotus and Crepis ----
 lotus_rows <- AusRD[AusRD$Species == "Lotus", ]
 names(lotus_rows)
 lotus_rows <- lotus_rows[-c(40:72), ]
@@ -1513,7 +1513,7 @@ names(AusRDL)
 crepis_rows <- AusRD[AusRD$Species == "Crepis",]
 crepis_rows <- crepis_rows[-c(46:78),]
 AusRDC <- crepis_rows[,-c(10:17)]
-## Redundancy Analysis for Lotus ----
+  ## Redundancy Analysis for Lotus ----
 names(AusRDL)[names(AusRDL) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusRDL)[names(AusRDL) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusRDL)[names(AusRDL) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
@@ -1529,7 +1529,7 @@ View(Lotus_RDA) # Temperature, Drought and CO2:Drought are significant (Latter m
 anova(rda.l)
 trait_loadings <- scores(rda.l, display = "all")
 trait_loadings
-### Extracting Values for Lotus RDA ----
+    ### Extracting Values for Lotus RDA ----
 summary_text <- capture.output(summary(rda.l))
 writeLines(summary_text, "lotus_rda_summary.txt")
 l_rda_eigenvalues <- eigenvals(rda.l, constrained = TRUE)
@@ -1537,7 +1537,7 @@ l_rda_proportion_explained <- l_rda_eigenvalues/sum(l_rda_eigenvalues)
 l_rda_proportion_explained
 
 
-### Preparing Model for Plotting ----
+    ### Preparing Model for Plotting ----
 rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ Temperature + Drought + CO2:Drought + Condition(CO2), data = AusRDL, scale = TRUE) # Without C:T Interaction
 
 l_bp_scores <- scores(rda.ln, display = "bp") #Extracting Names of Predictors
@@ -1545,7 +1545,7 @@ l_bp_scores <- scores(rda.ln, display = "bp") #Extracting Names of Predictors
 rownames(l_bp_scores)
 rownames(l_bp_scores)<- c("T", "D", "CTxD")
 
-### Plot for Lotus RDA ----
+    ### Plot for Lotus RDA ----
 png("Lotus - RDA - 5 June 2025.png", width = 1600, height = 1600, res = 200)
 plot(rda.ln, type = "n",xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (19.03%)", ylab = "RDA2 (4.7%)")
 ### Adding Individual Observations
@@ -1558,7 +1558,7 @@ arrows(0, 0, scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[
 text(scores(rda.ln, display = "bp")[,1], scores(rda.ln, display = "bp")[,2], labels = rownames(l_bp_scores), col = 'red', pos = 3, cex = 2)
 dev.off()
 
-## Redundancy Analysis for Crepis ----
+  ## Redundancy Analysis for Crepis ----
 names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
 names(AusRDC)[names(AusRDC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
 names(AusRDC)[names(AusRDC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
@@ -1575,20 +1575,20 @@ Crepis_RDA # Drought and CO2: Temperature are significant
 Crepis_RDA <- as.data.frame(Crepis_RDA)
 View(Crepis_RDA)
 
-### Extracting Values for Crepis RDA ----
+    ### Extracting Values for Crepis RDA ----
 summary_text <- capture.output(summary(rda.c))
 writeLines(summary_text, "crepis_rda_summary.txt")
 c_rda_eigenvalues <- eigenvals(rda.c, constrained = TRUE)
 c_rda_proportion_explained <- c_rda_eigenvalues/sum(c_rda_eigenvalues) 
 c_rda_proportion_explained
 
-### Preparing Model for Plotting ----
+    ### Preparing Model for Plotting ----
 rda.cn <- rda(AusRDC[,c(9:10,12:17)] ~ Drought + CO2:Temperature + Condition(CO2+Temperature), data = AusRDC, scale = TRUE)
 c_bp_scores <- scores(rda.cn, display = "bp") #Extracting Names of Predictors
 rownames(c_bp_scores)
 rownames(c_bp_scores)<- c("D", "CxT")
 
-### Plot for Crepis RDA ----
+    ### Plot for Crepis RDA ----
 png("Crepis - RDA - 5 June 2025.png", width = 1600, height = 1600, res = 200)
 plot(rda.cn, type = "n", xlim = c(-2,2), ylim = c(-2,2), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
 ### Adding Individual Observations
@@ -1631,7 +1631,7 @@ anova_to_csv <- function(model, csv_file_path) {
   cat("ANOVA results have been written to", csv_file_path, "\n")
 }
 
-## Output ANOVA results to CSV file for Mixed Effect Linear models in Lotus ----
+  ## Output ANOVA results to CSV file for Mixed Effect Linear models in Lotus ----
 anova_output_csv <- 'anova_LMLo - 18 August 2024.csv'
 anova_to_csv(l_DAmodel, anova_output_csv)
 anova_to_csv(log_SSPAmodel, anova_output_csv)
@@ -1644,7 +1644,7 @@ anova_to_csv(l_PDMCmodel, anova_output_csv)
 anova_to_csv(l_SLAmodel, anova_output_csv)
 anova_to_csv(l_log_LDMCmodel, anova_output_csv)
 
-## Output ANOVA results to CSV file for Mixed Effect Linear models in Crepis ----
+  ## Output ANOVA results to CSV file for Mixed Effect Linear models in Crepis ----
 anova_output_csv <- 'anova_LMCr - 18 August 2024.csv'
 anova_to_csv(c_sq_DAmodel, anova_output_csv)
 anova_to_csv(c_sq_SPAmodel, anova_output_csv)
@@ -1655,7 +1655,7 @@ anova_to_csv(c_sq_LDMCmodel, anova_output_csv)
 anova_to_csv(sq_SNmodel, anova_output_csv)
 anova_to_csv(log_SMmodel, anova_output_csv)
 
-## Output ANOVA results to CSV file for Linear models in Lotus ----
+  ## Output ANOVA results to CSV file for Linear models in Lotus ----
 anova_output_csv <- 'anova_LLo - 18 August 2024.csv'
 anova_to_csv(l_DAmodel, anova_output_csv)
 anova_to_csv(log_SSPAmodel, anova_output_csv)
@@ -1668,7 +1668,7 @@ anova_to_csv(l_PDMCmodel, anova_output_csv)
 anova_to_csv(l_SLAmodel, anova_output_csv)
 anova_to_csv(l_log_LDMCmodel, anova_output_csv)
 
-## Output ANOVA results to CSV file for Linear models in Crepis ----
+  ## Output ANOVA results to CSV file for Linear models in Crepis ----
 anova_output_csv <- 'anova_LCr - 18 August 2024.csv'
 anova_to_csv(c_sq_DAmodel, anova_output_csv)
 anova_to_csv(c_sq_SPAmodel, anova_output_csv)
@@ -1680,7 +1680,7 @@ anova_to_csv(sq_SNmodel, anova_output_csv)
 anova_to_csv(log_SMmodel, anova_output_csv)
 
 # Correlogram ----
-## For Lotus ----
+  ## For Lotus ----
 View(AusL)
 Lotcor_Data <- AusL[,c(9,18,20:23)]
 names(Lotcor_Data)
@@ -1697,7 +1697,7 @@ corrplot(Lotcor_Matrix, method = "color", type = "full",
          number.cex = 0.8) 
 corrplot.mixed(Lotcor_Matrix, order = 'AOE')
 
-### Correlogram which Includes p-values ----
+    ### Correlogram which Includes p-values ----
 l_corr_matrix <- rcorr(as.matrix(Lotcor_Data))
 l_corr_matrix
 l_r_values <- l_corr_matrix$r
@@ -1728,7 +1728,7 @@ ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
         axis.ticks = element_blank()) +
   coord_fixed()
 
-### Correlogram which includes p-values and the central diagonal is white ----
+    ### Correlogram which includes p-values and the central diagonal is white ----
 
 # Calculate correlation matrix
 l_corr_matrix <- rcorr(as.matrix(Lotcor_Data))
@@ -1773,7 +1773,7 @@ ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
         axis.ticks = element_blank()) +
   coord_fixed()
 
-## For Crepis ----
+  ## For Crepis ----
 names(AusC)
 Crecor_Data <- AusC[,c(9:10,12:17)]
 names(Crecor_Data)
@@ -1792,7 +1792,7 @@ corrplot(Crecor_Matrix, method = "color", type = "full",
          number.cex = 0.8) 
 corrplot.mixed(Crecor_Matrix, order = 'AOE')
 
-### Correlogram which Includes p-values ----
+    ### Correlogram which Includes p-values ----
 c_corr_matrix <- rcorr(as.matrix(Crecor_Data))
 c_corr_matrix
 c_r_values <- c_corr_matrix$r
@@ -1825,7 +1825,7 @@ ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
         axis.ticks = element_blank()) +
   coord_fixed()
 
-### Correlogram which includes p-values and the central diagonal is white ----
+    ### Correlogram which includes p-values and the central diagonal is white ----
 
 c_corr_matrix <- rcorr(as.matrix(Crecor_Data))
 c_r_values <- c_corr_matrix$r
@@ -1871,8 +1871,8 @@ ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
 
 # Variance Partitioning using Barplot ----
 
-## Creation of Separate Models ----
-### For Lotus ----
+  ## Creation of Separate Models ----
+    ### For Lotus ----
 lv_DAmodel <- lm(AusL$`Display Area (DA)(cm2)`~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
 lv_sq_SPAmodel <- lm(AusL$`sqrt_Specific Petal Area (SPA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
 lv_PDMCmodel <- lm(AusL$`Petal Dry Matter Content (PDMC)(g/g)` ~CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
@@ -1880,7 +1880,7 @@ lv_log_LAmodel <- lm(AusL$`log_Leaf Area (LA)(cm2)` ~ CO2 + Temperature + Drough
 lv_SLAmodel <- lm(AusL$`Specific Leaf Area (SLA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
 lv_log_LDMCmodel <- lm(AusL$`log_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusL)
 
-### For Crepis ----
+    ### For Crepis ----
 cv_sq_DAmodel <- lm(AusC$`Display Area (DA)(cm2)`~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
 cv_sq_SPAmodel <- lm(AusC$`Specific Petal Area (SPA)(cm2/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
 cv_sq_PDMCmodel <- lm(AusC$`Petal Dry Matter Content (PDMC)(g/g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
@@ -1890,7 +1890,7 @@ cv_sq_LDMCmodel <- lm(AusC$`sqrt_Leaf Dry Matter Content (LDMC)(g/g)` ~ CO2 + Te
 cv_sq_SNmodel <- lm(AusC$`sqrt_Number of Seeds (SN)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
 cv_log_SMmodel <- lm(AusC$`log_Seed Mass (SM)(g)` ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusC)
 
-### Creation of Plot for Lotus ----
+    ### Creation of Plot for Lotus ----
 l_model <- list(
   DA = lv_DAmodel,
   SPA = lv_sq_SPAmodel,
@@ -1900,7 +1900,7 @@ l_model <- list(
   LDMC = lv_log_LDMCmodel
 )
 
-## For both Significant and Marginally Significant Variables ----
+      #### For both Significant and Marginally Significant Variables ----
 all_results_df <- data.frame()
 
 # Loop through each model in the l_model list
@@ -1947,7 +1947,7 @@ ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
         legend.title = element_blank())
 
 
-## For Significant Variables Only ----
+      #### For Significant Variables Only ----
 
 all_results_df <- data.frame()
 
@@ -1994,7 +1994,7 @@ ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
         legend.title = element_blank())
 
 
-#### Including RDA ----
+      #### Including RDA ----
 
 lv_rda_results_df <- Lotus_RDA %>% 
   as.data.frame() %>%  # Ensure it is a data frame
@@ -2038,7 +2038,7 @@ ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
 
 dev.off()
 
-### Creation of plot for Crepis ----
+    ### For Crepis ----
 
 c_model <- list(
   DA = cv_sq_DAmodel,
@@ -2052,7 +2052,7 @@ c_model <- list(
 )
 
 
-## For both Significant and Marginally Significant Variables ----
+      #### For both Significant and Marginally Significant Variables ----
 
 all_results_df <- data.frame()
 
@@ -2098,7 +2098,7 @@ ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
         legend.position = "bottom", 
         legend.title = element_blank())
 
-## For Significant Variables Alone ----
+      #### For Significant Variables Alone ----
 
 all_results_df <- data.frame()
 
@@ -2144,7 +2144,7 @@ ggplot(all_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
         legend.title = element_blank())
 
 
-#### Including RDA ----
+      #### Including RDA ----
 
 cv_rda_results_df <- Crepis_RDA %>% 
   as.data.frame() %>%  # Ensure it is a data frame
@@ -2189,7 +2189,7 @@ ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
 dev.off()
 
 # Exporting Plots ----
-## For Lotus ----
+  ## For Lotus ----
 
 l_plots <- list(
   Lotus_CO2_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`)) +
@@ -2283,7 +2283,7 @@ for (i in seq_along(l_plots)) {
          width = 12, height = 12, dpi = 300)
 }
 
-## For Crepis ----
+  ## For Crepis ----
 # Create a list of ggplots for Crepis
 c_plots<- list(
   Crepis_D_DA = ggplot(AusC, aes(x = Drought, y = `Display Area (DA)(cm2)`)) +
@@ -2362,3 +2362,115 @@ for (i in seq_along(c_plots)) {
          plot = c_plots[[i]], 
          width = 12, height = 12, dpi = 300)
 }
+# Network Analysis
+  ## For Lotus ----
+ln_trait_data <- AusRD[AusRD$Species == "Lotus", m_cols]
+ln_trait_corr <- cor(ln_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
+ln_p_values <- cor.mtest(ln_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
+ln_adjusted_p_values <- p.adjust(ln_p_values, method = "fdr") # Apply Holm correction to the p-values
+threshold <- 0.4
+ln_adj_matrix <- ifelse(abs(ln_trait_corr) > threshold & ln_adjusted_p_values < 0.01, 1, 0) # Create adjacency matrix (set a threshold)
+ln_network <- graph_from_adjacency_matrix(ln_adj_matrix, mode = "undirected", diag = FALSE)
+ln_ceb <- cluster_edge_betweenness(ln_network)
+ln_cluster_membership <- membership(ln_ceb)  # To assign cluster colours, get cluster assignments for each node
+ln_num_clusters <- length(unique(ln_cluster_membership)) 
+ln_cluster_colors <- rainbow(ln_num_clusters)  # Generate distinct colors
+V(ln_network)$color <- ln_cluster_colors[ln_cluster_membership]
+
+png("ln_network_plot.png", width = 12, height = 12, units = "in", res = 100)
+plot(ln_ceb, ln_network,
+     vertex.size = 7,
+     vertex.label.cex = 1.5,
+     vertex.color = V(ln_network)$color,
+     vertex.label.dist = 1)  # Increase this to move labels further away
+plot(ln_ceb, ln_network, vertex.size = 7, vertex.label.cex = 1.5, vertex.color = V(ln_network)$color)
+dev.off()
+
+ln_modularity_value <- modularity(ln_network, ln_cluster_membership) # Calculate modularity 
+print(paste("Modularity", ln_modularity_value))
+ln_edge_density_value <- edge_density(ln_network) # Calculate Edge Density
+print(paste("Edge Density", ln_edge_density_value))
+
+ln_degree_centrality <- degree(ln_network)
+ln_betweenness_centrality <- betweenness(ln_network)
+ln_closeness_centrality <- closeness(ln_network)
+ln_eigenvector_centrality <- eigen_centrality(ln_network)$vector
+ln_clustering_coefficient <- transitivity(ln_network, type = "local")
+ln_average_path_length <- mean_distance(ln_network)
+ln_diameter_value <- diameter(ln_network)
+ln_density_value <- edge_density(ln_network)
+ln_assortativity_value <- assortativity_degree(ln_network)
+ln_pagerank_values <- page_rank(ln_network)$vector
+ln_transitivity_value <- transitivity(ln_network)
+
+## For Crepis (Main Variables) ----
+cmn_trait_data <- AusRD[AusRD$Species == "Crepis", m_cols]
+cmn_trait_corr <- cor(cmn_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
+cmn_p_values <- cor.mtest(cmn_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
+cmn_adjusted_p_values <- p.adjust(cmn_p_values, method = "fdr") # Apply Holm correction to the p-values
+threshold <- 0.4
+cmn_adj_matrix <- ifelse(abs(cmn_trait_corr) > threshold & cmn_adjusted_p_values < 0.01, 1, 0) # Create adjacency matrix (set a threshold)
+cmn_network <- graph_from_adjacency_matrix(cmn_adj_matrix, mode = "undirected", diag = FALSE)
+cmn_ceb <- cluster_edge_betweenness(cmn_network)
+cmn_cluster_membership <- membership(cmn_ceb)  # To assign cluster colours, get cluster assignments for each node
+cmn_num_clusters <- length(unique(cmn_cluster_membership)) 
+cmn_cluster_colors <- rainbow(cmn_num_clusters)  # Generate distinct colors
+V(cmn_network)$color <- cmn_cluster_colors[cmn_cluster_membership]
+
+png("cmn_network_plot.png", width = 800, height = 600)
+plot(cmn_ceb, cmn_network, vertex.size = 7, vertex.label.cex = 1, vertex.color = V(cmn_network)$color)
+dev.off()
+
+cmn_modularity_value <- modularity(cmn_network, cmn_cluster_membership) # Calculate modularity 
+print(paste("Modularity", cmn_modularity_value))
+
+cmn_edge_density_value <- edge_density(cmn_network) # Calculate Edge Density
+print(paste("Edge Density", cmn_edge_density_value))
+
+cmn_degree_centrality <- degree(cmn_network)
+cmn_betweenness_centrality <- betweenness(cmn_network)
+cmn_closeness_centrality <- closeness(cmn_network)
+cmn_eigenvector_centrality <- eigen_centrality(cmn_network)$vector
+cmn_clustering_coefficient <- transitivity(cmn_network, type = "local")
+cmn_average_path_length <- mean_distance(cmn_network)
+cmn_diameter_value <- diameter(cmn_network)
+cmn_density_value <- edge_density(cmn_network)
+cmn_assortativity_value <- assortativity_degree(cmn_network)
+cmn_pagerank_values <- page_rank(cmn_network)$vector
+cmn_transitivity_value <- transitivity(cmn_network)
+
+## For Crepis (All Variables) ----
+can_trait_data <- AusRD[AusRD$Species == "Crepis", a_cols]
+can_trait_corr <- cor(can_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
+can_p_values <- cor.mtest(can_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
+can_adjusted_p_values <- p.adjust(can_p_values, method = "fdr") # Apply Holm correction to the p-values
+threshold <- 0.4
+can_adj_matrix <- ifelse(abs(can_trait_corr) > threshold & can_adjusted_p_values < 0.01, 1, 0) # Create adjacency matrix (set a threshold)
+can_network <- graph_from_adjacency_matrix(can_adj_matrix, mode = "undirected", diag = FALSE)
+can_ceb <- cluster_edge_betweenness(can_network)
+can_cluster_membership <- membership(can_ceb)  # To assign cluster colours, get cluster assignments for each node
+can_num_clusters <- length(unique(can_cluster_membership)) 
+can_cluster_colors <- rainbow(can_num_clusters)  # Generate distinct colors
+V(can_network)$color <- can_cluster_colors[can_cluster_membership]
+
+png("can_network_plot.png", width = 800, height = 600)
+plot(can_ceb, can_network, vertex.size = 7, vertex.label.cex = 1, vertex.color = V(can_network)$color)
+dev.off()
+
+can_modularity_value <- modularity(can_network, can_cluster_membership) # Calculate modularity 
+print(paste("Modularity", can_modularity_value))
+
+can_edge_density_value <- edge_density(can_network) # Calculate Edge Density
+print(paste("Edge Density", can_edge_density_value))
+
+can_degree_centrality <- degree(can_network)
+can_betweenness_centrality <- betweenness(can_network)
+can_closeness_centrality <- closeness(can_network)
+can_eigenvector_centrality <- eigen_centrality(can_network)$vector
+can_clustering_coefficient <- transitivity(can_network, type = "local")
+can_average_path_length <- mean_distance(can_network)
+can_diameter_value <- diameter(can_network)
+can_density_value <- edge_density(can_network)
+can_assortativity_value <- assortativity_degree(can_network)
+can_pagerank_values <- page_rank(can_network)$vector
+can_transitivity_value <- transitivity(can_network)
