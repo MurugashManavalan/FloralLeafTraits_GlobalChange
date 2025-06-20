@@ -1661,7 +1661,7 @@ anova_to_csv(log_SMmodel, anova_output_csv)
 # Correlogram ----
   ## For Lotus ----
 View(AusL)
-Lotcor_Data <- AusL[,c(9,18,20:23)]
+Lotcor_Data <- AusPC[AusPC$Species == "Lotus",c(9,18,20:23)]
 names(Lotcor_Data)
 names(Lotcor_Data)[names(Lotcor_Data) == "Display Area (DA)(cm2)"] <- "DA"
 names(Lotcor_Data)[names(Lotcor_Data) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -1752,9 +1752,26 @@ ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
         axis.ticks = element_blank()) +
   coord_fixed()
 
+# Export correlogram
+ggsave("Lotus_correlation_heatmap.png",
+       plot = ggplot(data = l_merged_data, aes(Var1, Var2, fill = correlation)) +
+         geom_tile(color = "white") +
+         scale_fill_gradient2(low = "red", high = "blue4", mid = "#ffffff", 
+                              midpoint = 0, limit = c(-1, 1), space = "Lab", 
+                              name = "Pearson\nCorrelation") +
+         geom_text(aes(label = label, fontface = fontface), color = "black", size = 5) +
+         theme_minimal() +
+         theme(axis.text.x = element_text(size = 12),
+               axis.text.y = element_text(size = 12),
+               axis.title.x = element_blank(),
+               axis.title.y = element_blank(),
+               axis.ticks = element_blank()) +
+         coord_fixed(),
+       width = 12, height = 12, dpi = 300)
+
   ## For Crepis ----
 names(AusC)
-Crecor_Data <- AusC[,c(9:10,12:17)]
+Crecor_Data <- AusPC[AusPC$Species == "Crepis",a_cols]
 names(Crecor_Data)
 names(Crecor_Data)[names(Crecor_Data) == "Display Area (DA)(cm2)"] <- "DA"
 names(Crecor_Data)[names(Crecor_Data) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -1847,6 +1864,23 @@ ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
         axis.title.y = element_blank(),
         axis.ticks = element_blank()) +
   coord_fixed()
+
+# Export Correlogram
+ggsave("Crepis_correlation_heatmap.png",
+       plot = ggplot(data = c_merged_data, aes(Var1, Var2, fill = correlation)) +
+         geom_tile(color = "white") +
+         scale_fill_gradient2(low = "red", high = "blue4", mid = "#ffffff", 
+                              midpoint = 0, limit = c(-1, 1), space = "Lab", 
+                              name = "Pearson\nCorrelation") +
+         geom_text(aes(label = label, fontface = fontface), color = "black", size = 5) +
+         theme_minimal() +
+         theme(axis.text.x = element_text(size = 16),
+               axis.text.y = element_text(size = 16),
+               axis.title.x = element_blank(),
+               axis.title.y = element_blank(),
+               axis.ticks = element_blank()) +
+         coord_fixed(),
+       width = 12, height = 12, dpi = 300)
 
 # Variance Partitioning using Barplot ----
 
@@ -2436,7 +2470,7 @@ png("can_network_plot.png", width = 14, height = 12, units = "in", res = 300)
 plot(can_ceb, can_network,
      vertex.size = 7,
      vertex.label.cex = 1.5,
-     vertex.color = V(ln_network)$color,
+     vertex.color = V(can_network)$color,
      vertex.label.dist = 1)  # Increase this to move labels further away
 dev.off()
 
