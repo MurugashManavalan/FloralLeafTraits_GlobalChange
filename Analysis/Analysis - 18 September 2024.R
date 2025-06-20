@@ -1761,8 +1761,8 @@ ggsave("Lotus_correlation_heatmap.png",
                               name = "Pearson\nCorrelation") +
          geom_text(aes(label = label, fontface = fontface), color = "black", size = 5) +
          theme_minimal() +
-         theme(axis.text.x = element_text(size = 12),
-               axis.text.y = element_text(size = 12),
+         theme(axis.text.x = element_text(size = 16),
+               axis.text.y = element_text(size = 16),
                axis.title.x = element_blank(),
                axis.title.y = element_blank(),
                axis.ticks = element_blank()) +
