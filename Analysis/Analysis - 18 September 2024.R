@@ -236,77 +236,60 @@ ggplot(AusL, aes(x = Drought, y= AusL$`Leaf Dry Matter Content (LDMC)(g/g)`)) +
 
 ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
   geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    x = "CO2",
-    y = "DA (cm2)",
-    fill = "Temperature"
+  facet_wrap(~ Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+  scale_fill_manual(
+    values = c("0" = "#7e57c2", "1" = "#ff9800")
   ) +
+  scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+  labs(x = "CO2", y = "DA (cm2)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 28),  # Increase x-axis title size
-    axis.title.y = element_text(size = 28),  # Increase y-axis title size
-    axis.text.x = element_text(size = 26),   # Increase x-axis text size
-    axis.text.y = element_text(size = 26),   # Increase y-axis text size
-    legend.title = element_text(size = 24),  # Increase legend title size
-    legend.text = element_text(size = 22)    # Increase legend text size
+    axis.title = element_text(size = 36),
+    axis.text = element_text(size = 32),
+    strip.text = element_text(size = 32, face = "bold"),
+    legend.position = "none"
   )
-
 
 ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperature)) +
   geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    x = "CO2",
-    y = "SLA (cm2/g)",
-    fill = "Temperature"
+  facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+  scale_fill_manual(
+    values = c("0" = "#7e57c2", "1" = "#ff9800")
   ) +
+  scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+  labs(x = "CO2", y = "SLA (cm2/g)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 28),  # Increase x-axis title size
-    axis.title.y = element_text(size = 28),  # Increase y-axis title size
-    axis.text.x = element_text(size = 26),   # Increase x-axis text size
-    axis.text.y = element_text(size = 26),   # Increase y-axis text size
-    legend.title = element_text(size = 24),  # Increase legend title size
-    legend.text = element_text(size = 22)    # Increase legend text size
-  )
-ggplot(AusL, aes(x = CO2, y = AusL$`Display Area (DA)(cm2)`, fill = Drought)) +
-  geom_boxplot() +
-  facet_wrap(~ Drought) +
-  labs(
-    x = "CO2 + Temperature",
-    y = "DA (cm2)",
-    fill = "Drought"
-  ) +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 28),  # Increase x-axis title size
-    axis.title.y = element_text(size = 28),  # Increase y-axis title size
-    axis.text.x = element_text(size = 26),   # Increase x-axis text size
-    axis.text.y = element_text(size = 26),   # Increase y-axis text size
-    legend.title = element_text(size = 24),  # Increase legend title size
-    legend.text = element_text(size = 22)    # Increase legend text size
+    axis.title = element_text(size = 36),
+    axis.text = element_text(size = 32),
+    strip.text = element_text(size = 32, face = "bold"),
+    legend.position = "none"
   )
 
-ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
-  geom_boxplot() +
-  facet_wrap(~ Drought) +
-  labs(
-    x = "CO2 + Temperature",
-    y = "LDMC (g/g)",
-    fill = "Drought"
-  ) +
-  theme_bw() +
-  theme(
-    axis.title.x = element_text(size = 28),  # Increase x-axis title size
-    axis.title.y = element_text(size = 28),  # Increase y-axis title size
-    axis.text.x = element_text(size = 26),   # Increase x-axis text size
-    axis.text.y = element_text(size = 26),   # Increase y-axis text size
-    legend.title = element_text(size = 24),  # Increase legend title size
-    legend.text = element_text(size = 22)    # Increase legend text size
-  )
+ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)` , fill = Drought)) +
+  scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+  geom_boxplot()+
+  facet_wrap(~ Drought, labeller = as_labeller(c("0" = "Well Watered", "1" = "Drought"))) +
+  scale_fill_manual(values = c("0" = "#fbc02d", "1" = "#f7766d"),
+                    labels = c("0" = "Well-watered", "1" = "Drought")) +
+  labs(x = "CO2 + Temperature", y = "DA (cm2)", fill = "Drought") + theme_bw() +
+  theme(axis.title = element_text(size = 36),
+        axis.text = element_text(size = 32),
+        strip.text = element_text(size = 32, face = "bold"),
+        legend.position = "none")
 
-anova(lv_LAmodel)
+ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)` , fill = Drought)) +
+  scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+  geom_boxplot()+
+  facet_wrap(~ Drought, labeller = as_labeller(c("0" = "Well Watered", "1" = "Drought"))) +
+  scale_fill_manual(values = c("0" = "#fbc02d", "1" = "#f7766d"),
+                    labels = c("0" = "Well-watered", "1" = "Drought")) +
+  labs(x = "CO2 + Temperature", y = "LDMC (g/g)", fill = "Drought") + theme_bw() +
+  theme(axis.title = element_text(size = 36),
+        axis.text = element_text(size = 32),
+        strip.text = element_text(size = 32, face = "bold"),
+        legend.position = "none")
+
   ## Plots in Crepis ----
 View(AusC)
 
@@ -401,38 +384,34 @@ ggplot(AusC, aes(x = AusC$Drought, y= `Number of Seeds (SN)`)) +
 
 ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
   geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    x = "CO2",
-    y = "SPA (cm2/g)",
-    fill = "Temperature"
+  facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+  scale_fill_manual(
+    values = c("0" = "#7e57c2", "1" = "#ff9800")
   ) +
+  scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+  labs(x = "CO2", y = "SPA (cm2/g)") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 28),  # Increase x-axis title size
-    axis.title.y = element_text(size = 28),  # Increase y-axis title size
-    axis.text.x = element_text(size = 26),   # Increase x-axis text size
-    axis.text.y = element_text(size = 26),   # Increase y-axis text size
-    legend.title = element_text(size = 24),  # Increase legend title size
-    legend.text = element_text(size = 22)    # Increase legend text size
+    axis.title = element_text(size = 36),
+    axis.text = element_text(size = 32),
+    strip.text = element_text(size = 32, face = "bold"),
+    legend.position = "none"
   )
 
 ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
   geom_boxplot() +
-  facet_wrap(~ Temperature) +
-  labs(
-    x = "CO2",
-    y = "SN",
-    fill = "Temperature"
+  facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+  scale_fill_manual(
+    values = c("0" = "#7e57c2", "1" = "#ff9800")
   ) +
+  scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+  labs(x = "CO2", y = "SN") +
   theme_bw() +
   theme(
-    axis.title.x = element_text(size = 28),  # Increase x-axis title size
-    axis.title.y = element_text(size = 28),  # Increase y-axis title size
-    axis.text.x = element_text(size = 26),   # Increase x-axis text size
-    axis.text.y = element_text(size = 26),   # Increase y-axis text size
-    legend.title = element_text(size = 24),  # Increase legend title size
-    legend.text = element_text(size = 22)    # Increase legend text size
+    axis.title = element_text(size = 36),
+    axis.text = element_text(size = 32),
+    strip.text = element_text(size = 32, face = "bold"),
+    legend.position = "none"
   )
 
 # Principal Component Analysis ----
@@ -2235,46 +2214,42 @@ l_plots <- list(
           axis.text = element_text(size = 32)),
   
   Lotus_CxT_DA = ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
-    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     geom_boxplot() +
-    facet_wrap(~ Temperature) +
-    scale_fill_manual(
-      values = c("0" = "#7e57c2", "1" = "#ff9800"),
-      labels = c("0" = "Ambient Temp.", "1" = "High Temp.")) +
-    labs(x = "CO2", y = "DA (cm2)", fill = "Temperature") +
+    facet_wrap(~ Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
+    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+    labs(x = "CO2", y = "DA (cm2)") +
     theme_bw() +
-    theme(axis.title = element_text(size = 36),
+    theme(
+      axis.title = element_text(size = 36),
       axis.text = element_text(size = 32),
-      legend.title = element_text(size = 28),
-      legend.text = element_text(size = 26),
-      legend.title.align = 0.5),
+      strip.text = element_text(size = 32, face = "bold"),
+      legend.position = "none"),
   
   Lotus_CxT_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperature)) +
-    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     geom_boxplot() +
-    facet_wrap(~ Temperature) +
-    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800"),
-                      labels = c("0" = "Ambient Temp.", "1" = "High Temp.")) +
-    labs(x = "CO2", y = "SLA (cm2/g)", fill = "Temperature") +
-    theme_bw() +
-    theme(axis.title = element_text(size = 36),
-          axis.text = element_text(size = 32),
-          legend.title = element_text(size = 28),
-          legend.text = element_text(size = 26),
-          legend.title.align = 0.5),
-  
-  Lotus_CTxD_LDMC = ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`, fill = Drought)) +
+    facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
-    geom_boxplot() + 
-    facet_wrap(~ Drought) +
+    labs(x = "CO2", y = "SLA (cm2/g)") +
+    theme_bw() +
+    theme(
+      axis.title = element_text(size = 36),
+      axis.text = element_text(size = 32),
+      strip.text = element_text(size = 32, face = "bold"),
+      legend.position = "none"),
+  
+  Lotus_CTxD_LDMC = ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)` , fill = Drought)) +
+    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+    geom_boxplot()+
+    facet_wrap(~ Drought, labeller = as_labeller(c("0" = "Well Watered", "1" = "Drought"))) +
     scale_fill_manual(values = c("0" = "#fbc02d", "1" = "#f7766d"),
                       labels = c("0" = "Well-watered", "1" = "Drought")) +
     labs(x = "CO2 + Temperature", y = "LDMC (g/g)", fill = "Drought") + theme_bw() +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32),
-          legend.title = element_text(size = 28),
-          legend.text = element_text(size = 26),
-          legend.title.align = 0.5))
+          strip.text = element_text(size = 32, face = "bold"),
+          legend.position = "none"))
 
 # Save each plot as a separate PNG
 for (i in seq_along(l_plots)) {
@@ -2330,32 +2305,31 @@ c_plots<- list(
   
   # Interaction plots
   Crepis_CxT_SPA = ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
-    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     geom_boxplot() +
-    facet_wrap(~ Temperature) +
-    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800"),
-                      labels = c("0" = "Ambient Temp.", "1" = "High Temp.")) +
-    labs(x = "CO2", y = "SPA (cm2/g)", fill = "Temperature") +
+    facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
+    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+    labs(x = "CO2", y = "SPA (cm2/g)") +
     theme_bw() +
-    theme(axis.title = element_text(size = 36),
-          axis.text = element_text(size = 32),
-          legend.title = element_text(size = 28),
-          legend.text = element_text(size = 26),
-          legend.title.align = 0.5),
+    theme(
+      axis.title = element_text(size = 36),
+      axis.text = element_text(size = 32),
+      strip.text = element_text(size = 32, face = "bold"),
+      legend.position = "none"),
   
   Crepis_CxT_SN = ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
-    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     geom_boxplot() +
-    facet_wrap(~ Temperature) +
-    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800"),
-                      labels = c("0" = "Ambient Temp.", "1" = "High Temp.")) +
-    labs(x = "CO2", y = "SN", fill = "Temperature") +
+    facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
+    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
+    scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
+    labs(x = "CO2", y = "SN") +
     theme_bw() +
-    theme(axis.title = element_text(size = 36),
-          axis.text = element_text(size = 32),
-          legend.title = element_text(size = 28),
-          legend.text = element_text(size = 26),
-          legend.title.align = 0.5))
+    theme(
+      axis.title = element_text(size = 36),
+      axis.text = element_text(size = 32),
+      strip.text = element_text(size = 32, face = "bold"),
+      legend.position = "none"
+    ))
 
 for (i in seq_along(c_plots)) {
   ggsave(filename = paste0(names(c_plots)[i], ".png"), 
