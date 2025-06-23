@@ -2402,7 +2402,6 @@ plot(ln_network,
      vertex.color = V(ln_network)$color,
      edge.width = E(ln_network)$weight * 5)
 dev.off()
-
   ## For Crepis (All Variables) ----
 can_trait_data <- AusRD[AusRD$Species == "Crepis", a_cols]
 can_trait_corr <- cor(can_trait_data, use = "pairwise.complete.obs") # Compute Pearson correlations and p-values
