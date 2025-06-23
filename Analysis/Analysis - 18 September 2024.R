@@ -1120,6 +1120,7 @@ names(AusRC)[names(AusRC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
     ### For Lotus ----
 # C0T0D0
+citation("ggplot2")
 png("Lotus - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_control,
                 col.var = lmv_group_factor,
@@ -2372,129 +2373,58 @@ for (i in seq_along(c_plots)) {
 }
 # Network Analysis ----
   ## For Lotus ----
-ln_trait_data <- AusRD[AusRD$Species == "Lotus", m_cols]
-ln_trait_corr <- cor(ln_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
-ln_p_values <- cor.mtest(ln_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
-ln_adjusted_p_values <- p.adjust(ln_p_values, method = "fdr") # Apply Holm correction to the p-values
-threshold <- 0.4
-ln_adj_matrix <- ifelse(abs(ln_trait_corr) > threshold & ln_adjusted_p_values < 0.01, 1, 0) # Create adjacency matrix (set a threshold)
-ln_network <- graph_from_adjacency_matrix(ln_adj_matrix, mode = "undirected", diag = FALSE)
-ln_ceb <- cluster_edge_betweenness(ln_network)
-ln_cluster_membership <- membership(ln_ceb)  # To assign cluster colours, get cluster assignments for each node
-ln_num_clusters <- length(unique(ln_cluster_membership)) 
-ln_cluster_colors <- rainbow(ln_num_clusters)  # Generate distinct colors
-V(ln_network)$color <- ln_cluster_colors[ln_cluster_membership]
 
-png("ln_network_plot.png", width = 14, height = 12, units = "in", res = 300)
-plot(ln_ceb, ln_network,
-     vertex.size = 7,
+n_trait_data <- AusPC[AusPC$Species == "Lotus", m_cols] # Subset trait data for 'Lotus'
+ln_trait_corr <- cor(n_trait_data, use = "pairwise.complete.obs") # Calculate Pearson correlations
+ln_p_values <- cor.mtest(n_trait_data, use = "pairwise.complete.obs")$p # Get p-values for correlations
+ln_adjusted_p_values <- p.adjust(ln_p_values, method = "fdr") # Adjust p-values using False Discovery Rate (FDR)
+threshold <- 0.2
+ln_weighted_adj <- ifelse(abs(ln_trait_corr) > threshold & ln_adjusted_p_values < 0.05,
+                          abs(ln_trait_corr), 0) # Create weighted adjacency matrix with significance and threshold
+ln_network <- graph_from_adjacency_matrix(ln_weighted_adj, mode = "undirected", weighted = TRUE, diag = FALSE) # Create igraph object with weighted edges
+deg <- strength(ln_network, weights = E(ln_network)$weight)  # Weighted degree
+btw <- betweenness(ln_network, weights = 1 / E(ln_network)$weight, normalized = TRUE) # Weighted betweeness
+V(ln_network)$degree <- deg # Assign centrality scores to nodes
+V(ln_network)$betweenness <- btw
+ln_ceb <- cluster_edge_betweenness(ln_network) 
+ln_cluster_membership <- membership(ln_ceb)
+ln_num_clusters <- length(unique(ln_cluster_membership))
+ln_cluster_colors <- c("#f7756d","#fbc02d","#00bfc4", "#7e57c2", "#ff9800")
+V(ln_network)$color <- ln_cluster_colors[ln_cluster_membership] # Assign cluster membership colors
+layout <- layout_with_fr(ln_network)  # Fruchterman-Reingold layout
+png("Lotus_trait_network - 23 June 2025.png", width = 7, height = 6, units = "in", res = 300)
+plot(ln_network,
+     layout = layout,
+     vertex.size = deg / max(deg) * 20,
      vertex.label.cex = 1.5,
+     vertex.label.color = "black",
+     vertex.label.dist = 1,
      vertex.color = V(ln_network)$color,
-     vertex.label.dist = 1)  # Increase this to move labels further away
+     edge.width = E(ln_network)$weight * 5)
 dev.off()
-
-ln_modularity_value <- modularity(ln_network, ln_cluster_membership) # Calculate modularity 
-print(paste("Modularity", ln_modularity_value))
-ln_edge_density_value <- edge_density(ln_network) # Calculate Edge Density
-print(paste("Edge Density", ln_edge_density_value))
-
-ln_degree_centrality <- degree(ln_network)
-ln_betweenness_centrality <- betweenness(ln_network)
-ln_closeness_centrality <- closeness(ln_network)
-ln_eigenvector_centrality <- eigen_centrality(ln_network)$vector
-ln_clustering_coefficient <- transitivity(ln_network, type = "local")
-ln_average_path_length <- mean_distance(ln_network)
-ln_diameter_value <- diameter(ln_network)
-ln_density_value <- edge_density(ln_network)
-ln_assortativity_value <- assortativity_degree(ln_network)
-ln_pagerank_values <- page_rank(ln_network)$vector
-ln_transitivity_value <- transitivity(ln_network)
-
-ln_modularity_value
-ln_degree_centrality
-ln_betweenness_centrality
-ln_eigenvector_centrality
-ln_clustering_coefficient
-
-  ## For Crepis (Main Variables) ----
-cmn_trait_data <- AusRD[AusRD$Species == "Crepis", m_cols]
-cmn_trait_corr <- cor(cmn_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
-cmn_p_values <- cor.mtest(cmn_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
-cmn_adjusted_p_values <- p.adjust(cmn_p_values, method = "fdr") # Apply Holm correction to the p-values
-threshold <- 0.4
-cmn_adj_matrix <- ifelse(abs(cmn_trait_corr) > threshold & cmn_adjusted_p_values < 0.01, 1, 0) # Create adjacency matrix (set a threshold)
-cmn_network <- graph_from_adjacency_matrix(cmn_adj_matrix, mode = "undirected", diag = FALSE)
-cmn_ceb <- cluster_edge_betweenness(cmn_network)
-cmn_cluster_membership <- membership(cmn_ceb)  # To assign cluster colours, get cluster assignments for each node
-cmn_num_clusters <- length(unique(cmn_cluster_membership)) 
-cmn_cluster_colors <- rainbow(cmn_num_clusters)  # Generate distinct colors
-V(cmn_network)$color <- cmn_cluster_colors[cmn_cluster_membership]
-
-png("cmn_network_plot.png", width = 800, height = 600)
-plot(cmn_ceb, cmn_network, vertex.size = 7, vertex.label.cex = 1, vertex.color = V(cmn_network)$color)
-dev.off()
-
-cmn_modularity_value <- modularity(cmn_network, cmn_cluster_membership) # Calculate modularity 
-print(paste("Modularity", cmn_modularity_value))
-
-cmn_edge_density_value <- edge_density(cmn_network) # Calculate Edge Density
-print(paste("Edge Density", cmn_edge_density_value))
-
-cmn_degree_centrality <- degree(cmn_network)
-cmn_betweenness_centrality <- betweenness(cmn_network)
-cmn_closeness_centrality <- closeness(cmn_network)
-cmn_eigenvector_centrality <- eigen_centrality(cmn_network)$vector
-cmn_clustering_coefficient <- transitivity(cmn_network, type = "local")
-cmn_average_path_length <- mean_distance(cmn_network)
-cmn_diameter_value <- diameter(cmn_network)
-cmn_density_value <- edge_density(cmn_network)
-cmn_assortativity_value <- assortativity_degree(cmn_network)
-cmn_pagerank_values <- page_rank(cmn_network)$vector
-cmn_transitivity_value <- transitivity(cmn_network)
 
   ## For Crepis (All Variables) ----
 can_trait_data <- AusRD[AusRD$Species == "Crepis", a_cols]
-can_trait_corr <- cor(can_trait_data, use = "pairwise.complete.obs") # Calculate correlation matrix
-can_p_values <- cor.mtest(can_trait_data, use = "pairwise.complete.obs")$p # Get p-values for the correlations
-can_adjusted_p_values <- p.adjust(can_p_values, method = "fdr") # Apply Holm correction to the p-values
-threshold <- 0.4
-can_adj_matrix <- ifelse(abs(can_trait_corr) > threshold & can_adjusted_p_values < 0.01, 1, 0) # Create adjacency matrix (set a threshold)
-can_network <- graph_from_adjacency_matrix(can_adj_matrix, mode = "undirected", diag = FALSE)
+can_trait_corr <- cor(can_trait_data, use = "pairwise.complete.obs") # Compute Pearson correlations and p-values
+can_p_values <- cor.mtest(can_trait_data, use = "pairwise.complete.obs")$p
+can_adjusted_p_values <- p.adjust(can_p_values, method = "fdr") # Adjust p-values using FDR
+threshold <- 0.2
+can_weighted_adj <- ifelse(abs(can_trait_corr) > threshold & can_adjusted_p_values < 0.05,
+                           abs(can_trait_corr), 0) # Create weighted adjacency matrix
+can_network <- graph_from_adjacency_matrix(can_weighted_adj, mode = "undirected", weighted = TRUE, diag = FALSE) # Create igraph object with weighted edges
+can_deg <- strength(can_network, weights = E(can_network)$weight)  # Weighted degree
+can_btw <- betweenness(can_network, weights = 1 / E(can_network)$weight, normalized = TRUE) # Weighted betweeness
+V(can_network)$size <- can_deg / max(can_deg) * 20  # Scale node size
+V(can_network)$label.cex <- 1.5
 can_ceb <- cluster_edge_betweenness(can_network)
-can_cluster_membership <- membership(can_ceb)  # To assign cluster colours, get cluster assignments for each node
-can_num_clusters <- length(unique(can_cluster_membership)) 
-can_cluster_colors <- rainbow(can_num_clusters)  # Generate distinct colors
-V(can_network)$color <- can_cluster_colors[can_cluster_membership]
-
-png("can_network_plot.png", width = 14, height = 12, units = "in", res = 300)
-plot(can_ceb, can_network,
-     vertex.size = 7,
+can_cluster_membership <- membership(can_ceb)
+can_num_clusters <- length(unique(can_cluster_membership))
+can_cluster_colors <- c("#f7756d","#fbc02d","#00bfc4", "#7e57c2", "#ff9800")
+V(can_network)$color <- can_cluster_colors[can_cluster_membership] # Assign cluster membership colors
+png("Crepis_network_plot - 23 June 2025.png", width = 7, height = 6, units = "in", res = 300)
+plot(can_network,
+     vertex.label.dist = 1,
      vertex.label.cex = 1.5,
-     vertex.color = V(can_network)$color,
-     vertex.label.dist = 1)  # Increase this to move labels further away
+     edge.width = E(can_network)$weight * 5,
+     vertex.label.color = "black")
 dev.off()
-
-can_modularity_value <- modularity(can_network, can_cluster_membership) # Calculate modularity 
-print(paste("Modularity", can_modularity_value))
-
-can_edge_density_value <- edge_density(can_network) # Calculate Edge Density
-print(paste("Edge Density", can_edge_density_value))
-
-can_degree_centrality <- degree(can_network)
-can_betweenness_centrality <- betweenness(can_network)
-can_closeness_centrality <- closeness(can_network)
-can_eigenvector_centrality <- eigen_centrality(can_network)$vector
-can_clustering_coefficient <- transitivity(can_network, type = "local")
-can_average_path_length <- mean_distance(can_network)
-can_diameter_value <- diameter(can_network)
-can_density_value <- edge_density(can_network)
-can_assortativity_value <- assortativity_degree(can_network)
-can_pagerank_values <- page_rank(can_network)$vector
-can_transitivity_value <- transitivity(can_network)
-
-can_modularity_value
-can_degree_centrality
-can_betweenness_centrality
-can_eigenvector_centrality
-can_clustering_coefficient
-
