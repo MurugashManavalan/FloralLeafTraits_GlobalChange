@@ -4,7 +4,7 @@ install_and_load_all_packages <- function() {
   cran_packages <- c(
     "readr", "lme4", "lmerTest", "ggplot2", "vegan", "dplyr", "corrplot", 
     "igraph", "qgraph", "Hmisc", "ggrepel", "tidyr", "plyr", "ggeffects", 
-    "car", "reshape2", "factoextra", "purrr", "here", "devtools", "WGCNA"
+    "car", "reshape2", "factoextra", "purrr", "here", "devtools"
   )
   
   missing_cran <- cran_packages[!cran_packages %in% installed.packages()[, "Package"]]

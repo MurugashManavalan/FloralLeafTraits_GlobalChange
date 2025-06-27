@@ -508,6 +508,15 @@ dev.off()
 
   ## Grouping based on Climatic Variables ----
   ## Rank Abundance Curves ----
+    ### Renaming Trait Names ----
+names(AusRC)[names(AusRC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
+names(AusRC)[names(AusRC) == "Petal Dry Matter Content (PDMC)(g/g)"] <- "PDMC"
+names(AusRC)[names(AusRC) == "Specific Leaf Area (SLA)(cm2/g)"] <- "SLA"
+names(AusRC)[names(AusRC) == "Leaf Dry Matter Content (LDMC)(g/g)"] <- "LDMC"
+names(AusRC)[names(AusRC) == "Number of Seeds (SN)"] <- "SN"
+names(AusRC)[names(AusRC) == "Seed Mass (SM)(g)"] <- "SM"
+names(AusRC)[names(AusRC) == "Display Area (DA)(cm2)"] <- "DA"
+names(AusRC)[names(AusRC) == "Leaf Area (LA)(cm2)"] <- "LA"
     ### Statistical Testing of PCAs ----
       #### Lotus ----
 m_cols <- c(9, 18, 20:23)
@@ -520,7 +529,7 @@ PCAtest_lmv_temperature <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatm
 PCAtest_lmv_co2 <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_ct <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_lmv_ctd <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D1", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
-
+View(AusRC)
       #### Crepis (Main Variables) ----
 PCAtest_cmv <- PCAtest(AusRC[AusRC$Species == "Crepis", m_cols], nperm = 1000, nboot = 1000, alpha = 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_cmv_control <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", m_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
@@ -564,8 +573,8 @@ variance_lmv_ctd <- lmv_ctd$sdev^2 / sum(lmv_ctd$sdev^2)
 lengths <- sapply(list(variance_lmv_control, variance_lmv_drought, variance_lmv_temperature, variance_lmv_co2, variance_lmv_ct, variance_lmv_ctd), length)
 print(lengths)
 
-  
-### Combi### Combi### Combining Variance Explained Results to a dataframe
+
+### Combining Variance Explained Results to a dataframe
 AusL_PC <- data.frame(
   PCA_axis = rep(1:5,6),
   Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
@@ -1504,6 +1513,11 @@ names(AusRDL)[names(AusRDL) == "Leaf Area (LA)(cm2)"] <- "LA"
 
 rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDL, scale = TRUE)
 Lotus_RDA <- anova(rda.l, permutations = 9999, by = "terms")
+Lotus_RDA <- anova(rda.l, permutations = 9999, by = "axis")
+scores_RDA <- Lotus_RDA$`Pr(>F)`
+scores_RDA
+Lotus_RDA
+print(Lotus_RDA$`Pr(>F)`)
 Lotus_RDA <- as.data.frame(Lotus_RDA)
 View(Lotus_RDA) # Temperature, Drought and CO2:Drought are significant (Latter marginally significant)
 anova(rda.l)
@@ -1551,9 +1565,11 @@ names(AusRDC)[names(AusRDC) == "Seed Mass (SM)(g)"] <- "SM"
 rda.c <- rda(AusRDC[,c(9:10,12:17)] ~ CO2 + Temperature + Drought + CO2:Temperature + CO2:Drought, data = AusRDC, scale = TRUE)
 summary(rda.c)
 Crepis_RDA <- anova(rda.c, permutations = 9999, by = "terms")
+Crepis_RDA <- anova(rda.c, permutations = 9999, by = "axis")
 Crepis_RDA # Drought and CO2: Temperature are significant
 Crepis_RDA <- as.data.frame(Crepis_RDA)
 View(Crepis_RDA)
+print(Crepis_RDA$`Pr(>F)`)
 
     ### Extracting Values for Crepis RDA ----
 summary_text <- capture.output(summary(rda.c))
@@ -1569,8 +1585,8 @@ rownames(c_bp_scores)
 rownames(c_bp_scores)<- c("D", "CxT")
 
     ### Plot for Crepis RDA ----
-png("Crepis - RDA - 5 June 2025.png", width = 1600, height = 1600, res = 200)
-plot(rda.cn, type = "n", xlim = c(-2,2), ylim = c(-2,2), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
+png("Crepis - RDA (Zoomed In) - 27 June 2025.png", width = 1600, height = 1600, res = 200)
+plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
 ### Adding Individual Observations
 points(scores(rda.cn, display = "sites")[,1], scores(rda.cn, display = "sites")[,2], pch = 21, bg = "white", col = "black", cex = 1.2)
 ### Adding Arrows and Text for Response Variables
@@ -2373,13 +2389,12 @@ for (i in seq_along(c_plots)) {
 }
 # Network Analysis ----
   ## For Lotus ----
-
 n_trait_data <- AusPC[AusPC$Species == "Lotus", m_cols] # Subset trait data for 'Lotus'
 ln_trait_corr <- cor(n_trait_data, use = "pairwise.complete.obs") # Calculate Pearson correlations
 ln_p_values <- cor.mtest(n_trait_data, use = "pairwise.complete.obs")$p # Get p-values for correlations
 ln_adjusted_p_values <- p.adjust(ln_p_values, method = "fdr") # Adjust p-values using False Discovery Rate (FDR)
 threshold <- 0.2
-ln_weighted_adj <- ifelse(abs(ln_trait_corr) > threshold & ln_adjusted_p_values < 0.05,
+ln_weighted_adj <- ifelse(abs(ln_trait_corr) > threshold & ln_p_values < 0.05,
                           abs(ln_trait_corr), 0) # Create weighted adjacency matrix with significance and threshold
 ln_network <- graph_from_adjacency_matrix(ln_weighted_adj, mode = "undirected", weighted = TRUE, diag = FALSE) # Create igraph object with weighted edges
 deg <- strength(ln_network, weights = E(ln_network)$weight)  # Weighted degree
@@ -2402,28 +2417,69 @@ plot(ln_network,
      vertex.color = V(ln_network)$color,
      edge.width = E(ln_network)$weight * 5)
 dev.off()
+  ## For Lotus (Showing Positive and Negative Correlation) ----
+ln_sign <- sign(ln_trait_corr)  # +1 for positive, -1 for negative
+ln_weighted_adj <- ifelse(abs(ln_trait_corr) > threshold & ln_p_values < 0.05,
+                          ln_trait_corr, 0)
+ln_network <- graph_from_adjacency_matrix(ln_weighted_adj, mode = "undirected", weighted = TRUE, diag = FALSE) # Create igraph object with weighted edges
+E(ln_network)$color <- ifelse(E(ln_network)$weight > 0, "blue", "red")
+ln_layout <- layout_with_fr(ln_network, weights = abs(E(ln_network)$weight))
+V(ln_network)$color <- ln_cluster_colors[ln_cluster_membership]
+png("Lotus_network_plot_sign - 27 June 2025.png", width = 7, height = 6, units = "in", res = 300)
+plot(ln_network,
+     layout = ln_layout,
+     vertex.label.dist = 1,
+     vertex.label.cex = 1.5,
+     vertex.label.color = "black",
+     vertex.color = V(ln_network)$color,
+     vertex.size = V(ln_network)$size,
+     edge.width = abs(E(ln_network)$weight) * 5,
+     edge.color = E(ln_network)$color)
+dev.off()
+
   ## For Crepis (All Variables) ----
-can_trait_data <- AusRD[AusRD$Species == "Crepis", a_cols]
+can_trait_data <- AusPC[AusPC$Species == "Crepis", a_cols]
 can_trait_corr <- cor(can_trait_data, use = "pairwise.complete.obs") # Compute Pearson correlations and p-values
 can_p_values <- cor.mtest(can_trait_data, use = "pairwise.complete.obs")$p
 can_adjusted_p_values <- p.adjust(can_p_values, method = "fdr") # Adjust p-values using FDR
 threshold <- 0.2
-can_weighted_adj <- ifelse(abs(can_trait_corr) > threshold & can_adjusted_p_values < 0.05,
+dim(ln_p_values)
+can_weighted_adj <- ifelse(abs(can_trait_corr) > threshold & can_p_values < 0.05, # Not Corrected for fdr
                            abs(can_trait_corr), 0) # Create weighted adjacency matrix
 can_network <- graph_from_adjacency_matrix(can_weighted_adj, mode = "undirected", weighted = TRUE, diag = FALSE) # Create igraph object with weighted edges
 can_deg <- strength(can_network, weights = E(can_network)$weight)  # Weighted degree
+?graph_from_adjacency_matrix
 can_btw <- betweenness(can_network, weights = 1 / E(can_network)$weight, normalized = TRUE) # Weighted betweeness
-V(can_network)$size <- can_deg / max(can_deg) * 20  # Scale node size
+V(can_network)$size <- can_deg / max(can_deg) * 30  # Scale node size
 V(can_network)$label.cex <- 1.5
 can_ceb <- cluster_edge_betweenness(can_network)
 can_cluster_membership <- membership(can_ceb)
 can_num_clusters <- length(unique(can_cluster_membership))
-can_cluster_colors <- c("#f7756d","#fbc02d","#00bfc4", "#7e57c2", "#ff9800")
+can_cluster_colors <- c("#fbc02d","#00bfc4", "#7e57c2", "#ff9800")
 V(can_network)$color <- can_cluster_colors[can_cluster_membership] # Assign cluster membership colors
-png("Crepis_network_plot - 23 June 2025.png", width = 7, height = 6, units = "in", res = 300)
+png("Crepis_network_plot - 27 June 2025.png", width = 7, height = 6, units = "in", res = 300)
 plot(can_network,
      vertex.label.dist = 1,
      vertex.label.cex = 1.5,
      edge.width = E(can_network)$weight * 5,
      vertex.label.color = "black")
+dev.off()
+  ## For Crepis (Showing Positive and Negatice Correlation) ----
+can_sign <- sign(can_trait_corr)  # +1 for positive, -1 for negative
+can_weighted_adj <- ifelse(abs(can_trait_corr) > threshold & can_p_values < 0.05,
+                           can_trait_corr, 0)
+can_network <- graph_from_adjacency_matrix(can_weighted_adj, mode = "undirected", weighted = TRUE, diag = FALSE) # Create igraph object with weighted edges
+E(can_network)$color <- ifelse(E(can_network)$weight > 0, "blue", "red")
+can_layout <- layout_with_fr(can_network, weights = abs(E(can_network)$weight))
+V(can_network)$color <- can_cluster_colors[can_cluster_membership]
+png("Crepis_network_plot_sign - 27 June 2025.png", width = 7, height = 6, units = "in", res = 300)
+plot(can_network,
+     layout = can_layout,
+     vertex.label.dist = 1,
+     vertex.label.cex = 1.5,
+     vertex.label.color = "black",
+     vertex.color = V(can_network)$color,
+     vertex.size = V(can_network)$size,
+     edge.width = abs(E(can_network)$weight) * 5,
+     edge.color = E(can_network)$color)
 dev.off()
