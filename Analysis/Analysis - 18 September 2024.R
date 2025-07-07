@@ -1515,14 +1515,13 @@ rda.l <- rda(AusRDL[,c(9,18,20:23)] ~ CO2 + Temperature + Drought + CO2:Temperat
 Lotus_RDA <- anova(rda.l, permutations = 9999, by = "terms")
 Lotus_RDA <- anova(rda.l, permutations = 9999, by = "axis")
 scores_RDA <- Lotus_RDA$`Pr(>F)`
-scores_RDA
-Lotus_RDA
 print(Lotus_RDA$`Pr(>F)`)
 Lotus_RDA <- as.data.frame(Lotus_RDA)
 View(Lotus_RDA) # Temperature, Drought and CO2:Drought are significant (Latter marginally significant)
 anova(rda.l)
 trait_loadings <- scores(rda.l, display = "all")
 trait_loadings
+
     ### Extracting Values for Lotus RDA ----
 summary_text <- capture.output(summary(rda.l))
 writeLines(summary_text, "lotus_rda_summary.txt")
@@ -1530,12 +1529,9 @@ l_rda_eigenvalues <- eigenvals(rda.l, constrained = TRUE)
 l_rda_proportion_explained <- l_rda_eigenvalues/sum(l_rda_eigenvalues) 
 l_rda_proportion_explained
 
-
     ### Preparing Model for Plotting ----
 rda.ln <- rda(AusRDL[,c(9,18,20:23)] ~ Temperature + Drought + CO2:Drought + Condition(CO2), data = AusRDL, scale = TRUE) # Without C:T Interaction
-
 l_bp_scores <- scores(rda.ln, display = "bp") #Extracting Names of Predictors
-
 rownames(l_bp_scores)
 rownames(l_bp_scores)<- c("T", "D", "CTxD")
 
@@ -1554,7 +1550,6 @@ dev.off()
 
       #### Having Colored Response Variables ----
 # Add predictor arrows
-
 species_scores <- as.data.frame(scores(rda.ln, display = "species"))
 species_scores$Trait <- rownames(species_scores)
 species_scores$Group <- lmv_group_factor  # Your factor for trait groups
@@ -1638,7 +1633,7 @@ rownames(c_bp_scores)<- c("D", "CxT")
 
     ### Plot for Crepis RDA ----
 png("Crepis - RDA (Zoomed In) - 27 June 2025.png", width = 1600, height = 1600, res = 200)
-plot(rda.cn, type = "n", xlim = c(-1,1), ylim = c(-1,1), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
+plot(rda.cn, type = "n", xlim = c(-2,2), ylim = c(-2,2), xlab = "RDA1 (13.04%)", ylab = "RDA2 (4.11%)")
 ### Adding Individual Observations
 points(scores(rda.cn, display = "sites")[,1], scores(rda.cn, display = "sites")[,2], pch = 21, bg = "white", col = "black", cex = 1.2)
 ### Adding Arrows and Text for Response Variables
@@ -1650,48 +1645,59 @@ text(scores(rda.cn, display = "bp")[,1], scores(rda.cn, display = "bp")[,2], lab
 dev.off()
 
       #### Having Colored Response Variables ----
-# Add predictor arrows
-
+# Extract and prepare scores
 species_scores <- as.data.frame(scores(rda.cn, display = "species"))
 species_scores$Trait <- rownames(species_scores)
-species_scores$Group <- cav_group_factor
+species_scores$Group <- cav_group_factor  # This must be a factor or character vector of same length
 
 site_scores <- as.data.frame(scores(rda.cn, display = "sites"))
 site_scores$Sample <- rownames(site_scores)
 
 bp_scores <- as.data.frame(scores(rda.cn, display = "bp"))
-bp_scores$Variable <- c("D", "CxT")
+bp_scores$Variable <- c("D", "CxT")  # must match row order!
 
-# Build the ggplot
-png("Crepis - RDA - 6 July 2025.png", width = 2000, height = 1600, res = 200)
+arrow_scaling <- 2  # Adjust for appearance
+
+# Apply scaling
+species_scores_scaled <- species_scores %>%
+  mutate(RDA1 = RDA1 * arrow_scaling,
+         RDA2 = RDA2 * arrow_scaling)
+
+bp_scores_scaled <- bp_scores %>%
+  mutate(RDA1 = RDA1 * arrow_scaling,
+         RDA2 = RDA2 * arrow_scaling)
+
+# Prepare plot
+png("Crepis - RDA - 7 July 2025.png", width = 2000, height = 1600, res = 200)
 ggplot() +
-  # Sites
+  # Sites (samples)
   geom_point(data = site_scores, aes(x = RDA1, y = RDA2), 
              shape = 21, fill = "white", color = "black", size = 3) +
   
   # Species (traits) arrows
-  geom_segment(data = species_scores, 
+  geom_segment(data = species_scores_scaled, 
                aes(x = 0, y = 0, xend = RDA1, yend = RDA2, color = Group),
-               arrow = arrow(length = unit(0.4, "cm")), size = 1) +
+               arrow = arrow(length = unit(0.4, "cm")), linewidth = 1) +
   
   # Species labels
-  geom_text(data = species_scores, 
+  geom_text(data = species_scores_scaled, 
             aes(x = RDA1, y = RDA2, label = Trait, color = Group), 
             size = 7, vjust = -0.8) +
   
   # Predictor arrows
-  geom_segment(data = bp_scores, 
+  geom_segment(data = bp_scores_scaled, 
                aes(x = 0, y = 0, xend = RDA1, yend = RDA2), 
                arrow = arrow(length = unit(0.4, "cm")), 
-               color = "blue", size = 1) +
+               color = "blue", linewidth = 1) +
   
   # Predictor labels
-  geom_text(data = bp_scores, 
+  geom_text(data = bp_scores_scaled, 
             aes(x = RDA1, y = RDA2, label = Variable), 
             color = "blue", size = 7, vjust = -0.8) +
   
-  scale_color_manual(values = c("tomato", "seagreen","saddlebrown")) +  # your groups colors
-  coord_cartesian(xlim = c(-1, 1), ylim = c(-1, 1)) +   # Change to (-2,2) for zoomed out image
+  # Color scheme and theme
+  scale_color_manual(values = c("tomato", "seagreen", "saddlebrown")) +
+  coord_cartesian(xlim = c(-2, 2), ylim = c(-2, 2)) +
   theme_bw() +
   labs(x = "RDA1 (13.04%)", y = "RDA2 (4.11%)", color = "Trait Group") +
   theme(
