@@ -1579,7 +1579,7 @@ bp_scores <- as.data.frame(scores(rda.ln, display = "bp"))
 bp_scores$Variable <- c("T", "D", "CTxD")
 
 # Build the ggplot
-png("Lotus - RDA - 27 August 2025.png", width = 2000, height = 1600, res = 200)
+svg("Lotus - RDA - 27 August 2025.svg", width = 10, height = 8)
 ggplot() +
   # Sites
   geom_point(data = site_scores, aes(x = RDA1, y = RDA2), 
@@ -1637,8 +1637,6 @@ Crepis_RDA <- anova(rda.c, permutations = 9999, by = "terms")
 Crepis_RDA <- anova(rda.c, permutations = 9999, by = "axis")
 Crepis_RDA # Drought and CO2: Temperature are significant
 Crepis_RDA <- as.data.frame(Crepis_RDA)
-View(Crepis_RDA)
-print(Crepis_RDA$`Pr(>F)`)
 
     ### Extracting Values for Crepis RDA ----
 summary_text <- capture.output(summary(rda.c))
@@ -1690,7 +1688,7 @@ bp_scores_scaled <- bp_scores %>%
          RDA2 = RDA2 * arrow_scaling)
 
 # Prepare plot
-png("Crepis - RDA - 27 August 2025.png", width = 2000, height = 1600, res = 200)
+svg("Crepis - RDA - 27 August 2025.svg", width = 10, height = 8)
 ggplot() +
   # Sites (samples)
   geom_point(data = site_scores, aes(x = RDA1, y = RDA2), 
@@ -1938,7 +1936,7 @@ desired_order <- c("RDA", "LDMC", "SLA", "LA", "DA")
 combined_results_df$Trait <- factor(combined_results_df$Trait, levels = desired_order)
 combined_results_df
 # Create a stacked bar plot for all models
-png("Lotus - Variance Partitioning Plot (With RDA) - 13 March 2025.png", width = 2000, height = 1600, res = 200)
+svg("Lotus - Variance Partitioning Plot (With RDA) - 27 August 2025.svg", width = 10, height = 8)
 ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
@@ -1953,7 +1951,6 @@ ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
         legend.text = element_text(size = 14),  # Increase legend labels size
         legend.position = "bottom", 
         legend.title = element_blank())
-
 dev.off()
 
     ### For Crepis ----
@@ -2042,7 +2039,7 @@ for (model_name in names(c_model)) {
   all_results_df <- rbind(all_results_df, anova_results_df)
 }
 
-desired_order <- c("SM", "SN", "LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
+desired_order <- c("SM", "SN", "LDMC", "PDMC", "SPA", "DA")
 
 # Convert 'Trait' to a factor with the desired order
 all_results_df$Trait <- factor(all_results_df$Trait, levels = desired_order)
@@ -2082,14 +2079,14 @@ cv_rda_results_selected <- cv_rda_results_df[, c("PropVar", "Factor", "Trait")]
 combined_results_df <- rbind(all_results_selected, cv_rda_results_selected)
 
 combined_results_df
-desired_order <- c("RDA", "SM", "SN", "LDMC", "SLA", "LA", "PDMC", "SPA", "DA")
+desired_order <- c("RDA", "SM", "SN", "LDMC", "PDMC", "SPA", "DA")
 
 # Convert 'Trait' to a factor with the desired order
 combined_results_df$Trait <- factor(combined_results_df$Trait, levels = desired_order)
 combined_results_df
 # Create a stacked bar plot for all models
 
-png("Crepis - Variance Partitioning Plot (With RDA) - 13 March 2025.png", width = 2000, height = 1600, res = 200)
+svg("Crepis - Variance Partitioning Plot (With RDA) - 27 August 2025.svg", width = 10, height = 8)
 ggplot(combined_results_df, aes(x = Trait, y = PropVar, fill = Factor)) +
   geom_bar(stat = "identity", position = "stack") +
   theme_minimal() +
