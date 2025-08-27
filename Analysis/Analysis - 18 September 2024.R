@@ -451,7 +451,7 @@ cmv_group_factor <- factor(pca_var_groups[rownames(cmv$rotation)])
 cav_group_factor <- factor(pca_var_groups[rownames(cav$rotation)])
 
     ### PCA plots ----
-png("Lotus - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Lotus - PCA - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv,
                 col.var = lmv_group_factor,          # Color by custom groups
                 palette = c("tomato", "seagreen"),   # One color per group
@@ -466,10 +466,11 @@ fviz_pca_biplot(lmv,
     axis.title.y = element_text(size = 20),
     legend.text = element_text(size = 16),          # Legend label size
     legend.title = element_text(size = 18)          # Legend title size
-  )
+  ) + 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
-png("Crepis (Main Variables) - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (Main Variables) - PCA - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -484,10 +485,11 @@ fviz_pca_biplot(cmv,
     axis.title.y = element_text(size = 20),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  ) + 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
-png("Crepis (All Variables) - PCA - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (All Variables) - PCA - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
@@ -502,7 +504,8 @@ fviz_pca_biplot(cav,
     axis.title.y = element_text(size = 20),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  ) + 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 
@@ -580,7 +583,7 @@ AusL_PC <- data.frame(
   Variance_Explained = c(variance_lmv_control, variance_lmv_co2, variance_lmv_temperature, variance_lmv_drought, variance_lmv_ct, variance_lmv_ctd),
   Treatment = rep(c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"), each = 5)
 )
-library(ggplot2)
+
 AusL_PC$Treatment <- factor(AusL_PC$Treatment, levels = c("C0T0D0", "C1T0D0", "C0T1D0", "C0T0D1", "C1T1D0", "C1T1D1"))
 png("Lotus - Proportion of Variance Explained - 27 March 2025.png", width = 2000, height = 1600, res = 200)
 ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment, #size = Treatment
@@ -620,13 +623,11 @@ ggplot(AusL_PC, aes(x = PCA_axis, y = Variance_Explained, color = Treatment, #si
     legend.text = element_text(size = 18),
   )
 dev.off()
-    
-View(AusL_PC)
 
     ### Crepis (Main Variables) ----
 cmv <- prcomp(AusRC[AusRC$Species == "Crepis", c(9,18,20:23)], scale = TRUE)
 cmv_control <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D0", c(9,18,20:23)], scale = TRUE)
-cmv_drought <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
+cmv_drought <- prcomp(AusRC[AusRC$ Species == "Crepis" & AusRC$Treatment == "C0T0D1", c(9,18,20:23)], scale = TRUE)
 cmv_temperature <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C0T2D0", c(9,18,20:23)], scale = TRUE)
 cmv_co2 <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T0D0", c(9,18,20:23)], scale = TRUE)
 cmv_ct <- prcomp(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", c(9,18,20:23)], scale = TRUE)
@@ -1129,8 +1130,7 @@ names(AusRC)[names(AusRC) == "Leaf Area (LA)(cm2)"] <- "LA"
 
     ### For Lotus ----
 # C0T0D0
-citation("ggplot2")
-png("Lotus - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Lotus - C0T0D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_control,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1146,11 +1146,12 @@ fviz_pca_biplot(lmv_control,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  ) + 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T0D0
-png("Lotus - C1T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Lotus - C1T0D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_co2,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1166,11 +1167,12 @@ fviz_pca_biplot(lmv_co2,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  ) + 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C0T1D0
-png("Lotus - C0T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Lotus - C0T1D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_temperature,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1186,11 +1188,12 @@ fviz_pca_biplot(lmv_temperature,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C0T0D1
-png("Lotus - C0T0D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Lotus - C0T0D1 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_drought,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1206,11 +1209,12 @@ fviz_pca_biplot(lmv_drought,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T1D0
-png("Lotus - C1T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Lotus - C1T1D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_ct,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1226,11 +1230,12 @@ fviz_pca_biplot(lmv_ct,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T1D1
-png("Lotus - C1T1D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Lotus - C1T1D1 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(lmv_ctd,
                 col.var = lmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1246,12 +1251,13 @@ fviz_pca_biplot(lmv_ctd,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
     ### For Crepis (Main Variables) ----
 # C0T0D0
-png("Crepis (Main Variables) - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (Main Variables) - C0T0D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv_control,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1267,11 +1273,12 @@ fviz_pca_biplot(cmv_control,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T0D0
-png("Crepis (Main Variables) - C1T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (Main Variables) - C1T0D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv_co2,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1287,11 +1294,12 @@ fviz_pca_biplot(cmv_co2,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C0T1D0
-png("Crepis (Main Variables) - C0T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (Main Variables) - C0T1D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv_temperature,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1307,11 +1315,12 @@ fviz_pca_biplot(cmv_temperature,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C0T0D1
-png("Crepis (Main Variables) - C0T0D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (Main Variables) - C0T0D1 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv_drought,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1327,11 +1336,12 @@ fviz_pca_biplot(cmv_drought,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T1D0
-png("Crepis (Main Variables) - C1T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (Main Variables) - C1T1D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv_ct,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1347,11 +1357,12 @@ fviz_pca_biplot(cmv_ct,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T1D1
-png("Crepis (Main Variables) - C1T1D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (Main Variables) - C1T1D1 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cmv_ctd,
                 col.var = cmv_group_factor,
                 palette = c("tomato", "seagreen"),
@@ -1367,12 +1378,13 @@ fviz_pca_biplot(cmv_ctd,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
     ### For Crepis (All Variables) ----
 # C0T0D0
-png("Crepis (All Variables) - C0T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (All Variables) - C0T0D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav_control,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
@@ -1388,11 +1400,12 @@ fviz_pca_biplot(cav_control,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T0D0
-png("Crepis (All Variables) - C1T0D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (All Variables) - C1T0D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav_co2,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
@@ -1408,11 +1421,12 @@ fviz_pca_biplot(cav_co2,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C0T1D0
-png("Crepis (All Variables) - C0T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (All Variables) - C0T1D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav_temperature,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
@@ -1428,11 +1442,12 @@ fviz_pca_biplot(cav_temperature,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C0T0D1
-png("Crepis (All Variables) - C0T0D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (All Variables) - C0T0D1 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav_drought,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
@@ -1448,11 +1463,12 @@ fviz_pca_biplot(cav_drought,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T1D0
-png("Crepis (All Variables) - C1T1D0 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (All Variables) - C1T1D0 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav_ct,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
@@ -1468,11 +1484,12 @@ fviz_pca_biplot(cav_ct,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # C1T1D1
-png("Crepis (All Variables) - C1T1D1 - 16 June 2025.png", width = 1600, height = 1600, res = 200)
+png("Crepis (All Variables) - C1T1D1 - 27 August 2025.png", width = 1600, height = 1600, res = 200)
 fviz_pca_biplot(cav_ctd,
                 col.var = cav_group_factor,
                 palette = c("tomato", "seagreen", "saddlebrown"),
@@ -1488,7 +1505,8 @@ fviz_pca_biplot(cav_ctd,
     plot.title = element_text(size = 20, face = "bold", hjust = 0.5),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  guides(color = guide_legend(override.aes = list(label = "")))
 dev.off()
 
 # Redundancy Analysis ----
@@ -1561,7 +1579,7 @@ bp_scores <- as.data.frame(scores(rda.ln, display = "bp"))
 bp_scores$Variable <- c("T", "D", "CTxD")
 
 # Build the ggplot
-png("Lotus - RDA - 6 July 2025.png", width = 2000, height = 1600, res = 200)
+png("Lotus - RDA - 27 August 2025.png", width = 2000, height = 1600, res = 200)
 ggplot() +
   # Sites
   geom_point(data = site_scores, aes(x = RDA1, y = RDA2), 
@@ -1597,7 +1615,11 @@ ggplot() +
     axis.title.y = element_text(size = 20),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  )+ 
+  
+  # Remove "a" below arrow in legend
+  guides(color = guide_legend(override.aes = list(label = "")))
+
 dev.off()
   ## Redundancy Analysis for Crepis ----
 names(AusRDC)[names(AusRDC) == "Specific Petal Area (SPA)(cm2/g)"] <- "SPA"
@@ -1668,7 +1690,7 @@ bp_scores_scaled <- bp_scores %>%
          RDA2 = RDA2 * arrow_scaling)
 
 # Prepare plot
-png("Crepis - RDA - 7 July 2025.png", width = 2000, height = 1600, res = 200)
+png("Crepis - RDA - 27 August 2025.png", width = 2000, height = 1600, res = 200)
 ggplot() +
   # Sites (samples)
   geom_point(data = site_scores, aes(x = RDA1, y = RDA2), 
@@ -1705,7 +1727,11 @@ ggplot() +
     axis.title.y = element_text(size = 20),
     legend.text = element_text(size = 16),
     legend.title = element_text(size = 18)
-  )
+  ) + 
+  
+  # Remove "a" below arrow in legend
+  guides(color = guide_legend(override.aes = list(label = "")))
+
 dev.off()
 
 # Preparing function which exports anova results to CSV ----
