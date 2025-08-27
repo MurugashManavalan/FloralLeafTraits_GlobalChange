@@ -2086,53 +2086,51 @@ dev.off()
 l_plots <- list(
   Lotus_CO2_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`)) +
     scale_x_discrete(labels = c("0"="Ambient CO2", "1"="Elevated CO2")) +
-    geom_boxplot(fill = "#7e57c2") +
-    labs(x = "CO2", y = "SLA (cm2/g)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "CO2", y = "SLA (cm2/g)") + 
     theme(axis.title = element_text(size = 36),  
           axis.text = element_text(size = 32)),
   
   Lotus_CO2_LDMC = ggplot(AusL, aes(x = as.factor(CO2), y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     scale_x_discrete(labels = c("0"="Ambient CO2", "1"="Elevated CO2")) +
-    geom_boxplot(fill = "#7e57c2") +
-    labs(x = "CO2", y = "LDMC (g/g)") + theme_bw() + 
+    geom_boxplot() +
+    labs(x = "CO2", y = "LDMC (g/g)") + 
     theme(axis.title = element_text(size = 36),  
           axis.text = element_text(size = 32)),
   
   Lotus_T_DA = ggplot(AusL, aes(x = Temperature, y = `Display Area (DA)(cm2)`)) +
     scale_x_discrete(labels = c("0"="Ambient Temp.", "1"="High Temp.")) +
-    geom_boxplot(fill = "#ff9800") +
-    labs(x = "Temperature", y = "DA (cm2)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Temperature", y = "DA (cm2)") +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Lotus_D_LA = ggplot(AusL, aes(x = Drought, y = `Leaf Area (LA)(cm2)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "LA (cm2)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "LA (cm2)") + 
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Lotus_D_SLA = ggplot(AusL, aes(x = Drought, y = `Specific Leaf Area (SLA)(cm2/g)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "SLA (cm2/g)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "SLA (cm2/g)") + 
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Lotus_D_LDMC = ggplot(AusL, aes(x = Drought, y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "LDMC (g/g)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "LDMC (g/g)") +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Lotus_CxT_DA = ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
     geom_boxplot() +
     facet_wrap(~ Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
-    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     labs(x = "CO2", y = "DA (cm2)") +
-    theme_bw() +
     theme(
       axis.title = element_text(size = 36),
       axis.text = element_text(size = 32),
@@ -2142,10 +2140,8 @@ l_plots <- list(
   Lotus_CxT_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperature)) +
     geom_boxplot() +
     facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
-    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     labs(x = "CO2", y = "SLA (cm2/g)") +
-    theme_bw() +
     theme(
       axis.title = element_text(size = 36),
       axis.text = element_text(size = 32),
@@ -2156,9 +2152,7 @@ l_plots <- list(
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     geom_boxplot()+
     facet_wrap(~ Drought, labeller = as_labeller(c("0" = "Well Watered", "1" = "Drought"))) +
-    scale_fill_manual(values = c("0" = "#fbc02d", "1" = "#f7766d"),
-                      labels = c("0" = "Well-watered", "1" = "Drought")) +
-    labs(x = "CO2 + Temperature", y = "LDMC (g/g)", fill = "Drought") + theme_bw() +
+    labs(x = "CO2 + Temperature", y = "LDMC (g/g)", fill = "Drought") +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32),
           strip.text = element_text(size = 32, face = "bold"),
@@ -2176,43 +2170,43 @@ for (i in seq_along(l_plots)) {
 c_plots<- list(
   Crepis_D_DA = ggplot(AusC, aes(x = Drought, y = `Display Area (DA)(cm2)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "DA (cm2)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "DA (cm2)") +
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Crepis_D_SPA = ggplot(AusC, aes(x = Drought, y = `Specific Petal Area (SPA)(cm2/g)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "SPA (cm2/g)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "SPA (cm2/g)") + 
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Crepis_D_PDMC = ggplot(AusC, aes(x = Drought, y = `Petal Dry Matter Content (PDMC)(g/g)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "PDMC (g/g)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "PDMC (g/g)") + 
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Crepis_D_LDMC = ggplot(AusC, aes(x = Drought, y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "LDMC (g/g)") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "LDMC (g/g)") + 
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Crepis_D_SN = ggplot(AusC, aes(x = Drought, y = `Number of Seeds (SN)`)) +
     scale_x_discrete(labels = c("0"="Well-watered", "1"="Drought")) +
-    geom_boxplot(fill = "#f7766d") +
-    labs(x = "Drought", y = "SN") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Drought", y = "SN") + 
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
   Crepis_T_SN = ggplot(AusC, aes(x = Temperature, y = `Number of Seeds (SN)`)) +
     scale_x_discrete(labels = c("0"="Ambient Temp.", "1"="High Temp.")) +
-    geom_boxplot(fill = "#ff9800") +
-    labs(x = "Temperature", y = "SN") + theme_bw() +
+    geom_boxplot() +
+    labs(x = "Temperature", y = "SN") + 
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
@@ -2220,10 +2214,8 @@ c_plots<- list(
   Crepis_CxT_SPA = ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
     geom_boxplot() +
     facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
-    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     labs(x = "CO2", y = "SPA (cm2/g)") +
-    theme_bw() +
     theme(
       axis.title = element_text(size = 36),
       axis.text = element_text(size = 32),
@@ -2233,10 +2225,8 @@ c_plots<- list(
   Crepis_CxT_SN = ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
     geom_boxplot() +
     facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
-    scale_fill_manual(values = c("0" = "#7e57c2", "1" = "#ff9800")) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     labs(x = "CO2", y = "SN") +
-    theme_bw() +
     theme(
       axis.title = element_text(size = 36),
       axis.text = element_text(size = 32),
