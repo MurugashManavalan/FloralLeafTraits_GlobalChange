@@ -1818,7 +1818,7 @@ l_plots <- list(
     theme(axis.title = element_text(size = 36),
           axis.text = element_text(size = 32)),
   
-  Lotus_CxT_DA = ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`, fill = Temperature)) +
+  Lotus_CxT_DA = ggplot(AusL, aes(x = CO2, y = `Display Area (DA)(cm2)`)) +
     geom_boxplot() +
     facet_wrap(~ Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
@@ -1829,7 +1829,7 @@ l_plots <- list(
       strip.text = element_text(size = 32, face = "bold"),
       legend.position = "none"),
   
-  Lotus_CxT_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`, fill = Temperature)) +
+  Lotus_CxT_SLA = ggplot(AusL, aes(x = CO2, y = `Specific Leaf Area (SLA)(cm2/g)`)) +
     geom_boxplot() +
     facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
@@ -1840,7 +1840,7 @@ l_plots <- list(
       strip.text = element_text(size = 32, face = "bold"),
       legend.position = "none"),
   
-  Lotus_CTxD_LDMC = ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)` , fill = Drought)) +
+  Lotus_CTxD_LDMC = ggplot(AusL, aes(x = CO2, y = `Leaf Dry Matter Content (LDMC)(g/g)`)) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
     geom_boxplot()+
     facet_wrap(~ Drought, labeller = as_labeller(c("0" = "Well Watered", "1" = "Drought"))) +
@@ -1903,7 +1903,7 @@ c_plots<- list(
           axis.text = element_text(size = 32)),
   
   # Interaction plots
-  Crepis_CxT_SPA = ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`, fill = Temperature)) +
+  Crepis_CxT_SPA = ggplot(AusC, aes(x = CO2, y = `Specific Petal Area (SPA)(cm2/g)`)) +
     geom_boxplot() +
     facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
@@ -1914,7 +1914,7 @@ c_plots<- list(
       strip.text = element_text(size = 32, face = "bold"),
       legend.position = "none"),
   
-  Crepis_CxT_SN = ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`, fill = Temperature)) +
+  Crepis_CxT_SN = ggplot(AusC, aes(x = CO2, y = `Number of Seeds (SN)`)) +
     geom_boxplot() +
     facet_wrap(~Temperature, labeller = as_labeller(c("0" = "Ambient Temp.", "1" = "High Temp."))) +
     scale_x_discrete(labels = c("0" = "Ambient", "1" = "Elevated")) +
