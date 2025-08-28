@@ -1455,60 +1455,6 @@ ggplot() +
 
 dev.off()
 
-# Preparing function which exports anova results to CSV ----
-anova_to_csv <- function(model, csv_file_path) {
-  # Perform the ANOVA test
-  anova_results <- anova(model)
-  
-  # Convert the results to a data frame
-  anova_df <- as.data.frame(anova_results)
-  
-  # Add a column with the model formula to distinguish different models
-  model_formula <- paste(deparse(formula(model)), collapse = " ")
-  anova_df$model <- rep(model_formula, nrow(anova_df))
-  
-  # Check if the CSV file already exists
-  if (file.exists(csv_file_path)) {
-    # Read the existing data
-    existing_df <- read_csv(csv_file_path)
-    
-    # Append the new results
-    combined_df <- bind_rows(existing_df, anova_df)
-  } else {
-    # If the file does not exist, the combined data frame is the new ANOVA results
-    combined_df <- anova_df
-  }
-  
-  # Write the combined DataFrame to the CSV file
-  write_csv(combined_df, file = csv_file_path)
-  
-  cat("ANOVA results have been written to", csv_file_path, "\n")
-}
-
-  ## Output ANOVA results to CSV file for Linear models in Lotus ----
-anova_output_csv <- 'anova_LLo - 18 August 2024.csv'
-anova_to_csv(l_DAmodel, anova_output_csv)
-anova_to_csv(log_SSPAmodel, anova_output_csv)
-anova_to_csv(log_SW1PAmodel, anova_output_csv)
-anova_to_csv(SW2PAmodel, anova_output_csv)
-anova_to_csv(sq_SKPAmodel, anova_output_csv)
-anova_to_csv(l_sq_SPAmodel, anova_output_csv)
-anova_to_csv(l_LAmodel, anova_output_csv)
-anova_to_csv(l_PDMCmodel, anova_output_csv)
-anova_to_csv(l_SLAmodel, anova_output_csv)
-anova_to_csv(l_log_LDMCmodel, anova_output_csv)
-
-  ## Output ANOVA results to CSV file for Linear models in Crepis ----
-anova_output_csv <- 'anova_LCr - 18 August 2024.csv'
-anova_to_csv(c_sq_DAmodel, anova_output_csv)
-anova_to_csv(c_sq_SPAmodel, anova_output_csv)
-anova_to_csv(c_sq_PDMCmodel, anova_output_csv)
-anova_to_csv(c_log_LAmodel, anova_output_csv)
-anova_to_csv(c_log_SLAmodel, anova_output_csv)
-anova_to_csv(c_sq_LDMCmodel, anova_output_csv)
-anova_to_csv(sq_SNmodel, anova_output_csv)
-anova_to_csv(log_SMmodel, anova_output_csv)
-
 # Variance Partitioning using Barplot ----
   ## Creation of Separate Models ----
     ### For Lotus ----
