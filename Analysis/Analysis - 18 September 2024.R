@@ -274,9 +274,18 @@ PCAtest_cav_co2 <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == 
 PCAtest_cav_ct <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", a_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 PCAtest_cav_ctd <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D1", a_cols], 100, 100, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
 
+    ### Exporting Significant Plots ----
+png("Lotus - CTD Covariation Explained - 29 August 2025.png", width = 2000, height = 1600, res = 200)
+PCAtest_lmv_ctd <- PCAtest(AusRC[AusRC$Species == "Lotus" & AusRC$Treatment == "C2T2D1", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+dev.off()
 
+png("Crepis - CO2 Covariation Explained - 29 August 2025.png", width = 2000, height = 1600, res = 200)
+PCAtest_cmv_co2 <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T0D0", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+dev.off()
 
-
+png("Crepis - CT Covariation Explained - 29 August 2025.png", width = 2000, height = 1600, res = 200)
+PCAtest_cmv_ct <- PCAtest(AusRC[AusRC$Species == "Crepis" & AusRC$Treatment == "C2T2D0", m_cols], 1000, 1000, 0.05, varcorr = TRUE, counter = FALSE, plot = TRUE)
+dev.off()
     ### Creating PCA for each treatment ----
     ### Lotus ----
 
