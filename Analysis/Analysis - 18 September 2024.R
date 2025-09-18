@@ -24,7 +24,6 @@ AusRC <- AusRD %>%
     }
   })
 
-View(AusRC)
 # Log and Square Root transform Response Variables ----
 AusL <- log_sqrt_transform(AusL, c(9:23))
 AusC <- log_sqrt_transform(AusC, c(9:17))
