@@ -2,15 +2,15 @@ source(here::here("Analysis", "Functions.R"))
 install_and_load_all_packages()
 
 # Loading Files into R ----
-AusL <- read_csv(here("Data", "Austria Experiment - Lotus Data - Core Response Variables - 7 March 2025.csv"))
+AusL <- read_csv(here("Data", "Lotus-raw_data.csv"))
 AusL <- AusL[c(1:93),]
-AusC <- read_csv(here("Data", "Austria Experiment - Crepis Data - Core Response Variables - 7 March 2025.csv"))
+AusC <- read_csv(here("Data", "Crepis-raw_data.csv"))
 AusC <- AusC[c(1:62),]
-AusPC <- read_csv(here("Data", "Austria Experiment - Crepis and Lotus Data - RDA - 7 March 2025.csv"))
+AusPC <- read_csv(here("Data", "LotusCrepis-RDA.csv"))
 AusPC <- AusPC[c(1:84),]
-AusRD <- read_csv(here("Data", "Austria Experiment - Crepis and Lotus Data - RDA - 7 March 2025.csv"))
+AusRD <- read_csv(here("Data", "LotusCrepis-RDA.csv"))
 AusRD <- AusRD[c(1:84),]
-AusRC <- read_csv(here("Data", "Austria Experiment - Crepis and Lotus Data - RAC - 7 March 2025.csv"))
+AusRC <- read_csv(here("Data", "LotusCrepis-RAC.csv"))
 AusRC <- AusRC[c(1:66),]
 AusRC <- AusRD %>%
   group_by(Species, Treatment) %>%
