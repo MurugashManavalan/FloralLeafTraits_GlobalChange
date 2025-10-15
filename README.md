@@ -33,3 +33,9 @@ It provides both raw and processed data, as well as scripts for univariate and m
 `readr`, `lme4`, `lmerTest`, `ggplot2`, `vegan`, `dplyr`, `corrplot`, 
 `igraph`, `qgraph`, `Hmisc`, `ggrepel`, `tidyr`, `plyr`, `ggeffects`, 
 `car`, `reshape2`, `factoextra`, `purrr`, `here`, `devtools`, `brms`
+```
+
+## Citation
+Please cite the study once published:  
+- Paper: [https://doi.org/10.1093/aob/mcaf214](https://doi.org/10.1093/aob/mcaf214)  
+- Dataset & Scripts DOI: [https://zenodo.org/records/17360692](https://zenodo.org/records/17360692)
