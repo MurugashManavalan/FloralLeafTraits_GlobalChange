@@ -24,6 +24,7 @@ It provides both raw and processed data, as well as scripts for univariate and m
 - `R/trait_analysis.R` – Main R script containing the analysis code.  
 - `R/functions.R` – Helper script with package loading and custom functions.  
 
+Follow this code : https://github.com/MurugashManavalan/FloralLeafTraits_GlobalChange/blob/56a61ac9447c7691267858682c86fe09283557f6/R/trait_analysis.R#L139-L148
 ---
 
 ## Dependencies
